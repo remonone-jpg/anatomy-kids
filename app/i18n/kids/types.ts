@@ -8,13 +8,21 @@ import type { OrganId } from "../../lib/anatomy-data";
 export const CHILD_NAME = "수호";
 
 /**
- * Organs a five-year-old can point to on their own body.
- *
- * The other four (liver, kidneys, eyeball, pancreas) stay in the data and keep
- * their child-facing copy, so re-enabling one is a single edit here. The eye is
- * left out on purpose: a detached eyeball frightens a lot of children this age.
+ * Every organ, ordered for a child rather than by body system: the ones they
+ * can point to on themselves come first, the ones they have to be told about
+ * come last. Trimming this list is how kids mode would show fewer of them.
  */
-export const KIDS_ORGAN_IDS: OrganId[] = ["heart", "brain", "lungs", "intestine", "skin"];
+export const KIDS_ORGAN_IDS: OrganId[] = [
+  "heart",
+  "brain",
+  "lungs",
+  "intestine",
+  "skin",
+  "eyeball",
+  "liver",
+  "kidneys",
+  "pancreas",
+];
 
 /**
  * Child-facing copy layered over an organ's adult entry. Only the fields a
