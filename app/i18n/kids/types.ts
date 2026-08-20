@@ -37,6 +37,12 @@ export type KidsOrganCopy = {
   dailyFact: string;
   funFact: string;
   /**
+   * Something to try on their own body. A five-year-old learns "the heart is
+   * in the chest" by putting a hand there and feeling it, not by being shown
+   * a diagram — this is the line that turns the screen into an activity.
+   */
+  bodySense: string;
+  /**
    * Hotspot id -> child-facing explanation. Labels keep their real anatomical
    * name: the words are short, children this age enjoy saying them, and the
    * explanation underneath is what carries the meaning.
@@ -49,6 +55,11 @@ export type KidsUiCopy = {
   tagline: string;
   libraryTitle: string;
   viewAll: string;
+  mapTab: string;
+  listTab: string;
+  mapLabel: string;
+  mapHint: string;
+  bodySenseTitle: string;
   quoteLine1: string;
   quoteLine2: string;
   quoteSign: string;

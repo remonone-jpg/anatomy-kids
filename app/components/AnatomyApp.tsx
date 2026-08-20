@@ -20,18 +20,20 @@ import {
   Play,
   Search,
   Share2,
+  PersonStanding,
   Sparkles,
   Stethoscope,
   Volume2,
   X,
 } from "lucide-react";
 import { OrganViewer } from "./OrganViewer";
+import { BodyMap } from "./BodyMap";
 import type { OrganId } from "../lib/anatomy-data";
 import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
 import { buildOrgans, indexOrgans, type Organ } from "../i18n/merge";
 import { format, type Dictionary, type UiDictionary } from "../i18n/types";
-import { applyKids, getKidsUi, kidsAvailable, KIDS_ORGAN_IDS } from "../i18n/kids";
+import { applyKids, getBodySense, getKidsUi, kidsAvailable, KIDS_ORGAN_IDS } from "../i18n/kids";
 import { speak, stopSpeaking } from "../lib/speech";
 
 type Modal = "lesson" | "quiz" | "animation" | "system" | null;
@@ -182,6 +184,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const [modal, setModal] = useState<Modal>(null);
   const [query, setQuery] = useState("");
   const [mobileLibrary, setMobileLibrary] = useState(false);
+  // The map opens first for everyone: "where is it in me" is the question a
+  // child asks, and a grown-up gets the same orientation for free.
+  const [libraryView, setLibraryView] = useState<"map" | "list">("map");
   const [quizActive, setQuizActive] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const prefetched = useRef(new Set<OrganId>());
@@ -213,9 +218,12 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     );
   }, [organId]);
 
+  const bodySense = kidsOn ? getBodySense(locale.code, organId) : null;
+
   /** Everything a child would want read out for the organ on screen. */
   const readAloud = (target: Organ) => {
-    speak(`${target.name}. ${target.description} ${target.funFact}`, speechLang);
+    const lines = [target.name, target.description, target.funFact, bodySense ?? ""];
+    speak(lines.filter(Boolean).join(" "), speechLang);
   };
 
   const changeKidsMode = (next: boolean) => {
@@ -285,10 +293,41 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
       <div className="workspace">
         <aside className={`organ-library ${mobileLibrary ? "open" : ""}`}>
           <div className="panel-heading">
-            <span>{t.library.title}</span>
+            <span>{libraryView === "map" && kidsCopy ? kidsCopy.mapLabel : t.library.title}</span>
             <button aria-label={t.library.close} className="mobile-close" onClick={() => setMobileLibrary(false)}><X size={17} /></button>
             {!kidsOn && <button aria-label={t.library.saved}><Bookmark size={17} /></button>}
           </div>
+          {kidsCopy && (
+            <div className="library-tabs" role="tablist">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={libraryView === "map"}
+                className={libraryView === "map" ? "active" : ""}
+                onClick={() => setLibraryView("map")}
+              >
+                <PersonStanding size={15} /> {kidsCopy.mapTab}
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={libraryView === "list"}
+                className={libraryView === "list" ? "active" : ""}
+                onClick={() => setLibraryView("list")}
+              >
+                <LibraryBig size={15} /> {kidsCopy.listTab}
+              </button>
+            </div>
+          )}
+          {libraryView === "map" && kidsCopy ? (
+            <BodyMap
+              organs={organById}
+              activeId={organId}
+              onSelect={selectOrgan}
+              label={kidsCopy.mapLabel}
+              hint={kidsCopy.mapHint}
+            />
+          ) : (
           <div className="organ-list">
             {filteredOrgans.map((item) => (
               <button
@@ -309,7 +348,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               </button>
             ))}
           </div>
-          {!kidsOn && <button className="view-all" onClick={() => setQuery("")}>{t.library.viewAll} <ArrowRight size={14} /></button>}
+          )}
+          {!kidsOn && libraryView === "list" && <button className="view-all" onClick={() => setQuery("")}>{t.library.viewAll} <ArrowRight size={14} /></button>}
           <blockquote>
             <Sparkles size={18} />
             <p>{t.library.quoteLine1}<br />{t.library.quoteLine2}</p>
@@ -343,6 +383,14 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             <button className="listen-button" type="button" data-reveal onClick={() => readAloud(organ)}>
               <Volume2 size={19} /> {kidsCopy.listen}
             </button>
+          )}
+          {/* Turns the screen into something to do with their own body, which
+              is how a child this age actually locates an organ. */}
+          {kidsOn && kidsCopy && bodySense && (
+            <div className="body-sense" data-reveal>
+              <PersonStanding size={17} />
+              <p><b>{kidsCopy.bodySenseTitle}</b>{bodySense}</p>
+            </div>
           )}
           <div className="rule" />
           <h2 data-reveal>{t.info.keyFacts}</h2>

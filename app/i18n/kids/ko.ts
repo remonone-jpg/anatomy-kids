@@ -12,6 +12,11 @@ export const kids: KidsCopy = {
     tagline: "몸속을 구경해요",
     libraryTitle: "무엇을 볼까요?",
     viewAll: "전부 보기",
+    mapTab: "몸에서 찾기",
+    listTab: "목록",
+    mapLabel: "몸속 지도",
+    mapHint: "몸을 눌러보세요",
+    bodySenseTitle: "직접 해봐요",
     quoteLine1: "궁금한 걸 눌러보세요.",
     quoteLine2: "몸속이 보여요!",
     quoteSign: "천천히 구경해요",
@@ -65,6 +70,7 @@ export const kids: KidsCopy = {
       function: "온몸에 피를 보내요",
       dailyFact: "하루에 십만 번쯤 뛰어요",
       funFact: "{child}가 엄마 배 속에 있을 때부터 벌써 쿵쿵 뛰고 있었어요.",
+      bodySense: "가슴 한가운데에 손을 대고 가만히 있어 보세요. 쿵쿵 느껴지나요?",
       hotspots: {
         aorta: "피가 씽 하고 나가는 제일 큰 길",
         "left-atrium": "깨끗한 피가 들어오는 방",
@@ -81,6 +87,7 @@ export const kids: KidsCopy = {
       function: "생각하고 몸을 움직여요",
       dailyFact: "잠잘 때도 쉬지 않아요",
       funFact: "밤에 꿈을 꾸는 것도 뇌가 하는 일이에요.",
+      bodySense: "머리를 톡톡 만져보세요. 딱딱한 뼈 안에 뇌가 들어 있어요.",
       hotspots: {
         frontal: "무엇을 할지 생각하는 곳",
         parietal: "만지는 느낌을 아는 곳",
@@ -95,6 +102,7 @@ export const kids: KidsCopy = {
       function: "숨을 쉬어요",
       dailyFact: "이만 번쯤 숨을 쉬어요",
       funFact: "오른쪽이 왼쪽보다 조금 더 커요. 왼쪽은 심장에게 자리를 비켜줬거든요.",
+      bodySense: "숨을 크게 들이마셔 보세요. 가슴이 부풀어 오르죠?",
       hotspots: {
         trachea: "공기가 들어오는 길",
         "right-lung": "오른쪽 숨주머니",
@@ -110,6 +118,7 @@ export const kids: KidsCopy = {
       function: "몸속을 깨끗하게 해요",
       dailyFact: "쉬지 않고 아주 많은 일을 해요",
       funFact: "조금 다쳐도 다시 자라나는 신기한 곳이에요.",
+      bodySense: "오른쪽 갈비뼈 아래를 살짝 눌러보세요. 그 안에 간이 있어요.",
       hotspots: {
         "right-lobe": "제일 큰 부분",
         "left-lobe": "가운데를 넘어간 부분",
@@ -123,6 +132,7 @@ export const kids: KidsCopy = {
       function: "피를 깨끗하게 걸러요",
       dailyFact: "하루 종일 피를 걸러요",
       funFact: "이름처럼 정말 콩 모양으로 생겼어요.",
+      bodySense: "허리 뒤쪽에 양손을 얹어보세요. 왼쪽 오른쪽 하나씩 있어요.",
       hotspots: {
         cortex: "바깥쪽에서 피를 거르는 곳",
         medulla: "쉬야를 모으는 곳",
@@ -136,6 +146,7 @@ export const kids: KidsCopy = {
       function: "세상을 봐요",
       dailyFact: "만 번도 넘게 깜빡여요",
       funFact: "눈물은 눈을 촉촉하게 닦아주는 청소물이에요.",
+      bodySense: "눈을 꼭 감았다가 떠보세요. 깜깜했다가 다시 밝아지죠?",
       hotspots: {
         cornea: "눈 앞의 투명한 창문",
         iris: "빛을 얼마나 들일지 정해요",
@@ -149,6 +160,7 @@ export const kids: KidsCopy = {
       function: "먹은 걸 소화시켜요",
       dailyFact: "먹은 음식이 하루 넘게 지나가요",
       funFact: "배에서 꼬르륵 소리가 나는 건 장이 움직이는 소리예요.",
+      bodySense: "배를 살살 문질러 보세요. 이 안에 꼬불꼬불한 길이 있어요.",
       hotspots: {
         duodenum: "음식이 제일 먼저 오는 곳",
         jejunum: "좋은 걸 쏙쏙 가져가는 곳",
@@ -162,6 +174,7 @@ export const kids: KidsCopy = {
       function: "음식을 녹여줘요",
       dailyFact: "밥 먹을 때마다 열심히 일해요",
       funFact: "몸속 단맛이 너무 많아지지 않게 조절도 해줘요.",
+      bodySense: "배꼽 조금 위를 눌러보세요. 그 안쪽 깊은 곳에 숨어 있어요.",
       hotspots: {
         head: "장이랑 붙어 있는 부분",
         body: "가운데 부분",
@@ -176,6 +189,7 @@ export const kids: KidsCopy = {
       function: "몸을 지키고 느껴요",
       dailyFact: "매일 조금씩 새로 생겨요",
       funFact: "몸에서 가장 큰 곳이 바로 피부예요.",
+      bodySense: "팔을 살살 간지럽혀 보세요. 느끼는 게 바로 피부예요.",
       hotspots: {
         epidermis: "제일 바깥, 우리가 만지는 곳",
         dermis: "간지러운 걸 느끼는 곳",

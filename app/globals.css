@@ -497,7 +497,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .main-nav button { padding: 10px; }
   .workspace { grid-template-columns: 210px minmax(450px,1fr); height: 690px; }
   .info-panel { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px 22px; max-height: none; }
-  .info-panel .description, .info-panel .rule, .info-panel h2, .key-facts, .medical-note, .listen-button { grid-column: 2; }
+  .info-panel .description, .info-panel .rule, .info-panel h2, .key-facts, .medical-note, .listen-button, .body-sense { grid-column: 2; }
   .info-kicker, .info-title-row { grid-column: 1; }
   .info-panel { height: 330px; }
   .workspace { height: auto; }
@@ -901,3 +901,89 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .kids .listen-button { min-height: 60px; font-size: 18px; }
   .kids .action-grid button { min-height: 58px; }
 }
+
+/* ── Body map ───────────────────────────────────────────────────────────────
+   Answers "where is it inside me". Colour is the only thing CSS sets on these
+   groups — geometry stays in attributes so `stroke-width` survives. */
+
+.library-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin-bottom: 10px;
+  padding: 3px;
+  border-radius: 13px;
+  background: rgba(120,92,70,.06);
+}
+.library-tabs button {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: 500 12px var(--font-serif), serif;
+}
+.library-tabs button.active {
+  background: rgba(255,253,249,.95);
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(90,66,48,.09);
+}
+
+.body-map { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.body-map svg { flex: 1; min-height: 0; width: 100%; }
+
+/* Opacity belongs on the group, not in the colour: the head, neck, torso and
+   limbs overlap, and translucent fills would compound at every joint into
+   visible seams. */
+.body-outline { color: #a58469; opacity: .22; cursor: pointer; transition: opacity .25s, color .25s; }
+.body-outline.active { color: var(--coral); opacity: .42; }
+
+/* Every organ stays visible at once — seeing what sits next to what is the
+   whole point — with the selected one lifted out of the crowd. */
+.body-organ { cursor: pointer; opacity: .62; transition: opacity .25s; }
+.body-organ.active { opacity: 1; filter: drop-shadow(0 2px 6px rgba(90,66,48,.28)); }
+.body-organ:hover { opacity: .8; }
+.body-organ.active:hover { opacity: 1; }
+
+.body-outline:focus-visible, .body-organ:focus-visible { outline: 2px solid var(--lavender); outline-offset: 3px; }
+
+/* The two organs a child can feel working while they watch. */
+.body-organ--heart .body-organ-shape,
+.body-organ--lungs .body-organ-shape { transform-box: view-box; }
+.body-organ--heart .body-organ-shape { animation: bodymap-beat 1.15s ease-in-out infinite; }
+.body-organ--lungs .body-organ-shape { animation: bodymap-breathe 4.5s ease-in-out infinite; }
+@keyframes bodymap-beat {
+  0%, 100% { transform: scale(1); }
+  10% { transform: scale(1.1); }
+  22% { transform: scale(1); }
+  32% { transform: scale(1.05); }
+  46% { transform: scale(1); }
+}
+@keyframes bodymap-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+}
+
+.body-map-caption { margin: 0; display: flex; align-items: baseline; gap: 8px; }
+.body-map-caption b { font: 500 20px var(--font-serif), serif; }
+.body-map-caption span { color: var(--muted); font-size: 13px; }
+.body-map-hint { color: #a89c92; font-size: 11px; }
+
+/* Try-it-on-yourself prompt, weighted like the fun note it sits beside. */
+.body-sense {
+  margin-top: 15px;
+  display: flex;
+  gap: 9px;
+  padding: 13px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--lavender), transparent 92%);
+  color: #6d5892;
+}
+.body-sense svg { flex: none; }
+.body-sense p { margin: 0; font: 500 14px/1.5 var(--font-serif), serif; }
+.body-sense b { display: block; margin-bottom: 2px; color: var(--ink); }

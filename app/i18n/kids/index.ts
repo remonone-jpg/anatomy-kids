@@ -95,6 +95,16 @@ export function applyKids(dictionary: Dictionary, locale: string): Dictionary {
 }
 
 /**
+ * The "try it on yourself" line for one organ. It is deliberately not part of
+ * `OrganContent` — that type is shared by all twelve locales, and this only
+ * exists where a child rewrite does — so it is read through here instead.
+ */
+export function getBodySense(locale: string, id: OrganId): string | null {
+  const copy = KIDS_COPY[locale];
+  return copy ? withChild(copy.organs[id].bodySense) : null;
+}
+
+/**
  * Strings kids mode adds rather than replaces (the narration button, the mode
  * toggle). They have no home in `UiDictionary`, so components read them here.
  */
