@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import gsap from "gsap";
 import {
   ArrowRight,
+  Baby,
   BookOpen,
   Bookmark,
   BrainCircuit,
@@ -21,6 +22,7 @@ import {
   Share2,
   Sparkles,
   Stethoscope,
+  Volume2,
   X,
 } from "lucide-react";
 import { OrganViewer } from "./OrganViewer";
@@ -29,8 +31,38 @@ import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
 import { buildOrgans, indexOrgans, type Organ } from "../i18n/merge";
 import { format, type Dictionary, type UiDictionary } from "../i18n/types";
+import { applyKids, getKidsUi, kidsAvailable, KIDS_ORGAN_IDS } from "../i18n/kids";
+import { speak, stopSpeaking } from "../lib/speech";
 
 type Modal = "lesson" | "quiz" | "animation" | "system" | null;
+
+/** Remembers the grown-up's choice so the tablet reopens in the same mode. */
+const KIDS_STORAGE_KEY = "anatomy:kids-mode";
+
+/**
+ * `localStorage` is a client-only store, so it is read through
+ * `useSyncExternalStore` rather than an effect — same approach as the
+ * authoring flag in the viewer. The server snapshot is `true`, which is both
+ * the default for this build and what an unset key resolves to, so the first
+ * paint matches the server unless the grown-up has explicitly opted out.
+ */
+const kidsListeners = new Set<() => void>();
+
+function subscribeKidsMode(listener: () => void) {
+  kidsListeners.add(listener);
+  return () => {
+    kidsListeners.delete(listener);
+  };
+}
+
+function readKidsMode() {
+  return window.localStorage.getItem(KIDS_STORAGE_KEY) !== "0";
+}
+
+function writeKidsMode(next: boolean) {
+  window.localStorage.setItem(KIDS_STORAGE_KEY, next ? "1" : "0");
+  kidsListeners.forEach((listener) => listener());
+}
 
 /**
  * Renders an organ illustration, or its accent glyph for organs that ship as a
@@ -116,9 +148,32 @@ function LanguageSwitcher({ locale, t }: { locale: LocaleConfig; t: UiDictionary
   );
 }
 
+/** Grown-up control, so it stays a plain labelled switch rather than a toy. */
+function KidsToggle({ on, label, onChange }: { on: boolean; label: string; onChange: (next: boolean) => void }) {
+  return (
+    <button type="button" className={`kids-toggle ${on ? "on" : ""}`} onClick={() => onChange(!on)} aria-pressed={on}>
+      <Baby size={16} aria-hidden />
+      <span>{label}</span>
+      <span className={`switch ${on ? "on" : ""}`}><i /></span>
+    </button>
+  );
+}
+
 export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dictionary: Dictionary }) {
-  const t = dictionary.ui;
-  const organs = useMemo(() => buildOrgans(dictionary.organs), [dictionary.organs]);
+  // This build exists for a five-year-old, so kids mode starts on.
+  const kids = useSyncExternalStore(subscribeKidsMode, readKidsMode, () => true);
+  const kidsCopy = getKidsUi(locale.code);
+  const kidsOn = kids && kidsAvailable(locale.code);
+
+  // BCP-47 for speech synthesis; `intl` is stored in the underscore form.
+  const speechLang = locale.intl.replace("_", "-");
+
+  const activeDictionary = useMemo(
+    () => (kidsOn ? applyKids(dictionary, locale.code) : dictionary),
+    [kidsOn, dictionary, locale.code],
+  );
+  const t = activeDictionary.ui;
+  const organs = useMemo(() => buildOrgans(activeDictionary.organs), [activeDictionary.organs]);
   const organById = useMemo(() => indexOrgans(organs), [organs]);
 
   const [organId, setOrganId] = useState<OrganId>("heart");
@@ -132,13 +187,23 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const prefetched = useRef(new Set<OrganId>());
   const organ = organById[organId];
   const reference = organById[organId === "heart" ? "brain" : "heart"];
+
+  // Kids mode shows the five organs a child can point to on their own body.
+  const listedOrgans = useMemo(
+    () => (kidsOn ? KIDS_ORGAN_IDS.map((id) => organById[id]) : organs),
+    [kidsOn, organs, organById],
+  );
   const filteredOrgans = useMemo(
     () =>
-      organs.filter((item) =>
+      listedOrgans.filter((item) =>
         `${item.name} ${item.system}`.toLocaleLowerCase(locale.code).includes(query.toLocaleLowerCase(locale.code)),
       ),
-    [organs, query, locale.code],
+    [listedOrgans, query, locale.code],
   );
+
+  // Speech outlives the component otherwise — it belongs to the browser, not
+  // to React, so navigating away would leave a sentence still being read.
+  useEffect(() => stopSpeaking, []);
 
   useEffect(() => {
     if (!contentRef.current) return;
@@ -147,6 +212,22 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
       { opacity: 1, y: 0, duration: 0.48, stagger: 0.035, ease: "power2.out", overwrite: true },
     );
   }, [organId]);
+
+  /** Everything a child would want read out for the organ on screen. */
+  const readAloud = (target: Organ) => {
+    speak(`${target.name}. ${target.description} ${target.funFact}`, speechLang);
+  };
+
+  const changeKidsMode = (next: boolean) => {
+    writeKidsMode(next);
+    stopSpeaking();
+    setQuery("");
+    setCompare(false);
+    setQuizActive(false);
+    // The short list may not contain whatever adult organ was on screen, which
+    // would leave the viewer showing something the library cannot select.
+    if (next && !KIDS_ORGAN_IDS.includes(organId)) setOrganId("heart");
+  };
 
   const selectOrgan = (id: OrganId) => {
     if (organById[id].illustrated) {
@@ -159,6 +240,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     setMobileLibrary(false);
     setCompare(false);
     setQuizActive(false);
+    // Naming the organ out loud is the whole point for a child who cannot read
+    // the heading they just tapped.
+    if (kidsOn) speak(organById[id].name, speechLang);
+    else stopSpeaking();
   };
 
   // Warms the model in the HTTP cache while the pointer is still travelling,
@@ -170,25 +255,30 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   };
 
   return (
-    <main className="app-shell">
+    <main className={`app-shell ${kidsOn ? "kids" : ""}`}>
       <header className="topbar">
         <button className="brand" type="button" onClick={() => selectOrgan("heart")} aria-label={t.brand.home}>
           <strong>Anatomy Atelier<sup>✦</sup></strong>
           <em>{t.brand.tagline}</em>
         </button>
-        <nav className="main-nav" aria-label="Primary navigation">
-          <button className="active"><Compass size={17} /> {t.nav.explore}</button>
-          <button><BrainCircuit size={17} /> {t.nav.systems}</button>
-          <button onClick={() => setModal("lesson")}><BookOpen size={17} /> {t.nav.lessons}</button>
-          <button><LibraryBig size={17} /> {t.nav.library}</button>
-          <button><NotebookPen size={17} /> {t.nav.notes}</button>
-        </nav>
-        <label className="search-box">
-          <Search size={17} />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t.search.placeholder} />
-        </label>
+        {!kidsOn && (
+          <nav className="main-nav" aria-label="Primary navigation">
+            <button className="active"><Compass size={17} /> {t.nav.explore}</button>
+            <button><BrainCircuit size={17} /> {t.nav.systems}</button>
+            <button onClick={() => setModal("lesson")}><BookOpen size={17} /> {t.nav.lessons}</button>
+            <button><LibraryBig size={17} /> {t.nav.library}</button>
+            <button><NotebookPen size={17} /> {t.nav.notes}</button>
+          </nav>
+        )}
+        {!kidsOn && (
+          <label className="search-box">
+            <Search size={17} />
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t.search.placeholder} />
+          </label>
+        )}
         <LanguageSwitcher locale={locale} t={t} />
-        <button className="profile" aria-label={t.profile.open}><span>MA</span><ChevronDown size={15} /></button>
+        {kidsCopy && <KidsToggle on={kidsOn} label={kidsCopy.modeLabel} onChange={changeKidsMode} />}
+        {!kidsOn && <button className="profile" aria-label={t.profile.open}><span>MA</span><ChevronDown size={15} /></button>}
         <button className="mobile-library-trigger" onClick={() => setMobileLibrary(true)} aria-label={t.library.open}><LibraryBig size={20} /></button>
       </header>
 
@@ -197,7 +287,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <div className="panel-heading">
             <span>{t.library.title}</span>
             <button aria-label={t.library.close} className="mobile-close" onClick={() => setMobileLibrary(false)}><X size={17} /></button>
-            <button aria-label={t.library.saved}><Bookmark size={17} /></button>
+            {!kidsOn && <button aria-label={t.library.saved}><Bookmark size={17} /></button>}
           </div>
           <div className="organ-list">
             {filteredOrgans.map((item) => (
@@ -213,12 +303,13 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                 <span className="organ-glyph">
                   <OrganArt organ={item} asset="thumb" alt="" size={47} />
                 </span>
-                <span><b>{item.name}</b><small>{item.system}</small></span>
+                {/* A child gets more from "쿵! 쿵! 쿵!" than from "심혈관계". */}
+                <span><b>{item.name}</b><small>{kidsOn ? item.poetic : item.system}</small></span>
                 {organId === item.id && <Heart className="favorite" size={14} fill="currentColor" />}
               </button>
             ))}
           </div>
-          <button className="view-all" onClick={() => setQuery("")}>{t.library.viewAll} <ArrowRight size={14} /></button>
+          {!kidsOn && <button className="view-all" onClick={() => setQuery("")}>{t.library.viewAll} <ArrowRight size={14} /></button>}
           <blockquote>
             <Sparkles size={18} />
             <p>{t.library.quoteLine1}<br />{t.library.quoteLine2}</p>
@@ -235,6 +326,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           onCompare={() => setCompare(!compare)}
           quizActive={quizActive}
           onQuizExit={() => setQuizActive(false)}
+          kids={kidsOn}
+          speechLang={speechLang}
         />
 
         <aside className="info-panel" ref={contentRef}>
@@ -246,23 +339,30 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             </span>
           </div>
           <p className="description" data-reveal>{organ.description}</p>
+          {kidsOn && kidsCopy && (
+            <button className="listen-button" type="button" data-reveal onClick={() => readAloud(organ)}>
+              <Volume2 size={19} /> {kidsCopy.listen}
+            </button>
+          )}
           <div className="rule" />
           <h2 data-reveal>{t.info.keyFacts}</h2>
           <dl className="key-facts">
             <div data-reveal><dt><span>◇</span> {t.info.size}</dt><dd><Measure>{organ.size}</Measure></dd></div>
-            <div data-reveal><dt><span>♙</span> {t.info.weight}</dt><dd><Measure>{organ.weight}</Measure></dd></div>
+            {!kidsOn && <div data-reveal><dt><span>♙</span> {t.info.weight}</dt><dd><Measure>{organ.weight}</Measure></dd></div>}
             <div data-reveal><dt><span>⌁</span> {t.info.daily}</dt><dd><Measure>{organ.dailyFact}</Measure></dd></div>
-            <div data-reveal><dt><span>⌖</span> {t.info.location}</dt><dd><Measure>{organ.location}</Measure></dd></div>
-            <div data-reveal><dt><span>❋</span> {t.info.bloodSupply}</dt><dd><Measure>{organ.bloodSupply}</Measure></dd></div>
+            {!kidsOn && <div data-reveal><dt><span>⌖</span> {t.info.location}</dt><dd><Measure>{organ.location}</Measure></dd></div>}
+            {!kidsOn && <div data-reveal><dt><span>❋</span> {t.info.bloodSupply}</dt><dd><Measure>{organ.bloodSupply}</Measure></dd></div>}
             <div data-reveal><dt><span>◈</span> {t.info.function}</dt><dd><Measure>{organ.function}</Measure></dd></div>
           </dl>
-          <div className="medical-note" data-reveal><Stethoscope size={16} /><p><b>{t.info.medical}</b>{organ.medical}</p></div>
+          {/* Clinical framing has nothing to offer a five-year-old, so kids mode
+              drops the note rather than trying to simplify it. */}
+          {!kidsOn && <div className="medical-note" data-reveal><Stethoscope size={16} /><p><b>{t.info.medical}</b>{organ.medical}</p></div>}
           <div className="fun-note" data-reveal><Sparkles size={15} /><p><b>{t.info.didYouKnow}</b>{organ.funFact}</p></div>
-          <button className="lesson-button" data-reveal onClick={() => setModal("lesson")}>{t.info.viewLesson} <ArrowRight size={16} /></button>
+          {!kidsOn && <button className="lesson-button" data-reveal onClick={() => setModal("lesson")}>{t.info.viewLesson} <ArrowRight size={16} /></button>}
           <div className="action-grid" data-reveal>
             <button onClick={() => setModal("animation")}><Play size={15} /> {t.info.animate}</button>
             <button onClick={() => { setQuizActive(true); setModal(null); }}><CircleHelp size={15} /> {t.info.quiz}</button>
-            <button onClick={() => setCompare(!compare)} className={compare ? "active" : ""}><Share2 size={15} /> {t.info.compare}</button>
+            {!kidsOn && <button onClick={() => setCompare(!compare)} className={compare ? "active" : ""}><Share2 size={15} /> {t.info.compare}</button>}
           </div>
         </aside>
       </div>
@@ -281,16 +381,20 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         <article className="curiosity-card">
           <span>✿</span><p>{t.library.quoteLine1}<br />{t.library.quoteLine2}</p><em>{t.library.quoteSign}</em>
         </article>
-        <article>
-          <header><div><em>{t.cards.microscopic}</em><h3>{organ.tissue}</h3></div><Microscope size={17} /></header>
-          <div className="microscope-visual organ-card-image"><OrganArt organ={organ} asset="microscopic" alt="" /></div>
-          <button onClick={() => setModal("lesson")}>{t.cards.exploreTissue} <ArrowRight size={14} /></button>
-        </article>
-        <article>
-          <header><div><em>{t.cards.compareOrgans}</em><h3>{organ.comparison}</h3></div><Share2 size={17} /></header>
-          <div className="comparison-visual organ-card-image"><OrganArt organ={organ} asset="compare" alt="" /></div>
-          <button onClick={() => setCompare(true)}>{t.cards.openComparison} <ArrowRight size={14} /></button>
-        </article>
+        {!kidsOn && (
+          <article>
+            <header><div><em>{t.cards.microscopic}</em><h3>{organ.tissue}</h3></div><Microscope size={17} /></header>
+            <div className="microscope-visual organ-card-image"><OrganArt organ={organ} asset="microscopic" alt="" /></div>
+            <button onClick={() => setModal("lesson")}>{t.cards.exploreTissue} <ArrowRight size={14} /></button>
+          </article>
+        )}
+        {!kidsOn && (
+          <article>
+            <header><div><em>{t.cards.compareOrgans}</em><h3>{organ.comparison}</h3></div><Share2 size={17} /></header>
+            <div className="comparison-visual organ-card-image"><OrganArt organ={organ} asset="compare" alt="" /></div>
+            <button onClick={() => setCompare(true)}>{t.cards.openComparison} <ArrowRight size={14} /></button>
+          </article>
+        )}
         <article>
           <header><div><em>{t.cards.functionAnimation}</em><h3>{organ.function}</h3></div><Play size={17} /></header>
           {/* The artwork itself is the control, so the play badge inside it is
@@ -307,13 +411,17 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           </button>
           <button onClick={() => setModal("animation")}>{t.cards.playAnimation} <ArrowRight size={14} /></button>
         </article>
-        <article>
-          <header><div><em>{t.cards.clinicalNotes}</em><h3>{t.cards.commonConditions}</h3></div><FileText size={17} /></header>
-          <ul>{organ.conditions.map((condition) => <li key={condition}>{condition}</li>)}</ul>
-          <button onClick={() => setModal("lesson")}>{t.cards.seeAll} <ArrowRight size={14} /></button>
-        </article>
+        {/* A list of the eight ways an organ can fail is the last thing a child
+            should meet, so kids mode leaves the clinical card out entirely. */}
+        {!kidsOn && (
+          <article>
+            <header><div><em>{t.cards.clinicalNotes}</em><h3>{t.cards.commonConditions}</h3></div><FileText size={17} /></header>
+            <ul>{organ.conditions.map((condition) => <li key={condition}>{condition}</li>)}</ul>
+            <button onClick={() => setModal("lesson")}>{t.cards.seeAll} <ArrowRight size={14} /></button>
+          </article>
+        )}
         <article className="system-card">
-          <header><div><em>{t.cards.whereItWorks}</em><h3>{organ.system}</h3></div><BrainCircuit size={17} /></header>
+          <header><div><em>{t.cards.whereItWorks}</em><h3>{kidsOn ? organ.name : organ.system}</h3></div><BrainCircuit size={17} /></header>
           <button
             type="button"
             className="system-visual organ-card-image"
@@ -326,7 +434,16 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         </article>
       </section>
 
-      {modal && <LearningModal type={modal} organ={organ} t={t} onClose={() => setModal(null)} />}
+      {modal && (
+        <LearningModal
+          type={modal}
+          organ={organ}
+          t={t}
+          kids={kidsOn}
+          speechLang={speechLang}
+          onClose={() => setModal(null)}
+        />
+      )}
       {mobileLibrary && <button className="drawer-backdrop" aria-label={t.library.close} onClick={() => setMobileLibrary(false)} />}
     </main>
   );
@@ -343,11 +460,15 @@ function LearningModal({
   type,
   organ,
   t,
+  kids,
+  speechLang,
   onClose,
 }: {
   type: Exclude<Modal, null>;
   organ: Organ;
   t: UiDictionary;
+  kids: boolean;
+  speechLang: string;
   onClose: () => void;
 }) {
   const vars = { organ: organ.name, location: organ.location };
@@ -358,6 +479,16 @@ function LearningModal({
     // grammatical for the plural organs too.
     : type === "system" ? format(t.modal.bodyTitle, vars)
     : format(t.modal.insideTitle, vars);
+
+  // Reads the panel out as it opens. Kids mode only ever opens a modal from a
+  // tap, so the browser's gesture requirement for speech is already satisfied.
+  useEffect(() => {
+    if (!kids) return;
+    const body = type === "system" ? format(t.modal.systemIntro, vars) : t.modal.lessonBody;
+    speak(`${title}. ${body}`, speechLang);
+    // Reading once per opening is the intent; `vars` is rebuilt every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kids, type, title, speechLang]);
 
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={onClose}>
@@ -388,9 +519,11 @@ function LearningModal({
               <OrganArt organ={organ} asset="location" alt="" />
             </figure>
             <dl className="modal-facts">
-              <div><dt>{t.modal.system}</dt><dd>{organ.system}</dd></div>
+              {/* "심혈관계" and "좌·우 심장동맥" are names, not explanations —
+                  a child gets nothing from either, so only the role remains. */}
+              {!kids && <div><dt>{t.modal.system}</dt><dd>{organ.system}</dd></div>}
               <div><dt>{t.modal.primaryRole}</dt><dd><Measure>{organ.function}</Measure></dd></div>
-              <div><dt>{t.modal.bloodSupply}</dt><dd><Measure>{organ.bloodSupply}</Measure></dd></div>
+              {!kids && <div><dt>{t.modal.bloodSupply}</dt><dd><Measure>{organ.bloodSupply}</Measure></dd></div>}
             </dl>
             <button className="lesson-button" onClick={onClose}>{t.modal.continueExploring} <ArrowRight size={16} /></button>
           </>

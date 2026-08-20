@@ -497,7 +497,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .main-nav button { padding: 10px; }
   .workspace { grid-template-columns: 210px minmax(450px,1fr); height: 690px; }
   .info-panel { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px 22px; max-height: none; }
-  .info-panel .description, .info-panel .rule, .info-panel h2, .key-facts, .medical-note { grid-column: 2; }
+  .info-panel .description, .info-panel .rule, .info-panel h2, .key-facts, .medical-note, .listen-button { grid-column: 2; }
   .info-kicker, .info-title-row { grid-column: 1; }
   .info-panel { height: 330px; }
   .workspace { height: auto; }
@@ -813,4 +813,91 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .quiz-answer-icon { width: 36px; height: 36px; }
   .quiz-answer > div strong { font-size: 17px; }
   .authoring-panel { inset-inline-start: 10px; max-width: calc(100% - 20px); bottom: 82px; }
+}
+
+/* ── Kids mode ──────────────────────────────────────────────────────────────
+   A five-year-old taps with a whole fingertip and cannot read 10px type, so
+   this scope trades information density for size. Nothing here changes layout
+   structure — the elements kids mode drops are simply not rendered. */
+
+/* The toggle itself is a grown-up control, so it stays a plain labelled switch
+   in both modes rather than becoming part of the toy. */
+.kids-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 13px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: rgba(255,255,255,.28);
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  font: 500 12px var(--font-serif), serif;
+}
+.kids-toggle.on {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--sage), transparent 88%);
+  border-color: color-mix(in srgb, var(--sage), transparent 58%);
+}
+
+/* Brand, language, mode — the nav, search and profile are gone. */
+.kids .topbar { grid-template-columns: 1fr auto auto; }
+
+/* Five organs instead of nine, so each row can afford to be much larger. */
+.kids .organ-list { gap: 8px; }
+.kids .organ-item { min-height: 88px; grid-template-columns: 62px 1fr 18px; gap: 12px; border-radius: 20px; }
+.kids .organ-glyph { width: 58px; height: 58px; }
+.kids .organ-item b { font-size: 21px; }
+.kids .organ-item small { margin-top: 4px; color: #9a8f85; font-size: 13px; }
+
+.kids .description { font-size: 16px; line-height: 1.6; }
+.kids .key-facts { gap: 13px; }
+.kids .key-facts > div { grid-template-columns: 96px 1fr; }
+.kids .key-facts dt { font-size: 15px; }
+.kids .key-facts dd { font-size: 14px; line-height: 1.45; }
+.kids .fun-note { padding: 13px; border-radius: 16px; }
+.kids .fun-note p { font-size: 14px; line-height: 1.5; }
+
+/* The single most-used control in kids mode, so it gets the most weight. */
+.listen-button {
+  width: 100%;
+  min-height: 56px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2px solid color-mix(in srgb, var(--sage), transparent 52%);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--sage), transparent 88%);
+  color: #4d6a4c;
+  cursor: pointer;
+  font: 500 17px var(--font-serif), serif;
+}
+.listen-button:active { transform: scale(.98); }
+
+/* Two actions rather than three, so the spanning rule for the third would
+   otherwise leave the first button stranded in a half-width column. */
+.kids .action-grid { gap: 10px; }
+.kids .action-grid button { min-height: 54px; border-width: 2px; border-radius: 16px; font-size: 15px; }
+.kids .action-grid button:last-child { grid-column: auto; }
+
+.kids .tool-button { height: 68px; font-size: 11px; }
+.kids .tip-note p { font-size: 16px; line-height: 1.6; }
+.kids .callout-body b { font-size: 17px; }
+.kids .callout-body b:before { top: 18px; }
+.kids .callout-body small { margin-top: 5px; font-size: 13px; line-height: 1.4; }
+.kids .callout-close { width: 26px; height: 26px; }
+
+.kids .quiz-prompt strong { font-size: 26px; }
+.kids .quiz-meta small { font-size: 12px; }
+.kids .quiz-answer > div strong { font-size: 20px; }
+
+@media (max-width: 760px) {
+  /* Thumbs, not fingertips, and a much narrower column to spend. */
+  .kids .organ-item b { font-size: 19px; }
+  .kids .listen-button { min-height: 60px; font-size: 18px; }
+  .kids .action-grid button { min-height: 58px; }
 }
