@@ -2,13 +2,20 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
-import type { OrganId } from "../anatomy-data";
-import { BODY_HEIGHT_CM, organPlacements, SHELL_ORGAN, type OrganPlacement } from "../body-placement";
+import { organStructures, type OrganId } from "../anatomy-data";
 import { disposeObject } from "./dispose";
 
 /**
  * The whole body at once: a translucent human shell with every organ inside it,
- * at its real size and in its real place.
+ * at its real size and in its real place — and actually joined to each other.
+ *
+ * The organs here are not the ones the single-organ viewer shows. Those were
+ * each generated on their own, so however carefully they are positioned their
+ * stumps never meet: the heart's great vessels stop short of the aorta, the
+ * lungs never reach the trachea. These come from one segmentation of one body
+ * (Z-Anatomy, CC-BY-SA 4.0), already sharing the shell's coordinate space, so
+ * the oesophagus really does run into the stomach and the stomach into the
+ * duodenum. They need no placement at all — only a tint.
  *
  * Separate from `AnatomyViewer`, which exists to show one organ large with
  * labelled hotspots. Almost nothing is shared between the two — different
@@ -26,6 +33,37 @@ type Callbacks = {
 
 type Options = { compact?: boolean };
 
+/** The organ the shell itself stands for — it is the boundary, not a part. */
+const SHELL_ORGAN: OrganId = "skin";
+
+/** Every organ that exists as an atlas model. Skin is the shell. */
+const ATLAS_ORGANS: OrganId[] = [
+  "brain", "eyeball", "lungs", "heart", "liver", "pancreas", "kidneys", "intestine",
+];
+
+/**
+ * Tissue colours, not UI colours. The accents in `anatomy-data` are chosen to
+ * read as small chips beside a label; used as paint on a whole organ they turn
+ * the body into one salmon-coloured mass. These are the shades the tissues
+ * actually have, which is also what tells them apart on screen.
+ *
+ * `opacity` below 1 is for organs that would otherwise hide something the child
+ * came to see — the lungs sit in front of the heart.
+ */
+const TISSUE: Record<string, { color: number; opacity: number }> = {
+  brain: { color: 0xd3b3ad, opacity: 1 },
+  eyeball: { color: 0xece5db, opacity: 1 },
+  lungs: { color: 0xd98f8a, opacity: 0.62 },
+  heart: { color: 0xa8413a, opacity: 1 },
+  liver: { color: 0x8d5044, opacity: 1 },
+  pancreas: { color: 0xcfae7c, opacity: 1 },
+  kidneys: { color: 0x94473f, opacity: 1 },
+  intestine: { color: 0xd39c7e, opacity: 1 },
+};
+
+const tissueOf = (id: OrganId) =>
+  TISSUE[id] ?? { color: new THREE.Color(organStructures.find((o) => o.id === id)?.accent ?? "#e0ac97").getHex(), opacity: 1 };
+
 const CAMERA_FOV = 34;
 /** Centred on the organs rather than on the figure: they run from the pelvis
  *  at ~85cm to the crown of the brain at ~172cm. */
@@ -38,7 +76,7 @@ const HOME_TARGET = new THREE.Vector3(0, 128, 0);
 const HOME_FRAME = { height: 112, width: 58 };
 const HOME_FRAME_COMPACT = { height: 96, width: 44 };
 
-type PlacedOrgan = { id: OrganId; group: THREE.Group; meshes: THREE.Mesh[] };
+type PlacedOrgan = { id: OrganId; group: THREE.Group; meshes: THREE.Mesh[]; material: THREE.MeshStandardMaterial };
 
 /**
  * Structures that are not one of the nine, but without which the nine look
@@ -116,7 +154,9 @@ export class BodyViewer {
     this.shellMaterial = new THREE.MeshPhysicalMaterial({
       color: 0xffe6d8,
       transparent: true,
-      opacity: 0.17,
+      // Every organ is seen through this, so each point of opacity is paid for
+      // twice: once in how well the body reads, once in how muddy the organs get.
+      opacity: 0.12,
       roughness: 0.55,
       metalness: 0,
       transmission: 0,
@@ -142,9 +182,12 @@ export class BodyViewer {
   }
 
   private buildLights() {
-    this.scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-    this.scene.add(new THREE.HemisphereLight(0xfff8ee, 0x3a2a2f, 0.8));
-    const key = new THREE.DirectionalLight(0xfff3e7, 2.6);
+    // Kept low on purpose: flat fill is what washed the tissue colours out and
+    // left every organ reading as the same pale salmon. The key light carries
+    // the form instead.
+    this.scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+    this.scene.add(new THREE.HemisphereLight(0xfff8ee, 0x3a2a2f, 0.5));
+    const key = new THREE.DirectionalLight(0xfff3e7, 2.9);
     key.position.set(90, 240, 200);
     this.scene.add(key);
     const fill = new THREE.DirectionalLight(0xe6ecff, 1.0);
@@ -162,7 +205,7 @@ export class BodyViewer {
    */
   async load() {
     this.callbacks.onLoading(true, 0);
-    const total = organPlacements.length + 1 + CONTEXT_LAYERS.length;
+    const total = ATLAS_ORGANS.length + 1 + CONTEXT_LAYERS.length;
     let done = 0;
     const step = () => {
       done += 1;
@@ -214,11 +257,11 @@ export class BodyViewer {
           step();
         }
       }),
-      ...organPlacements.map(async (placement) => {
+      ...ATLAS_ORGANS.map(async (id) => {
         try {
-          const gltf = await this.loader.loadAsync(`/models/${placement.id}.glb`);
+          const gltf = await this.loader.loadAsync(`/models/atlas/${id}.glb`);
           if (this.disposed) return;
-          this.place(placement, gltf.scene);
+          this.add(id, gltf.scene);
         } catch {
           // A missing organ should not cost the rest of the body.
         } finally {
@@ -232,61 +275,34 @@ export class BodyViewer {
   }
 
   /**
-   * Fits one model into its anatomical box: rotate, then scale uniformly so the
-   * tightest axis matches, then centre. Uniform scale matters — fitting each
-   * axis on its own would stretch the organ into the box's proportions and lose
-   * the shape the model is there to show.
+   * Adds one atlas organ. No scaling and no positioning: the file is already
+   * in the shell's coordinate space, and moving it would be the one thing that
+   * could break the joins it comes with.
    */
-  private place(placement: OrganPlacement, model: THREE.Object3D) {
-    const target = new THREE.Vector3(...placement.size);
+  private add(id: OrganId, model: THREE.Object3D) {
+    const group = new THREE.Group();
+    group.add(model);
 
-    for (const center of placement.centers) {
-      const instance = placement.centers.length > 1 ? model.clone(true) : model;
-      const group = new THREE.Group();
+    const tissue = tissueOf(id);
+    const material = new THREE.MeshStandardMaterial({
+      color: tissue.color,
+      roughness: 0.58,
+      metalness: 0,
+      transparent: tissue.opacity < 1,
+      opacity: tissue.opacity,
+      depthWrite: tissue.opacity > 0.6,
+    });
 
-      if (placement.rotation) {
-        const [rx, ry, rz] = placement.rotation;
-        instance.rotation.set(
-          THREE.MathUtils.degToRad(rx),
-          THREE.MathUtils.degToRad(ry),
-          THREE.MathUtils.degToRad(rz),
-        );
-      }
-      instance.updateMatrixWorld(true);
+    const meshes: THREE.Mesh[] = [];
+    group.traverse((object) => {
+      if (!(object as THREE.Mesh).isMesh) return;
+      const mesh = object as THREE.Mesh;
+      mesh.material = material;
+      meshes.push(mesh);
+    });
 
-      const box = new THREE.Box3().setFromObject(instance);
-      const size = box.getSize(new THREE.Vector3());
-      const scale = Math.min(
-        target.x / Math.max(size.x, 1e-6),
-        target.y / Math.max(size.y, 1e-6),
-        target.z / Math.max(size.z, 1e-6),
-      );
-      group.add(instance);
-      group.scale.setScalar(scale);
-      group.updateMatrixWorld(true);
-
-      // Re-measure after scaling so the offset cancels the model's own origin,
-      // wherever the exporter happened to leave it.
-      const scaledBox = new THREE.Box3().setFromObject(group);
-      const scaledCenter = scaledBox.getCenter(new THREE.Vector3());
-      group.position.set(
-        center[0] - scaledCenter.x,
-        center[1] - scaledCenter.y,
-        center[2] - scaledCenter.z,
-      );
-
-      const meshes: THREE.Mesh[] = [];
-      group.traverse((object) => {
-        if ((object as THREE.Mesh).isMesh) {
-          const mesh = object as THREE.Mesh;
-          mesh.material = (mesh.material as THREE.Material).clone();
-          meshes.push(mesh);
-        }
-      });
-
-      this.scene.add(group);
-      this.organs.push({ id: placement.id, group, meshes });
-    }
+    this.scene.add(group);
+    this.organs.push({ id, group, meshes, material });
     this.applyEmphasis();
   }
 
@@ -306,17 +322,13 @@ export class BodyViewer {
     for (const organ of this.organs) {
       const isSelected = organ.id === this.selected;
       const isHovered = organ.id === this.hovered;
-      const opacity = !anySelected ? 1 : isSelected ? 1 : 0.28;
-      for (const mesh of organ.meshes) {
-        const material = mesh.material as THREE.MeshStandardMaterial;
-        material.transparent = opacity < 1;
-        material.opacity = opacity;
-        material.depthWrite = opacity > 0.6;
-        if (material.emissive) {
-          material.emissive.setHex(isSelected || isHovered ? 0x2a0e08 : 0x000000);
-        }
-        material.needsUpdate = true;
-      }
+      const base = tissueOf(organ.id).opacity;
+      const opacity = !anySelected ? base : isSelected ? 1 : base * 0.3;
+      organ.material.transparent = opacity < 1;
+      organ.material.opacity = opacity;
+      organ.material.depthWrite = opacity > 0.6;
+      organ.material.emissive.setHex(isSelected || isHovered ? 0x2a0e08 : 0x000000);
+      organ.material.needsUpdate = true;
     }
     // Context recedes as soon as one organ is the subject, so it frames the
     // body without competing with whatever the child just tapped.
@@ -324,7 +336,7 @@ export class BodyViewer {
       const base = CONTEXT_LAYERS[index]?.opacity ?? 0.7;
       material.opacity = anySelected ? base * 0.34 : base;
     }
-    this.shellMaterial.opacity = this.selected === SHELL_ORGAN ? 0.42 : 0.17;
+    this.shellMaterial.opacity = this.selected === SHELL_ORGAN ? 0.4 : 0.12;
     this.shellMaterial.color.setHex(this.selected === SHELL_ORGAN ? 0xffb9a3 : 0xffe6d8);
   }
 
@@ -446,9 +458,9 @@ export class BodyViewer {
     disposeObject(this.scene);
     this.shellMaterial.dispose();
     for (const material of this.contextMaterials) material.dispose();
+    for (const organ of this.organs) organ.material.dispose();
     this.renderer.dispose();
     canvas.remove();
   }
 }
 
-export { BODY_HEIGHT_CM };

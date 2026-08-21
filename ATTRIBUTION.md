@@ -9,6 +9,13 @@ Derived from the **Z-Anatomy** project:
 | `body.glb` | `Regions of human body100.fbx` | the translucent outer shell |
 | `viscera.glb` | `VisceralSystem100.fbx` | oesophagus, stomach, trachea, larynx, thyroid, gallbladder and bile duct, ureters, bladder, adrenals |
 | `vessels.glb` | `CardioVascular41.fbx` | the great vessels — aorta, venae cavae, pulmonary, carotid, jugular, subclavian, iliac, portal, renal, mesenteric |
+| `atlas/*.glb` | `VisceralSystem100.fbx`, `CardioVascular41.fbx`, `NervousSystem100.fbx` | the eight organs shown inside the body: brain, eyeballs, lungs, heart, liver, pancreas, kidneys, intestine |
+
+Everything above comes from one segmentation of one body, so the parts are
+already joined to each other and already share a coordinate space. That is the
+whole reason the body view uses them: the organ models in `public/models/*.glb`
+were each generated separately, and no amount of positioning makes their stumps
+meet.
 
 - Source: https://github.com/LluisV/Z-Anatomy (`Resources/Models/FBX/`)
 - Z-Anatomy's models descend from **BodyParts3D** (DBCLS, Japan)
@@ -46,14 +53,25 @@ must stay under CC BY-SA 4.0 wherever it is redistributed, with the attribution
 above kept intact. It does not place the rest of this repository under that
 licence, but it does travel with any copy of the file.
 
-### Organ placement
+### Rebuilding the organ set
 
-The boxes in `app/lib/body-placement.ts` are bounding-box measurements taken
-from the same Z-Anatomy release (`VisceralSystem100.fbx` and
-`NervousSystem100.fbx`). They are factual measurements rather than copied
-geometry, and they are what puts each organ where it belongs.
+```bash
+node scripts/build-anatomy-model.mjs "$FBX/CardioVascular41.fbx"   public/models/atlas/heart.glb     --include=heart,ventricle,atrium,myocard,pericard,cardiac,coronary
+node scripts/build-anatomy-model.mjs "$FBX/VisceralSystem100.fbx"  public/models/atlas/lungs.glb     --include=lung,bronch
+node scripts/build-anatomy-model.mjs "$FBX/VisceralSystem100.fbx"  public/models/atlas/liver.glb     --include=liver
+node scripts/build-anatomy-model.mjs "$FBX/VisceralSystem100.fbx"  public/models/atlas/kidneys.glb   --include=kidney
+node scripts/build-anatomy-model.mjs "$FBX/VisceralSystem100.fbx"  public/models/atlas/pancreas.glb  --include=pancrea
+node scripts/build-anatomy-model.mjs "$FBX/VisceralSystem100.fbx"  public/models/atlas/intestine.glb --exclude=omentum --include=intestin,colon,cecum,caecum,ileum,jejunum,duoden,rectum,appendix,taenia,mesocolon,mesenter
+node scripts/build-anatomy-model.mjs "$FBX/NervousSystem100.fbx"   public/models/atlas/brain.glb     --include=cerebrum,cerebral_hemisphere,cerebellum,frontal_lobe,parietal_lobe,temporal_lobe,occipital_lobe,brainstem,midbrain,pons,medulla_oblongata,corpus_callosum,gyrus,sulcus
+node scripts/build-anatomy-model.mjs "$FBX/NervousSystem100.fbx"   public/models/atlas/eyeball.glb   --include=eyeball,bulbus_oculi
+```
+
+The filters are chosen so the sets do not overlap: `viscera.glb` carries the
+trachea while `atlas/lungs.glb` carries the bronchi below it, `viscera.glb`
+carries the stomach while `atlas/intestine.glb` starts at the duodenum. Colours
+are applied at runtime in `body-viewer.ts` — the source meshes are untextured.
 
 ## Organ models — `public/models/{heart,brain,...}.glb`
 
 Shipped with the upstream `thebuggeddev/anatomy` repository; generated with
-Tripo. Not modified here — they are scaled and positioned at runtime.
+Tripo. Not modified here. They are what the single-organ viewer shows.
