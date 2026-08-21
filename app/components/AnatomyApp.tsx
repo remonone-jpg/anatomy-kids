@@ -21,6 +21,7 @@ import {
   Search,
   Share2,
   PersonStanding,
+  Scan,
   Sparkles,
   Stethoscope,
   Volume2,
@@ -28,6 +29,7 @@ import {
 } from "lucide-react";
 import { OrganViewer } from "./OrganViewer";
 import { BodyMap } from "./BodyMap";
+import { BodyScene } from "./BodyScene";
 import type { OrganId } from "../lib/anatomy-data";
 import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
@@ -187,6 +189,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // The map opens first for everyone: "where is it in me" is the question a
   // child asks, and a grown-up gets the same orientation for free.
   const [libraryView, setLibraryView] = useState<"map" | "list">("map");
+  // Which stage the centre column shows: one organ large, or the whole body.
+  const [stage, setStage] = useState<"organ" | "body">("organ");
   const [quizActive, setQuizActive] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const prefetched = useRef(new Set<OrganId>());
@@ -357,18 +361,46 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           </blockquote>
         </aside>
 
-        <OrganViewer
-          organ={organ}
-          t={t}
-          autoRotate={autoRotate}
-          onAutoRotate={setAutoRotate}
-          compare={compare}
-          onCompare={() => setCompare(!compare)}
-          quizActive={quizActive}
-          onQuizExit={() => setQuizActive(false)}
-          kids={kidsOn}
-          speechLang={speechLang}
-        />
+        <div className="stage">
+          {kidsCopy && (
+            <div className="stage-tabs" role="tablist">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={stage === "organ"}
+                className={stage === "organ" ? "active" : ""}
+                onClick={() => setStage("organ")}
+              >
+                <Heart size={15} /> {kidsCopy.viewOrgan}
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={stage === "body"}
+                className={stage === "body" ? "active" : ""}
+                onClick={() => setStage("body")}
+              >
+                <Scan size={15} /> {kidsCopy.viewBody}
+              </button>
+            </div>
+          )}
+          {stage === "body" && kidsCopy ? (
+            <BodyScene organs={organById} activeId={organId} onSelect={selectOrgan} copy={kidsCopy} />
+          ) : (
+            <OrganViewer
+              organ={organ}
+              t={t}
+              autoRotate={autoRotate}
+              onAutoRotate={setAutoRotate}
+              compare={compare}
+              onCompare={() => setCompare(!compare)}
+              quizActive={quizActive}
+              onQuizExit={() => setQuizActive(false)}
+              kids={kidsOn}
+              speechLang={speechLang}
+            />
+          )}
+        </div>
 
         <aside className="info-panel" ref={contentRef}>
           <div className="info-kicker" data-reveal><Heart size={13} fill="currentColor" /> {format(t.info.kicker, { organ: organ.name })}</div>
