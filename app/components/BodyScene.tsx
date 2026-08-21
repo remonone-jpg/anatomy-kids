@@ -19,15 +19,20 @@ export function BodyScene({
   activeId,
   onSelect,
   copy,
+  compact = false,
 }: {
   organs: Record<OrganId, Organ>;
   activeId: OrganId;
   onSelect: (id: OrganId) => void;
   copy: KidsUiCopy;
+  /** Sized for the side panel rather than the main stage. */
+  compact?: boolean;
 }) {
   const mountRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<BodyViewer | null>(null);
   const onSelectRef = useRef(onSelect);
+  // Read once at construction; the viewer is not rebuilt when this changes.
+  const compactRef = useRef(compact);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [hovered, setHovered] = useState<OrganId | null>(null);
@@ -42,15 +47,19 @@ export function BodyScene({
 
     void import("../lib/three/body-viewer").then(({ BodyViewer: Viewer }) => {
       if (cancelled || !mountRef.current) return;
-      viewer = new Viewer(mountRef.current, {
-        onLoading: (isLoading, value) => {
-          setLoading(isLoading);
-          setProgress(value);
+      viewer = new Viewer(
+        mountRef.current,
+        {
+          onLoading: (isLoading, value) => {
+            setLoading(isLoading);
+            setProgress(value);
+          },
+          // Routed through a ref because the viewer captures its callbacks once.
+          onPick: (id) => onSelectRef.current(id),
+          onHover: setHovered,
         },
-        // Routed through a ref because the viewer captures its callbacks once.
-        onPick: (id) => onSelectRef.current(id),
-        onHover: setHovered,
-      });
+        { compact: compactRef.current },
+      );
       viewerRef.current = viewer;
       void viewer.load();
     });
@@ -72,7 +81,7 @@ export function BodyScene({
   const label = hovered ? organs[hovered].name : organs[activeId].name;
 
   return (
-    <section className="body-scene" aria-label={copy.bodyLabel}>
+    <section className={`body-scene ${compact ? "compact" : ""}`} aria-label={copy.bodyLabel}>
       <div ref={mountRef} className="body-scene-mount" />
 
       <div className="body-scene-tools">

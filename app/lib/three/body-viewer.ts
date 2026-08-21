@@ -24,12 +24,19 @@ type Callbacks = {
   onHover: (id: OrganId | null) => void;
 };
 
+type Options = { compact?: boolean };
+
 const CAMERA_FOV = 34;
 /** Centred on the organs rather than on the figure: they run from the pelvis
  *  at ~85cm to the crown of the brain at ~172cm. */
 const HOME_TARGET = new THREE.Vector3(0, 128, 0);
-/** What the opening view should contain, in centimetres. */
+/**
+ * What the opening view should contain, in centimetres. The side panel is a
+ * narrow column, where fitting the full span would leave the figure tiny — so
+ * it opens tighter, on the organs rather than on the whole torso.
+ */
 const HOME_FRAME = { height: 112, width: 58 };
+const HOME_FRAME_COMPACT = { height: 96, width: 44 };
 
 type PlacedOrgan = { id: OrganId; group: THREE.Group; meshes: THREE.Mesh[] };
 
@@ -53,7 +60,8 @@ export class BodyViewer {
   private pointerDown = { x: 0, y: 0 };
   private dragged = false;
 
-  private frame = 0;
+  private frame: { height: number; width: number };
+  private raf = 0;
   private dirty = true;
   private disposed = false;
   private resizeObserver: ResizeObserver;
@@ -62,9 +70,10 @@ export class BodyViewer {
   /** Suppresses auto-framing once the visitor has taken over the camera. */
   private userMoved = false;
 
-  constructor(container: HTMLElement, callbacks: Callbacks) {
+  constructor(container: HTMLElement, callbacks: Callbacks, options: Options = {}) {
     this.container = container;
     this.callbacks = callbacks;
+    this.frame = options.compact ? HOME_FRAME_COMPACT : HOME_FRAME;
 
     const lowPower = window.matchMedia("(max-width: 780px)").matches || (navigator.hardwareConcurrency ?? 8) < 6;
     this.renderer = new THREE.WebGLRenderer({ antialias: !lowPower, alpha: true, powerPreference: "high-performance" });
@@ -324,9 +333,9 @@ export class BodyViewer {
    */
   private homeDistance() {
     const vFov = THREE.MathUtils.degToRad(CAMERA_FOV);
-    const byHeight = HOME_FRAME.height / 2 / Math.tan(vFov / 2);
+    const byHeight = this.frame.height / 2 / Math.tan(vFov / 2);
     const hFov = 2 * Math.atan(Math.tan(vFov / 2) * this.camera.aspect);
-    const byWidth = HOME_FRAME.width / 2 / Math.tan(hFov / 2);
+    const byWidth = this.frame.width / 2 / Math.tan(hFov / 2);
     return Math.max(byHeight, byWidth);
   }
 
@@ -364,7 +373,7 @@ export class BodyViewer {
 
   private animate = () => {
     if (this.disposed) return;
-    this.frame = requestAnimationFrame(this.animate);
+    this.raf = requestAnimationFrame(this.animate);
     const moved = this.controls.update();
     if (moved || this.dirty) {
       this.renderer.render(this.scene, this.camera);
@@ -374,7 +383,7 @@ export class BodyViewer {
 
   dispose() {
     this.disposed = true;
-    cancelAnimationFrame(this.frame);
+    cancelAnimationFrame(this.raf);
     this.resizeObserver.disconnect();
     const canvas = this.renderer.domElement;
     canvas.removeEventListener("pointerdown", this.onPointerDown);

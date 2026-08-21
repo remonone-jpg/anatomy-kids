@@ -902,78 +902,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .kids .action-grid button { min-height: 58px; }
 }
 
-/* ── Body map ───────────────────────────────────────────────────────────────
-   Answers "where is it inside me". Colour is the only thing CSS sets on these
-   groups — geometry stays in attributes so `stroke-width` survives. */
-
-.library-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3px;
-  margin-bottom: 10px;
-  padding: 3px;
-  border-radius: 13px;
-  background: rgba(120,92,70,.06);
-}
-.library-tabs button {
-  min-height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  font: 500 12px var(--font-serif), serif;
-}
-.library-tabs button.active {
-  background: rgba(255,253,249,.95);
-  color: var(--ink);
-  box-shadow: 0 2px 8px rgba(90,66,48,.09);
-}
-
-.body-map { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.body-map svg { flex: 1; min-height: 0; width: 100%; }
-
-/* Opacity belongs on the group, not in the colour: the head, neck, torso and
-   limbs overlap, and translucent fills would compound at every joint into
-   visible seams. */
-.body-outline { color: #a58469; opacity: .22; cursor: pointer; transition: opacity .25s, color .25s; }
-.body-outline.active { color: var(--coral); opacity: .42; }
-
-/* Every organ stays visible at once — seeing what sits next to what is the
-   whole point — with the selected one lifted out of the crowd. */
-.body-organ { cursor: pointer; opacity: .62; transition: opacity .25s; }
-.body-organ.active { opacity: 1; filter: drop-shadow(0 2px 6px rgba(90,66,48,.28)); }
-.body-organ:hover { opacity: .8; }
-.body-organ.active:hover { opacity: 1; }
-
-.body-outline:focus-visible, .body-organ:focus-visible { outline: 2px solid var(--lavender); outline-offset: 3px; }
-
-/* The two organs a child can feel working while they watch. */
-.body-organ--heart .body-organ-shape,
-.body-organ--lungs .body-organ-shape { transform-box: view-box; }
-.body-organ--heart .body-organ-shape { animation: bodymap-beat 1.15s ease-in-out infinite; }
-.body-organ--lungs .body-organ-shape { animation: bodymap-breathe 4.5s ease-in-out infinite; }
-@keyframes bodymap-beat {
-  0%, 100% { transform: scale(1); }
-  10% { transform: scale(1.1); }
-  22% { transform: scale(1); }
-  32% { transform: scale(1.05); }
-  46% { transform: scale(1); }
-}
-@keyframes bodymap-breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.07); }
-}
-
-.body-map-caption { margin: 0; display: flex; align-items: baseline; gap: 8px; }
-.body-map-caption b { font: 500 20px var(--font-serif), serif; }
-.body-map-caption span { color: var(--muted); font-size: 13px; }
-.body-map-hint { color: #a89c92; font-size: 11px; }
-
 /* Try-it-on-yourself prompt, weighted like the fun note it sits beside. */
 .body-sense {
   margin-top: 15px;
@@ -1097,3 +1025,40 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   font-size: 9px;
   letter-spacing: .02em;
 }
+
+/* Body scene inside the side panel: it borrows the panel's chrome instead of
+   bringing its own, and everything under the canvas is laid out in flow. The
+   floating overlay the main stage uses collides with itself at 220px wide. */
+.organ-library .body-scene {
+  flex: 1;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.body-scene.compact { display: flex; flex-direction: column; }
+.body-scene.compact .body-scene-mount { position: relative; inset: auto; flex: 1; min-height: 0; order: 1; }
+.body-scene.compact .body-scene-name { position: static; order: 2; margin-top: 8px; }
+.body-scene.compact .body-scene-name b { font-size: 19px; }
+.body-scene.compact .body-scene-hint { position: static; order: 3; display: block; text-align: center; margin-top: 2px; font-size: 11px; }
+.body-scene.compact .body-scene-tools {
+  position: static;
+  order: 4;
+  transform: none;
+  flex-direction: row;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 4px;
+  border-radius: 13px;
+}
+.body-scene.compact .body-scene-tools button {
+  flex-direction: row;
+  gap: 5px;
+  width: auto;
+  padding: 8px 9px;
+  white-space: nowrap;
+  font-size: 10px;
+}
+.body-scene.compact .body-scene-credit { position: static; order: 5; display: block; text-align: center; margin-top: 6px; }

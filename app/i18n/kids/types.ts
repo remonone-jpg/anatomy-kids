@@ -55,10 +55,7 @@ export type KidsUiCopy = {
   tagline: string;
   libraryTitle: string;
   viewAll: string;
-  mapTab: string;
   listTab: string;
-  mapLabel: string;
-  mapHint: string;
   viewOrgan: string;
   viewBody: string;
   bodyLoading: string;
