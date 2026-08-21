@@ -21,6 +21,7 @@ import {
   Search,
   Share2,
   PersonStanding,
+  Scan,
   Sparkles,
   Stethoscope,
   Volume2,
@@ -187,6 +188,11 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // The map opens first for everyone: "where is it in me" is the question a
   // child asks, and a grown-up gets the same orientation for free.
   const [libraryView, setLibraryView] = useState<"body" | "list">("body");
+  // Which stage the centre column shows. The panel falls back to the list while
+  // the body is on the main stage: two copies of it would mean two WebGL
+  // contexts holding the same twelve models.
+  const [stage, setStage] = useState<"organ" | "body">("organ");
+  const panelView = stage === "body" ? "list" : libraryView;
   const [quizActive, setQuizActive] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const prefetched = useRef(new Set<OrganId>());
@@ -293,7 +299,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
       <div className="workspace">
         <aside className={`organ-library ${mobileLibrary ? "open" : ""}`}>
           <div className="panel-heading">
-            <span>{libraryView === "body" && kidsCopy ? kidsCopy.viewBody : t.library.title}</span>
+            <span>{panelView === "body" && kidsCopy ? kidsCopy.viewBody : t.library.title}</span>
             <button aria-label={t.library.close} className="mobile-close" onClick={() => setMobileLibrary(false)}><X size={17} /></button>
             {!kidsOn && <button aria-label={t.library.saved}><Bookmark size={17} /></button>}
           </div>
@@ -302,24 +308,24 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               <button
                 type="button"
                 role="tab"
-                aria-selected={libraryView === "body"}
-                className={libraryView === "body" ? "active" : ""}
-                onClick={() => setLibraryView("body")}
+                aria-selected={panelView === "body"}
+                className={panelView === "body" ? "active" : ""}
+                onClick={() => { setLibraryView("body"); setStage("organ"); }}
               >
                 <PersonStanding size={15} /> {kidsCopy.viewBody}
               </button>
               <button
                 type="button"
                 role="tab"
-                aria-selected={libraryView === "list"}
-                className={libraryView === "list" ? "active" : ""}
+                aria-selected={panelView === "list"}
+                className={panelView === "list" ? "active" : ""}
                 onClick={() => setLibraryView("list")}
               >
                 <LibraryBig size={15} /> {kidsCopy.listTab}
               </button>
             </div>
           )}
-          {libraryView === "body" && kidsCopy ? (
+          {panelView === "body" && kidsCopy ? (
             <BodyScene organs={organById} activeId={organId} onSelect={selectOrgan} copy={kidsCopy} compact />
           ) : (
           <div className="organ-list">
@@ -343,7 +349,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             ))}
           </div>
           )}
-          {!kidsOn && libraryView === "list" && <button className="view-all" onClick={() => setQuery("")}>{t.library.viewAll} <ArrowRight size={14} /></button>}
+          {!kidsOn && panelView === "list" && <button className="view-all" onClick={() => setQuery("")}>{t.library.viewAll} <ArrowRight size={14} /></button>}
           <blockquote>
             <Sparkles size={18} />
             <p>{t.library.quoteLine1}<br />{t.library.quoteLine2}</p>
@@ -351,18 +357,46 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           </blockquote>
         </aside>
 
-        <OrganViewer
-          organ={organ}
-          t={t}
-          autoRotate={autoRotate}
-          onAutoRotate={setAutoRotate}
-          compare={compare}
-          onCompare={() => setCompare(!compare)}
-          quizActive={quizActive}
-          onQuizExit={() => setQuizActive(false)}
-          kids={kidsOn}
-          speechLang={speechLang}
-        />
+        <div className="stage">
+          {kidsCopy && (
+            <div className="stage-tabs" role="tablist">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={stage === "organ"}
+                className={stage === "organ" ? "active" : ""}
+                onClick={() => setStage("organ")}
+              >
+                <Heart size={15} /> {kidsCopy.viewOrgan}
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={stage === "body"}
+                className={stage === "body" ? "active" : ""}
+                onClick={() => setStage("body")}
+              >
+                <Scan size={15} /> {kidsCopy.viewBody}
+              </button>
+            </div>
+          )}
+          {stage === "body" && kidsCopy ? (
+            <BodyScene organs={organById} activeId={organId} onSelect={selectOrgan} copy={kidsCopy} />
+          ) : (
+            <OrganViewer
+              organ={organ}
+              t={t}
+              autoRotate={autoRotate}
+              onAutoRotate={setAutoRotate}
+              compare={compare}
+              onCompare={() => setCompare(!compare)}
+              quizActive={quizActive}
+              onQuizExit={() => setQuizActive(false)}
+              kids={kidsOn}
+              speechLang={speechLang}
+            />
+          )}
+        </div>
 
         <aside className="info-panel" ref={contentRef}>
           <div className="info-kicker" data-reveal><Heart size={13} fill="currentColor" /> {format(t.info.kicker, { organ: organ.name })}</div>

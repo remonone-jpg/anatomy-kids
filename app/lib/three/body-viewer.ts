@@ -40,6 +40,20 @@ const HOME_FRAME_COMPACT = { height: 96, width: 44 };
 
 type PlacedOrgan = { id: OrganId; group: THREE.Group; meshes: THREE.Mesh[] };
 
+/**
+ * Structures that are not one of the nine, but without which the nine look
+ * like objects floating in a person rather than parts of one body: the tube
+ * from throat to stomach, the ducts leaving the liver and kidneys, and the
+ * great vessels the heart actually connects to.
+ *
+ * They come from the same Z-Anatomy release as the shell, already in its
+ * coordinate space, so they need no placement of their own.
+ */
+const CONTEXT_LAYERS = [
+  { url: "/models/viscera.glb", color: 0xe0ac97, opacity: 0.72 },
+  { url: "/models/vessels.glb", color: 0xc25f52, opacity: 0.85 },
+];
+
 export class BodyViewer {
   private renderer: THREE.WebGLRenderer;
   private scene = new THREE.Scene();
@@ -52,6 +66,8 @@ export class BodyViewer {
   private shell: THREE.Mesh | null = null;
   private shellMaterial: THREE.MeshPhysicalMaterial;
   private organs: PlacedOrgan[] = [];
+  private contextMeshes: THREE.Mesh[] = [];
+  private contextMaterials: THREE.MeshStandardMaterial[] = [];
   private selected: OrganId | null = null;
   private hovered: OrganId | null = null;
 
@@ -146,7 +162,7 @@ export class BodyViewer {
    */
   async load() {
     this.callbacks.onLoading(true, 0);
-    const total = organPlacements.length + 1;
+    const total = organPlacements.length + 1 + CONTEXT_LAYERS.length;
     let done = 0;
     const step = () => {
       done += 1;
@@ -172,8 +188,33 @@ export class BodyViewer {
       step();
     }
 
-    await Promise.all(
-      organPlacements.map(async (placement) => {
+    await Promise.all([
+      ...CONTEXT_LAYERS.map(async (layer) => {
+        try {
+          const gltf = await this.loader.loadAsync(layer.url);
+          if (this.disposed) return;
+          const material = new THREE.MeshStandardMaterial({
+            color: layer.color,
+            roughness: 0.62,
+            metalness: 0,
+            transparent: true,
+            opacity: layer.opacity,
+          });
+          this.contextMaterials.push(material);
+          gltf.scene.traverse((object) => {
+            if (!(object as THREE.Mesh).isMesh) return;
+            const mesh = object as THREE.Mesh;
+            mesh.material = material;
+            this.contextMeshes.push(mesh);
+          });
+          this.scene.add(gltf.scene);
+        } catch {
+          // Context is a nicety; the organs still stand without it.
+        } finally {
+          step();
+        }
+      }),
+      ...organPlacements.map(async (placement) => {
         try {
           const gltf = await this.loader.loadAsync(`/models/${placement.id}.glb`);
           if (this.disposed) return;
@@ -184,8 +225,9 @@ export class BodyViewer {
           step();
         }
       }),
-    );
+    ]);
 
+    this.applyEmphasis();
     this.dirty = true;
   }
 
@@ -276,6 +318,12 @@ export class BodyViewer {
         material.needsUpdate = true;
       }
     }
+    // Context recedes as soon as one organ is the subject, so it frames the
+    // body without competing with whatever the child just tapped.
+    for (const [index, material] of this.contextMaterials.entries()) {
+      const base = CONTEXT_LAYERS[index]?.opacity ?? 0.7;
+      material.opacity = anySelected ? base * 0.34 : base;
+    }
     this.shellMaterial.opacity = this.selected === SHELL_ORGAN ? 0.42 : 0.17;
     this.shellMaterial.color.setHex(this.selected === SHELL_ORGAN ? 0xffb9a3 : 0xffe6d8);
   }
@@ -290,10 +338,15 @@ export class BodyViewer {
 
     const meshes = this.organs.flatMap((organ) => organ.meshes);
     const organHit = this.raycaster.intersectObjects(meshes, false)[0];
-    if (organHit) {
+    const contextHit = this.raycaster.intersectObjects(this.contextMeshes, false)[0];
+    if (organHit && (!contextHit || organHit.distance <= contextHit.distance)) {
       const found = this.organs.find((organ) => organ.meshes.includes(organHit.object as THREE.Mesh));
       if (found) return found.id;
     }
+    // A tap that lands on the stomach or the aorta selects nothing rather than
+    // falling through to the skin behind it, which would be a lie about what
+    // was pressed.
+    if (contextHit) return null;
     // Falling through to the shell makes the skin selectable by tapping an arm
     // or a leg, which is the one place it is not competing with an organ.
     if (this.shell && this.raycaster.intersectObject(this.shell, false).length > 0) return SHELL_ORGAN;
@@ -392,6 +445,7 @@ export class BodyViewer {
     this.controls.dispose();
     disposeObject(this.scene);
     this.shellMaterial.dispose();
+    for (const material of this.contextMaterials) material.dispose();
     this.renderer.dispose();
     canvas.remove();
   }

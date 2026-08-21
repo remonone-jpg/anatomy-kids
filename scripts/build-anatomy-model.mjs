@@ -1,16 +1,18 @@
 /**
- * Converts the Z-Anatomy body-surface FBX into the single GLB the viewer loads.
+ * Converts a Z-Anatomy FBX into a single GLB the viewer can load.
  *
- *   node scripts/build-body-model.mjs <regions.fbx> public/models/body.glb
+ *   node scripts/build-anatomy-model.mjs <in.fbx> <out.glb> [--exclude=a,b] [--include=a,b]
  *
- * The source ships the body surface as 301 separate region meshes (gluteal
- * region, popliteal fossa, and so on). The app never addresses a region on its
- * own — it needs one translucent shell — so they are merged into a single
- * geometry, which also removes 300 draw calls.
+ * The source files ship as hundreds of separately named meshes — one per body
+ * region, per organ, per vessel. The app never addresses one on its own, so
+ * they are merged into a single geometry, which also removes hundreds of draw
+ * calls. `--exclude` drops meshes whose name contains any of the given
+ * substrings, which is how the context layer avoids shipping a second copy of
+ * every organ that is already placed from `body-placement.ts`.
  *
- * Positions are quantised to 16-bit and normals to 8-bit. The shell is rendered
- * as a soft translucent surface, so it cannot show the precision that full
- * floats would cost, and the quantised file is roughly a quarter of the size.
+ * Positions are quantised to 16-bit and normals to 8-bit. These layers render
+ * as soft translucent surfaces, so they cannot show the precision full floats
+ * would cost, and the quantised file is roughly a quarter of the size.
  *
  * Z-Anatomy is CC-BY-SA 4.0; see ATTRIBUTION.md.
  */
@@ -18,11 +20,27 @@ import fs from "node:fs";
 import * as THREE from "three";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
 
-const [, , input, output] = process.argv;
+const [input, output, ...flags] = process.argv.slice(2);
 if (!input || !output) {
-  console.error("usage: node scripts/build-body-model.mjs <input.fbx> <output.glb>");
+  console.error("usage: node scripts/build-anatomy-model.mjs <in.fbx> <out.glb> [--exclude=a,b] [--include=a,b]");
   process.exit(1);
 }
+
+const listFlag = (name) => {
+  const found = flags.find((flag) => flag.startsWith(`--${name}=`));
+  return found ? found.slice(name.length + 3).split(",").map((t) => t.trim().toLowerCase()).filter(Boolean) : [];
+};
+const exclude = listFlag("exclude");
+const include = listFlag("include");
+const wanted = (name) => {
+  const lower = name.toLowerCase();
+  if (include.length && !include.some((t) => lower.includes(t))) return false;
+  return !exclude.some((t) => lower.includes(t));
+};
+
+/** `--list` prints what survives the filters and writes nothing — the only
+ *  practical way to choose filters for a file with hundreds of parts. */
+const listOnly = flags.includes("--list");
 
 const buf = fs.readFileSync(input);
 const root = new FBXLoader().parse(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength), "");
@@ -37,8 +55,11 @@ const normalMatrix = new THREE.Matrix3();
 const vertex = new THREE.Vector3();
 const normal = new THREE.Vector3();
 
+let skipped = 0;
+const kept = [];
 root.traverse((object) => {
   if (!object.isMesh) return;
+  if (!wanted(object.name)) { skipped += 1; return; }
   meshCount += 1;
   const geometry = object.geometry;
   const position = geometry.attributes.position;
@@ -57,12 +78,23 @@ root.traverse((object) => {
     }
   };
 
+  const before = positions.length;
   if (index) for (let i = 0; i < index.count; i += 1) emit(index.getX(i));
   else for (let i = 0; i < position.count; i += 1) emit(i);
+  kept.push({ name: object.name, tris: (positions.length - before) / 9 });
 });
 
+if (listOnly) {
+  const rows = kept
+    .map((entry) => `${String(Math.round(entry.tris)).padStart(7)}  ${entry.name}`)
+    .sort((a, b) => Number(b.slice(0, 7)) - Number(a.slice(0, 7)));
+  console.log(`kept ${kept.length} meshes (skipped ${skipped}), ${Math.round(rows.reduce((n, r) => n + Number(r.slice(0, 7)), 0))} triangles`);
+  for (const row of rows) console.log(row);
+  process.exit(0);
+}
+
 const vertexCount = positions.length / 3;
-console.log(`merged ${meshCount} meshes -> ${vertexCount} vertices (${vertexCount / 3} triangles)`);
+console.log(`merged ${meshCount} meshes (skipped ${skipped}) -> ${vertexCount / 3} triangles`);
 
 // Bounds drive both the quantisation window and the accessor min/max glTF requires.
 const min = [Infinity, Infinity, Infinity];
@@ -110,14 +142,14 @@ const quantMin = [0, 1, 2].map((a) => Math.round((min[a] - offset[a]) / scale[a]
 const quantMax = [0, 1, 2].map((a) => Math.round((max[a] - offset[a]) / scale[a]));
 
 const gltf = {
-  asset: { version: "2.0", generator: "build-body-model.mjs" },
+  asset: { version: "2.0", generator: "build-anatomy-model.mjs" },
   extensionsUsed: ["KHR_mesh_quantization"],
   extensionsRequired: ["KHR_mesh_quantization"],
   scene: 0,
   scenes: [{ nodes: [0] }],
-  nodes: [{ mesh: 0, scale, translation: offset, name: "BodySurface" }],
-  meshes: [{ name: "BodySurface", primitives: [{ attributes: { POSITION: 0, NORMAL: 1 }, material: 0 }] }],
-  materials: [{ name: "Body", pbrMetallicRoughness: { baseColorFactor: [1, 1, 1, 1], metallicFactor: 0, roughnessFactor: 1 }, doubleSided: true }],
+  nodes: [{ mesh: 0, scale, translation: offset, name: "AnatomyLayer" }],
+  meshes: [{ name: "AnatomyLayer", primitives: [{ attributes: { POSITION: 0, NORMAL: 1 }, material: 0 }] }],
+  materials: [{ name: "AnatomyLayer", pbrMetallicRoughness: { baseColorFactor: [1, 1, 1, 1], metallicFactor: 0, roughnessFactor: 1 }, doubleSided: true }],
   accessors: [
     { bufferView: 0, componentType: 5122, normalized: false, count: vertexCount, type: "VEC3", min: quantMin, max: quantMax },
     { bufferView: 1, componentType: 5120, normalized: true, count: vertexCount, type: "VEC3" },

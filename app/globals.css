@@ -1026,6 +1026,39 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   letter-spacing: .02em;
 }
 
+/* Side-panel tabs. The column is only ~220px wide, so the labels need
+   `nowrap` — without it the icon lands on one line and the words on the next. */
+.library-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin-bottom: 10px;
+  padding: 3px;
+  border-radius: 13px;
+  background: rgba(120,92,70,.06);
+}
+.library-tabs button {
+  min-height: 34px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  font: 500 11px var(--font-serif), serif;
+}
+.library-tabs button svg { flex: none; }
+.library-tabs button.active {
+  background: rgba(255,253,249,.95);
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(90,66,48,.09);
+}
+
 /* Body scene inside the side panel: it borrows the panel's chrome instead of
    bringing its own, and everything under the canvas is laid out in flow. The
    floating overlay the main stage uses collides with itself at 220px wide. */
