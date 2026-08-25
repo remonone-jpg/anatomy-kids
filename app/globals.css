@@ -144,7 +144,7 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   gap: 18px;
 }
 
-.organ-library, .viewer-shell, .info-panel {
+.organ-library, .viewer-shell, .body-scene, .info-panel {
   border: 1px solid var(--line);
   border-radius: 26px;
   background: var(--paper);
@@ -497,7 +497,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .main-nav button { padding: 10px; }
   .workspace { grid-template-columns: 210px minmax(450px,1fr); height: 690px; }
   .info-panel { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px 22px; max-height: none; }
-  .info-panel .description, .info-panel .rule, .info-panel h2, .key-facts, .medical-note { grid-column: 2; }
+  .info-panel .description, .info-panel .rule, .info-panel h2, .key-facts, .medical-note, .listen-button, .body-sense { grid-column: 2; }
   .info-kicker, .info-title-row { grid-column: 1; }
   .info-panel { height: 330px; }
   .workspace { height: auto; }
@@ -814,3 +814,284 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .quiz-answer > div strong { font-size: 17px; }
   .authoring-panel { inset-inline-start: 10px; max-width: calc(100% - 20px); bottom: 82px; }
 }
+
+/* ── Kids mode ──────────────────────────────────────────────────────────────
+   A five-year-old taps with a whole fingertip and cannot read 10px type, so
+   this scope trades information density for size. Nothing here changes layout
+   structure — the elements kids mode drops are simply not rendered. */
+
+/* The toggle itself is a grown-up control, so it stays a plain labelled switch
+   in both modes rather than becoming part of the toy. */
+.kids-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 13px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: rgba(255,255,255,.28);
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  font: 500 12px var(--font-serif), serif;
+}
+.kids-toggle.on {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--sage), transparent 88%);
+  border-color: color-mix(in srgb, var(--sage), transparent 58%);
+}
+
+/* Brand, language, mode — the nav, search and profile are gone. */
+.kids .topbar { grid-template-columns: 1fr auto auto; }
+
+/* Five organs instead of nine, so each row can afford to be much larger. */
+.kids .organ-list { gap: 8px; }
+.kids .organ-item { min-height: 88px; grid-template-columns: 62px 1fr 18px; gap: 12px; border-radius: 20px; }
+.kids .organ-glyph { width: 58px; height: 58px; }
+.kids .organ-item b { font-size: 21px; }
+.kids .organ-item small { margin-top: 4px; color: #9a8f85; font-size: 13px; }
+
+.kids .description { font-size: 16px; line-height: 1.6; }
+.kids .key-facts { gap: 13px; }
+.kids .key-facts > div { grid-template-columns: 96px 1fr; }
+.kids .key-facts dt { font-size: 15px; }
+.kids .key-facts dd { font-size: 14px; line-height: 1.45; }
+.kids .fun-note { padding: 13px; border-radius: 16px; }
+.kids .fun-note p { font-size: 14px; line-height: 1.5; }
+
+/* The single most-used control in kids mode, so it gets the most weight. */
+.listen-button {
+  width: 100%;
+  min-height: 56px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2px solid color-mix(in srgb, var(--sage), transparent 52%);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--sage), transparent 88%);
+  color: #4d6a4c;
+  cursor: pointer;
+  font: 500 17px var(--font-serif), serif;
+}
+.listen-button:active { transform: scale(.98); }
+
+/* Two actions rather than three, so the spanning rule for the third would
+   otherwise leave the first button stranded in a half-width column. */
+.kids .action-grid { gap: 10px; }
+.kids .action-grid button { min-height: 54px; border-width: 2px; border-radius: 16px; font-size: 15px; }
+.kids .action-grid button:last-child { grid-column: auto; }
+
+.kids .tool-button { height: 68px; font-size: 11px; }
+.kids .tip-note p { font-size: 16px; line-height: 1.6; }
+.kids .callout-body b { font-size: 17px; }
+.kids .callout-body b:before { top: 18px; }
+.kids .callout-body small { margin-top: 5px; font-size: 13px; line-height: 1.4; }
+.kids .callout-close { width: 26px; height: 26px; }
+
+.kids .quiz-prompt strong { font-size: 26px; }
+.kids .quiz-meta small { font-size: 12px; }
+.kids .quiz-answer > div strong { font-size: 20px; }
+
+@media (max-width: 760px) {
+  /* Thumbs, not fingertips, and a much narrower column to spend. */
+  .kids .organ-item b { font-size: 19px; }
+  .kids .listen-button { min-height: 60px; font-size: 18px; }
+  .kids .action-grid button { min-height: 58px; }
+}
+
+/* Try-it-on-yourself prompt, weighted like the fun note it sits beside. */
+.body-sense {
+  margin-top: 15px;
+  display: flex;
+  gap: 9px;
+  padding: 13px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--lavender), transparent 92%);
+  color: #6d5892;
+}
+.body-sense svg { flex: none; }
+.body-sense p { margin: 0; font: 500 14px/1.5 var(--font-serif), serif; }
+.body-sense b { display: block; margin-bottom: 2px; color: var(--ink); }
+
+/* ── Whole-body stage ───────────────────────────────────────────────────────
+   The centre column now holds two stages — one organ large, or the body with
+   all of them inside — so the panel chrome moves onto a wrapper and the tabs
+   float over the canvas rather than eating height from it. */
+
+.stage { position: relative; min-width: 0; min-height: 0; display: flex; }
+.stage > .viewer-shell, .stage > .body-scene { flex: 1; min-width: 0; min-height: 0; }
+
+.stage-tabs {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  z-index: 5;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(253,250,244,.9);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 8px 22px rgba(75,54,40,.08);
+}
+.stage-tabs button {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  font: 500 13px var(--font-serif), serif;
+}
+.stage-tabs button.active { background: color-mix(in srgb, var(--coral), transparent 90%); color: var(--ink); }
+
+.body-scene {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 52% 40%, rgba(255,255,255,.94), rgba(255,250,242,.74) 48%, rgba(246,236,224,.72)),
+    var(--paper);
+}
+.body-scene-mount { position: absolute; inset: 0; }
+.body-scene-mount canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+
+.body-scene-tools {
+  position: absolute;
+  inset-inline-start: 18px;
+  top: 50%;
+  z-index: 3;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(253,250,244,.82);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 12px 30px rgba(75,54,40,.08);
+}
+.body-scene-tools button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 58px;
+  padding: 9px 2px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font: 500 10px/1.1 var(--font-serif), serif;
+}
+.body-scene-tools button:hover { background: rgba(238,124,106,.08); color: var(--coral); }
+
+.body-scene-name { position: absolute; inset-inline: 0; bottom: 40px; margin: 0; text-align: center; pointer-events: none; }
+.body-scene-name b { font: 500 26px var(--font-serif), serif; }
+.body-scene-hint {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 18px;
+  text-align: center;
+  color: var(--muted);
+  pointer-events: none;
+  font-size: 12px;
+}
+
+@media (max-width: 760px) {
+  .stage-tabs { top: 10px; }
+  .stage-tabs button { padding: 0 11px; font-size: 12px; }
+  .body-scene-tools { inset-inline-start: 10px; }
+  .body-scene-tools button { width: 48px; font-size: 9px; }
+  .body-scene-name b { font-size: 21px; }
+}
+.body-scene-credit {
+  position: absolute;
+  inset-inline-end: 14px;
+  bottom: 10px;
+  color: #b3a89e;
+  pointer-events: none;
+  font-size: 9px;
+  letter-spacing: .02em;
+}
+
+/* Side-panel tabs. The column is only ~220px wide, so the labels need
+   `nowrap` — without it the icon lands on one line and the words on the next. */
+.library-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin-bottom: 10px;
+  padding: 3px;
+  border-radius: 13px;
+  background: rgba(120,92,70,.06);
+}
+.library-tabs button {
+  min-height: 34px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  font: 500 11px var(--font-serif), serif;
+}
+.library-tabs button svg { flex: none; }
+.library-tabs button.active {
+  background: rgba(255,253,249,.95);
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(90,66,48,.09);
+}
+
+/* Body scene inside the side panel: it borrows the panel's chrome instead of
+   bringing its own, and everything under the canvas is laid out in flow. The
+   floating overlay the main stage uses collides with itself at 220px wide. */
+.organ-library .body-scene {
+  flex: 1;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.body-scene.compact { display: flex; flex-direction: column; }
+.body-scene.compact .body-scene-mount { position: relative; inset: auto; flex: 1; min-height: 0; order: 1; }
+.body-scene.compact .body-scene-name { position: static; order: 2; margin-top: 8px; }
+.body-scene.compact .body-scene-name b { font-size: 19px; }
+.body-scene.compact .body-scene-hint { position: static; order: 3; display: block; text-align: center; margin-top: 2px; font-size: 11px; }
+.body-scene.compact .body-scene-tools {
+  position: static;
+  order: 4;
+  transform: none;
+  flex-direction: row;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 4px;
+  border-radius: 13px;
+}
+.body-scene.compact .body-scene-tools button {
+  flex-direction: row;
+  gap: 5px;
+  width: auto;
+  padding: 8px 9px;
+  white-space: nowrap;
+  font-size: 10px;
+}
+.body-scene.compact .body-scene-credit { position: static; order: 5; display: block; text-align: center; margin-top: 6px; }

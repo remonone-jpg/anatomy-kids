@@ -1,3 +1,22 @@
+# 몸속 구경하기 — 다섯 살을 위한 해부학
+
+> **이 저장소에 대하여**
+>
+> 원본은 [thebuggeddev/anatomy](https://github.com/thebuggeddev/anatomy)입니다.
+> 3D 장기 모델, 일러스트, 앱의 뼈대 전부 그분이 만들었고, 커밋 기록도
+> 그대로 보존돼 있습니다.
+>
+> 이 포크는 다섯 살 아이가 혼자 볼 수 있게 고친 것입니다: 한국어를 아이
+> 말로 다시 쓰고, 글자를 못 읽는 나이라 음성 낭독을 붙이고, 장기마다 자기
+> 몸으로 해보는 활동을 넣고, 반투명 인체 안에 장기를 실제 위치와 크기로
+> 배치한 화면을 더했습니다.
+>
+> 원본에는 라이선스가 명시되어 있지 않습니다. 추가된 인체·내장·혈관 모델은
+> Z-Anatomy(CC BY-SA 4.0)에서 온 것이며 [ATTRIBUTION.md](./ATTRIBUTION.md)에
+> 출처를 적어두었습니다.
+
+---
+
 # vinext-starter
 
 A clean full-stack starter running on

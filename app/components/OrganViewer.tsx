@@ -17,6 +17,7 @@ import {
 import type { Hotspot, Organ } from "../i18n/merge";
 import { format, type UiDictionary } from "../i18n/types";
 import type { AnatomyViewer } from "../lib/three/viewer";
+import { speak } from "../lib/speech";
 
 type Props = {
   organ: Organ;
@@ -27,6 +28,10 @@ type Props = {
   onCompare: () => void;
   quizActive: boolean;
   onQuizExit: () => void;
+  /** Narrates every label and trims the toolbar for pre-readers. */
+  kids: boolean;
+  /** BCP-47 tag the narration is spoken in. */
+  speechLang: string;
 };
 
 /** Fisher–Yates. The quiz asks for every structure once, in a fresh order. */
@@ -46,7 +51,7 @@ type PickRef = { current: (hotspot: Hotspot) => void };
  * organ, so switching specimens restarts it without a resetting effect.
  */
 function LabelQuiz({
-  hotspots, t, pickRef, flash, screenY, onExit,
+  hotspots, t, pickRef, flash, screenY, onExit, kids, speechLang,
 }: {
   hotspots: Hotspot[];
   t: UiDictionary;
@@ -54,6 +59,8 @@ function LabelQuiz({
   flash: (id: string, correct: boolean) => void;
   screenY: (id: string) => number | null;
   onExit: () => void;
+  kids: boolean;
+  speechLang: string;
 }) {
   const [seed, setSeed] = useState(0);
   const [step, setStep] = useState(0);
@@ -64,6 +71,14 @@ function LabelQuiz({
   const order = useMemo(() => shuffle(hotspots), [hotspots, seed]);
   const target = order[step];
   const finished = step >= order.length;
+
+  // A child who cannot read the prompt cannot play, so the question is asked
+  // out loud. The quiz is always entered by tapping a button, which satisfies
+  // the browser's user-gesture requirement for speech.
+  useEffect(() => {
+    if (!kids || !target) return;
+    speak(`${t.quiz.find} ${target.label}`, speechLang);
+  }, [kids, target, t.quiz.find, speechLang]);
 
   // Refreshed after every render so the viewer's long-lived callback always
   // sees the current question. Writing a ref in an effect is safe; writing one
@@ -80,6 +95,14 @@ function LabelQuiz({
       // otherwise the panel hides the dot it is telling the learner to look at.
       const revealed = screenY(correct ? hotspot.id : target.id);
       setAnswer({ correct, picked: hotspot.label, target: target.label, atTop: (revealed ?? 0) > 0.55 });
+      if (kids) {
+        speak(
+          correct
+            ? `${t.quiz.correct} ${target.label}`
+            : `${t.quiz.wrong} ${format(t.quiz.answer, { label: target.label })}`,
+          speechLang,
+        );
+      }
       setResults((list) => [...list, correct]);
       if (correct) setScore((value) => value + 1);
       window.setTimeout(() => {
@@ -162,7 +185,7 @@ function useAuthoringFlag() {
   );
 }
 
-export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCompare, quizActive, onQuizExit }: Props) {
+export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCompare, quizActive, onQuizExit, kids, speechLang }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<AnatomyViewer | null>(null);
   const organRef = useRef(organ);
@@ -260,6 +283,14 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
   useEffect(() => viewerRef.current?.setAuthoring(authoring), [authoring]);
 
 
+  // Tapping a dot is the main thing a child does here, and the callout it opens
+  // is two lines of text they cannot read — so it is spoken as well. Skipped
+  // during the quiz, where the answer must not be given away.
+  useEffect(() => {
+    if (!kids || !selected || quizActive) return;
+    speak(`${selected.label}. ${selected.detail}`, speechLang);
+  }, [kids, selected, quizActive, speechLang]);
+
   // The viewer drives the callout's position directly, so a spinning model
   // never costs a React render.
   const calloutRef = useCallback((node: HTMLDivElement | null) => {
@@ -281,7 +312,7 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
     }
   };
 
-  const tools = [
+  const allTools = [
     { id: "rotate", label: t.tools.rotate, icon: RotateCcw },
     { id: "zoom", label: t.tools.zoom, icon: Search },
     { id: "isolate", label: t.tools.isolate, icon: CircleDashed },
@@ -290,6 +321,10 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
     { id: "compare", label: t.tools.compare, icon: Box },
     { id: "reset", label: t.tools.reset, icon: RotateCcw },
   ];
+  // Cross-section and layer peeling need a mental model of what is being cut
+  // away. Kids mode keeps the three tools whose effect is visible immediately.
+  const KIDS_TOOLS = ["rotate", "zoom", "reset"];
+  const tools = kids ? allTools.filter((tool) => KIDS_TOOLS.includes(tool.id)) : allTools;
 
   return (
     <section className="viewer-shell" aria-label={format(t.viewer.title, { organ: organ.name })}>
@@ -347,6 +382,8 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
           flash={(id, correct) => viewerRef.current?.flash(id, correct)}
           screenY={(id) => viewerRef.current?.hotspotScreenY(id) ?? null}
           onExit={onQuizExit}
+          kids={kids}
+          speechLang={speechLang}
         />
       )}
 

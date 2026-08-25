@@ -1,14 +1,19 @@
 import type { NextConfig } from "next";
-import { defaultLocale } from "./app/i18n/config";
 
+/**
+ * Static export for GitHub Pages.
+ *
+ * The app's pages are all client-rendered 3D and copy — nothing reads a
+ * request — so every locale can be prerendered ahead of time and served as
+ * files. `redirects()` cannot come along: it needs a server, and the bare `/`
+ * is handled by a generated index.html instead (see scripts/build-static.mjs).
+ */
 const nextConfig: NextConfig = {
-  // Every route lives under /[locale], so `app/[locale]/layout.tsx` is the root
-  // layout and there is no page at `/`. Send bare visits to the default
-  // language. (Accept-Language negotiation would need middleware, which the
-  // Cloudflare/vinext target does not run — the in-app switcher covers it.)
-  async redirects() {
-    return [{ source: "/", destination: `/${defaultLocale}`, permanent: false }];
-  },
+  output: "export",
+  // Served from https://<user>.github.io/<repo>/.
+  basePath: process.env.PAGES_BASE ?? "",
+  trailingSlash: true,
+  images: { unoptimized: true },
 };
 
 export default nextConfig;
