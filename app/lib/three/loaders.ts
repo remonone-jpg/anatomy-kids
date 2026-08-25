@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import { disposeObject } from "./dispose";
+import { asset } from "../asset";
 
 /** Edge length of the cube every organ is normalised into, so hotspot
  *  coordinates authored in `anatomy-data` mean the same thing for each model. */
@@ -38,7 +39,7 @@ export class AnatomyAssetManager {
   /** Warms the HTTP cache so switching organs feels instant. */
   prefetch(url: string) {
     if (this.cache.has(url) || this.inflight.has(url)) return;
-    void fetch(url, { priority: "low" } as RequestInit).catch(() => {});
+    void fetch(asset(url), { priority: "low" } as RequestInit).catch(() => {});
   }
 
   async load(url: string, onProgress?: (progress: number) => void): Promise<LoadedOrgan> {
@@ -66,7 +67,7 @@ export class AnatomyAssetManager {
   }
 
   private async parse(url: string, onProgress?: (progress: number) => void): Promise<LoadedOrgan> {
-    const gltf = await this.loader.loadAsync(url, (event) => {
+    const gltf = await this.loader.loadAsync(asset(url), (event) => {
       if (event.total > 0) onProgress?.(event.loaded / event.total);
     });
 

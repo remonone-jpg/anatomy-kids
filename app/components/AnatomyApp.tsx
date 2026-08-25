@@ -36,6 +36,7 @@ import { buildOrgans, indexOrgans, type Organ } from "../i18n/merge";
 import { format, type Dictionary, type UiDictionary } from "../i18n/types";
 import { applyKids, getBodySense, getKidsUi, kidsAvailable, KIDS_ORGAN_IDS } from "../i18n/kids";
 import { speak, stopSpeaking } from "../lib/speech";
+import { asset } from "../lib/asset";
 
 type Modal = "lesson" | "quiz" | "animation" | "system" | null;
 
@@ -74,12 +75,13 @@ function writeKidsMode(next: boolean) {
  */
 function OrganArt({
   organ,
-  asset,
+  // Named `kind` rather than `asset` so it does not shadow the path helper.
+  kind,
   alt,
   size,
 }: {
   organ: Organ;
-  asset: "thumb" | "organ" | "microscopic" | "compare" | "location";
+  kind: "thumb" | "organ" | "microscopic" | "compare" | "location";
   alt: string;
   size?: number;
 }) {
@@ -95,12 +97,12 @@ function OrganArt({
   }
   return (
     <img
-      key={`${organ.id}-${asset}`}
-      src={`/anatomy/${organ.id}/${asset}.webp`}
+      key={`${organ.id}-${kind}`}
+      src={asset(`/anatomy/${organ.id}/${kind}.webp`)}
       alt={alt}
       width={size}
       height={size}
-      loading={asset === "thumb" ? "eager" : "lazy"}
+      loading={kind === "thumb" ? "eager" : "lazy"}
       decoding="async"
     />
   );
@@ -245,9 +247,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
 
   const selectOrgan = (id: OrganId) => {
     if (organById[id].illustrated) {
-      ["organ", "microscopic", "compare", "location"].forEach((asset) => {
+      ["organ", "microscopic", "compare", "location"].forEach((kind) => {
         const image = new Image();
-        image.src = `/anatomy/${id}/${asset}.webp`;
+        image.src = asset(`/anatomy/${id}/${kind}.webp`);
       });
     }
     setOrganId(id);
@@ -265,7 +267,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const prefetchOrgan = (id: OrganId) => {
     if (id === organId || prefetched.current.has(id)) return;
     prefetched.current.add(id);
-    void fetch(organById[id].model, { priority: "low" } as RequestInit).catch(() => {});
+    void fetch(asset(organById[id].model), { priority: "low" } as RequestInit).catch(() => {});
   };
 
   return (
@@ -340,7 +342,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                 style={{ "--item-accent": item.accent } as React.CSSProperties}
               >
                 <span className="organ-glyph">
-                  <OrganArt organ={item} asset="thumb" alt="" size={47} />
+                  <OrganArt organ={item} kind="thumb" alt="" size={47} />
                 </span>
                 {/* A child gets more from "쿵! 쿵! 쿵!" than from "심혈관계". */}
                 <span><b>{item.name}</b><small>{kidsOn ? item.poetic : item.system}</small></span>
@@ -403,7 +405,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <div className="info-title-row" data-reveal>
             <div><h1>{organ.name}</h1><em>{organ.poetic}</em></div>
             <span className="specimen-stamp">
-              <OrganArt organ={organ} asset="organ" alt="" size={92} />
+              <OrganArt organ={organ} kind="organ" alt="" size={92} />
             </span>
           </div>
           <p className="description" data-reveal>{organ.description}</p>
@@ -445,9 +447,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
 
       {compare && (
         <section className="compare-strip" aria-label={t.compare.title}>
-          <div className="compare-organ"><OrganArt organ={organ} asset="thumb" alt="" /><span>{t.compare.comparing}</span><strong>{organ.name}</strong><small>{organ.system}</small></div>
+          <div className="compare-organ"><OrganArt organ={organ} kind="thumb" alt="" /><span>{t.compare.comparing}</span><strong>{organ.name}</strong><small>{organ.system}</small></div>
           <b>{t.compare.vs}</b>
-          <div className="compare-organ"><OrganArt organ={reference} asset="thumb" alt="" /><span>{t.compare.reference}</span><strong>{reference.name}</strong><small>{reference.system}</small></div>
+          <div className="compare-organ"><OrganArt organ={reference} kind="thumb" alt="" /><span>{t.compare.reference}</span><strong>{reference.name}</strong><small>{reference.system}</small></div>
           <dl><div><dt>{t.compare.primaryRole}</dt><dd><Measure>{organ.function}</Measure></dd></div><div><dt>{t.compare.scale}</dt><dd><Measure>{organ.size}</Measure></dd></div></dl>
           <button onClick={() => setCompare(false)} aria-label={t.compare.close}><X size={16} /></button>
         </section>
@@ -460,14 +462,14 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         {!kidsOn && (
           <article>
             <header><div><em>{t.cards.microscopic}</em><h3>{organ.tissue}</h3></div><Microscope size={17} /></header>
-            <div className="microscope-visual organ-card-image"><OrganArt organ={organ} asset="microscopic" alt="" /></div>
+            <div className="microscope-visual organ-card-image"><OrganArt organ={organ} kind="microscopic" alt="" /></div>
             <button onClick={() => setModal("lesson")}>{t.cards.exploreTissue} <ArrowRight size={14} /></button>
           </article>
         )}
         {!kidsOn && (
           <article>
             <header><div><em>{t.cards.compareOrgans}</em><h3>{organ.comparison}</h3></div><Share2 size={17} /></header>
-            <div className="comparison-visual organ-card-image"><OrganArt organ={organ} asset="compare" alt="" /></div>
+            <div className="comparison-visual organ-card-image"><OrganArt organ={organ} kind="compare" alt="" /></div>
             <button onClick={() => setCompare(true)}>{t.cards.openComparison} <ArrowRight size={14} /></button>
           </article>
         )}
@@ -481,7 +483,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             onClick={() => setModal("animation")}
             aria-label={format(t.cards.playAria, { organ: organ.name })}
           >
-            <OrganArt organ={organ} asset="organ" alt="" />
+            <OrganArt organ={organ} kind="organ" alt="" />
             <i className="function-pulse" />
             <span className="play-badge"><Play size={18} fill="currentColor" /></span>
           </button>
@@ -504,7 +506,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             onClick={() => setModal("system")}
             aria-label={format(t.cards.systemAria, { organ: organ.name })}
           >
-            <OrganArt organ={organ} asset="location" alt="" />
+            <OrganArt organ={organ} kind="location" alt="" />
           </button>
           <button onClick={() => setModal("system")}>{t.cards.seeSystem} <ArrowRight size={14} /></button>
         </article>
@@ -592,7 +594,7 @@ function LearningModal({
             {/* Shown whole rather than cropped into the circular demo — the
                 point of this view is the figure and its vessels. */}
             <figure className="modal-figure">
-              <OrganArt organ={organ} asset="location" alt="" />
+              <OrganArt organ={organ} kind="location" alt="" />
             </figure>
             <dl className="modal-facts">
               {/* "심혈관계" and "좌·우 심장동맥" are names, not explanations —
@@ -606,7 +608,7 @@ function LearningModal({
         ) : (
           <>
             <p>{t.modal.lessonBody}</p>
-            <div className={`modal-demo ${type === "animation" ? "moving" : ""}`}><OrganArt organ={organ} asset="organ" alt="" /></div>
+            <div className={`modal-demo ${type === "animation" ? "moving" : ""}`}><OrganArt organ={organ} kind="organ" alt="" /></div>
             <button className="lesson-button" onClick={onClose}>{t.modal.continueExploring} <ArrowRight size={16} /></button>
           </>
         )}

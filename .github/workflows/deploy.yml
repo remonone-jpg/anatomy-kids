@@ -20,6 +20,8 @@ jobs:
     env:
       # Project pages live under /<repo>/, so every asset URL needs the prefix.
       PAGES_BASE: /anatomy-kids
+      # Read at build time by app/lib/asset.ts for URLs Next cannot rewrite.
+      NEXT_PUBLIC_BASE_PATH: /anatomy-kids
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

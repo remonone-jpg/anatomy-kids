@@ -4,6 +4,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import { organStructures, type OrganId } from "../anatomy-data";
 import { disposeObject } from "./dispose";
+import { asset } from "../asset";
 
 /**
  * The whole body at once: a translucent human shell with every organ inside it,
@@ -213,7 +214,7 @@ export class BodyViewer {
     };
 
     try {
-      const shellGltf = await this.loader.loadAsync("/models/body.glb");
+      const shellGltf = await this.loader.loadAsync(asset("/models/body.glb"));
       if (this.disposed) return;
       shellGltf.scene.traverse((object) => {
         if ((object as THREE.Mesh).isMesh) {
@@ -234,7 +235,7 @@ export class BodyViewer {
     await Promise.all([
       ...CONTEXT_LAYERS.map(async (layer) => {
         try {
-          const gltf = await this.loader.loadAsync(layer.url);
+          const gltf = await this.loader.loadAsync(asset(layer.url));
           if (this.disposed) return;
           const material = new THREE.MeshStandardMaterial({
             color: layer.color,
@@ -259,7 +260,7 @@ export class BodyViewer {
       }),
       ...ATLAS_ORGANS.map(async (id) => {
         try {
-          const gltf = await this.loader.loadAsync(`/models/atlas/${id}.glb`);
+          const gltf = await this.loader.loadAsync(asset(`/models/atlas/${id}.glb`));
           if (this.disposed) return;
           this.add(id, gltf.scene);
         } catch {

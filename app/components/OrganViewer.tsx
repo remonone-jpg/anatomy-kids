@@ -19,6 +19,7 @@ import { format, type UiDictionary } from "../i18n/types";
 import type { AnatomyViewer } from "../lib/three/viewer";
 import { speak } from "../lib/speech";
 
+
 type Props = {
   organ: Organ;
   t: UiDictionary;
