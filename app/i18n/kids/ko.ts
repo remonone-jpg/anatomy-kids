@@ -73,7 +73,7 @@ export const kids: KidsCopy = {
       description: "가슴 안에서 쉬지 않고 쿵쿵 뛰어요. 온몸 구석구석까지 피를 보내주는 힘센 펌프예요.",
       size: "{child} 주먹만 해요",
       function: "온몸에 피를 보내요",
-      dailyFact: "하루에 십만 번쯤 뛰어요",
+      dailyFact: "어른보다 빨라서 하루에 십만 번도 넘게 뛰어요",
       funFact: "{child}가 엄마 배 속에 있을 때부터 벌써 쿵쿵 뛰고 있었어요.",
       bodySense: "가슴 한가운데에 손을 대고 가만히 있어 보세요. 쿵쿵 느껴지나요?",
       hotspots: {
@@ -105,7 +105,7 @@ export const kids: KidsCopy = {
       description: "숨을 들이마시면 풍선처럼 부풀고, 내쉬면 다시 작아져요. 가슴 안에 두 개가 나란히 있어요.",
       size: "가슴을 거의 다 채워요",
       function: "숨을 쉬어요",
-      dailyFact: "이만 번쯤 숨을 쉬어요",
+      dailyFact: "어른보다 빨라서 하루에 이만 번도 넘게 숨 쉬어요",
       funFact: "오른쪽이 왼쪽보다 조금 더 커요. 왼쪽은 심장에게 자리를 비켜줬거든요.",
       bodySense: "숨을 크게 들이마셔 보세요. 가슴이 부풀어 오르죠?",
       hotspots: {
@@ -161,7 +161,7 @@ export const kids: KidsCopy = {
     intestine: {
       poetic: "꼬불꼬불 긴 길",
       description: "먹은 음식이 지나가는 길이에요. 여기서 몸에 좋은 것만 쏙쏙 골라 가져가요.",
-      size: "쭉 펴면 버스보다 길어요",
+      size: "쭉 펴면 자동차보다 길어요",
       function: "먹은 걸 소화시켜요",
       dailyFact: "먹은 음식이 하루 넘게 지나가요",
       funFact: "배에서 꼬르륵 소리가 나는 건 장이 움직이는 소리예요.",

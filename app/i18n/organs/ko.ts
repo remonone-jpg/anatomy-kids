@@ -59,7 +59,7 @@ export const organs: OrganContentDictionary = {
     location: "가슴우리 안, 심장 양옆",
     function: "산소와 이산화탄소를 교환",
     dailyFact: "하루 약 11,000 L의 공기가 드나듦",
-    medical: "허파꽈리가 테니스 코트만 한 교환 면적을 가슴 안에 접어 넣는다.",
+    medical: "허파꽈리가 배드민턴 코트만 한 교환 면적을 가슴 안에 접어 넣는다.",
     bloodSupply: "허파동맥과 기관지동맥",
     funFact: "오른허파는 세 엽, 왼허파는 두 엽뿐이라 심장이 들어갈 자리를 내줍니다.",
     tissue: "허파꽈리 조직",
