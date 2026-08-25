@@ -37,6 +37,12 @@ export type KidsOrganCopy = {
   dailyFact: string;
   funFact: string;
   /**
+   * Extra one-liners, surfaced one at a time behind a button. A child who has
+   * heard the description once still wants more, and a wall of ten facts is
+   * not readable at this age — so they arrive singly, in a shuffled order.
+   */
+  moreFacts: string[];
+  /**
    * Something to try on their own body. A five-year-old learns "the heart is
    * in the chest" by putting a hand there and feeling it, not by being shown
    * a diagram — this is the line that turns the screen into an activity.

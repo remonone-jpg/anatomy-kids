@@ -18,9 +18,27 @@ export type OrganContent = {
   tissue: string;
   comparison: string;
   conditions: string[];
+  /**
+   * Longer reads for the grown-up view: a few paragraphs that each stand on
+   * their own. Optional because a locale may carry the short copy without
+   * having had these written yet.
+   */
+  stories?: { title: string; body: string }[];
+  /**
+   * The layer below the stories, folded away until asked for. Grouping by
+   * category is what keeps eight paragraphs from reading as one long wall.
+   */
+  deepDive?: DeepDive[];
   /** Keyed by hotspot id — the Terminologia Anatomica term is the anchor. */
   hotspots: Record<string, { label: string; detail: string }>;
 };
+
+/** The angles a structure is worth looking at from, in the order they read. */
+export type DeepDiveCategory =
+  | "structure" | "mechanism" | "numbers" | "development"
+  | "teamwork" | "myths" | "history" | "animals";
+
+export type DeepDive = { category: DeepDiveCategory; title: string; body: string };
 
 export type OrganContentDictionary = Record<OrganId, OrganContent>;
 
