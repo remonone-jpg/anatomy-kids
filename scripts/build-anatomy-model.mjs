@@ -41,6 +41,33 @@ const wanted = (name) => {
 /** `--list` prints what survives the filters and writes nothing — the only
  *  practical way to choose filters for a file with hundreds of parts. */
 const listOnly = flags.includes("--list");
+/**
+ * `--parts` also writes `<output>.parts.json`: the centre of every mesh that
+ * survived the filters, expressed in the space the app's viewer normalises a
+ * model into. That is what hotspot coordinates are measured in, so the atlas's
+ * own part names become label positions without anyone placing them by hand.
+ *
+ * Z-Anatomy carries purpose-built anchors for this — a tiny mesh named after
+ * the structure with a `j` suffix, which is where the atlas itself puts the
+ * label. Those are preferred over a whole organ's centroid wherever they exist.
+ */
+const emitParts = flags.includes("--parts");
+/**
+ * `--color=#rrggbb` bakes a base colour into the material. The source meshes
+ * are untextured, and a heart rendered stark white reads as a prop rather than
+ * an organ. The whole-body view tints at runtime; a model loaded on its own by
+ * the single-organ viewer has to carry its colour with it.
+ */
+const colorFlag = flags.find((f) => f.startsWith("--color="))?.slice(8);
+const baseColor = colorFlag
+  ? [1, 3, 5].map((i) => {
+      const channel = parseInt(colorFlag.replace("#", "").slice(i - 1, i + 1), 16) / 255;
+      // glTF base colour is linear; the hex a designer picks is sRGB.
+      return +Math.pow(channel, 2.2).toFixed(4);
+    }).concat(1)
+  : [1, 1, 1, 1];
+/** Edge of the cube the viewer fits every organ into; see `loaders.ts`. */
+const FIT_SIZE = 3.8;
 
 const buf = fs.readFileSync(input);
 const root = new FBXLoader().parse(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength), "");
@@ -81,7 +108,17 @@ root.traverse((object) => {
   const before = positions.length;
   if (index) for (let i = 0; i < index.count; i += 1) emit(index.getX(i));
   else for (let i = 0; i < position.count; i += 1) emit(i);
-  kept.push({ name: object.name, tris: (positions.length - before) / 9 });
+
+  // Centre of this part in world space, kept for the parts file below.
+  const partBox = new THREE.Box3();
+  for (let i = before; i < positions.length; i += 3) {
+    partBox.expandByPoint(new THREE.Vector3(positions[i], positions[i + 1], positions[i + 2]));
+  }
+  kept.push({
+    name: object.name,
+    tris: (positions.length - before) / 9,
+    centre: partBox.isEmpty() ? null : partBox.getCenter(new THREE.Vector3()),
+  });
 });
 
 if (listOnly) {
@@ -149,7 +186,7 @@ const gltf = {
   scenes: [{ nodes: [0] }],
   nodes: [{ mesh: 0, scale, translation: offset, name: "AnatomyLayer" }],
   meshes: [{ name: "AnatomyLayer", primitives: [{ attributes: { POSITION: 0, NORMAL: 1 }, material: 0 }] }],
-  materials: [{ name: "AnatomyLayer", pbrMetallicRoughness: { baseColorFactor: [1, 1, 1, 1], metallicFactor: 0, roughnessFactor: 1 }, doubleSided: true }],
+  materials: [{ name: "AnatomyLayer", pbrMetallicRoughness: { baseColorFactor: baseColor, metallicFactor: 0, roughnessFactor: 0.72 }, doubleSided: true }],
   accessors: [
     { bufferView: 0, componentType: 5122, normalized: false, count: vertexCount, type: "VEC3", min: quantMin, max: quantMax },
     { bufferView: 1, componentType: 5120, normalized: true, count: vertexCount, type: "VEC3" },
@@ -160,6 +197,25 @@ const gltf = {
   ],
   buffers: [{ byteLength: binLength }],
 };
+
+if (emitParts) {
+  // The viewer centres a model on the origin and scales its longest axis to
+  // FIT_SIZE, so a hotspot has to be expressed after the same transform.
+  const centre = [0, 1, 2].map((a) => (min[a] + max[a]) / 2);
+  const fit = FIT_SIZE / Math.max(max[0] - min[0], max[1] - min[1], max[2] - min[2]);
+  const parts = {};
+  for (const entry of kept) {
+    if (!entry.centre) continue;
+    parts[entry.name] = [
+      +((entry.centre.x - centre[0]) * fit).toFixed(3),
+      +((entry.centre.y - centre[1]) * fit).toFixed(3),
+      +((entry.centre.z - centre[2]) * fit).toFixed(3),
+    ];
+  }
+  const partsPath = output.replace(/\.glb$/, "") + ".parts.json";
+  fs.writeFileSync(partsPath, JSON.stringify(parts, null, 2));
+  console.log(`wrote ${partsPath} — ${Object.keys(parts).length} parts`);
+}
 
 const jsonBytes = Buffer.from(JSON.stringify(gltf), "utf8");
 const jsonPadded = Buffer.alloc(align4(jsonBytes.length), 0x20);
