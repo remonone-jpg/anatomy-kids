@@ -257,10 +257,12 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
       viewer.setAutoRotate(autoRotateRef.current);
       viewer.setAuthoring(authoringRef.current);
       const current = organRef.current;
-      viewer.setOrgan(current.model, current.hotspots, current.accent).catch(() => {
-        setLoading(false);
-        setProgress(0);
-      });
+      if (current.model) {
+        viewer.setOrgan(current.model, current.hotspots, current.accent).catch(() => {
+          setLoading(false);
+          setProgress(0);
+        });
+      }
     });
 
     return () => {
@@ -270,7 +272,16 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
     };
   }, []);
 
+  // An organ can be written up before it is modelled. Everything else about it
+  // still works; only the stage stands down.
+  const modelled = organ.model !== null;
+
   useEffect(() => {
+    if (!organ.model) {
+      setLoading(false);
+      setProgress(0);
+      return;
+    }
     viewerRef.current?.setOrgan(organ.model, organ.hotspots, organ.accent).catch(() => {
       setLoading(false);
       setProgress(0);
@@ -332,6 +343,14 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
       <div className="viewer-glow" style={{ "--organ-accent": organ.accent } as React.CSSProperties} />
       <div ref={mountRef} className="three-mount" />
 
+      {!modelled && (
+        <div className="model-pending" role="status">
+          <span className="model-pending-glyph">{organ.icon}</span>
+          <strong>{format(t.viewer.pending ?? "{organ}: 3D model coming soon", { organ: organ.name })}</strong>
+          <small>{t.viewer.pendingNote ?? ""}</small>
+        </div>
+      )}
+
       <div className="viewer-tools" aria-label={t.tools.label}>
         {tools.map(({ id, label, icon: Icon }) => (
           <button
@@ -348,7 +367,7 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
         ))}
       </div>
 
-      {!quizActive && (
+      {!quizActive && modelled && (
       <aside className="tip-note" aria-label={t.viewer.tip}>
         <span><Sparkles size={15} /> {t.viewer.tip}</span>
         <p>{t.viewer.tipDrag}<br />{t.viewer.tipScroll}<br />{t.viewer.tipClick}</p>
@@ -419,7 +438,7 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
         </div>
       )}
 
-      {!quizActive && (
+      {!quizActive && modelled && (
       <button className="auto-rotate" type="button" onClick={() => onAutoRotate(!autoRotate)} aria-pressed={autoRotate}>
         <RotateCcw size={14} /> {t.viewer.autoRotate}
         <span className={`switch ${autoRotate ? "on" : ""}`}><i /></span>

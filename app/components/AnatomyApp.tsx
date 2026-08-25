@@ -265,9 +265,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // Warms the model in the HTTP cache while the pointer is still travelling,
   // so the switch usually renders without a visible loading pass.
   const prefetchOrgan = (id: OrganId) => {
-    if (id === organId || prefetched.current.has(id)) return;
+    const model = organById[id].model;
+    if (id === organId || !model || prefetched.current.has(id)) return;
     prefetched.current.add(id);
-    void fetch(asset(organById[id].model), { priority: "low" } as RequestInit).catch(() => {});
+    void fetch(asset(model), { priority: "low" } as RequestInit).catch(() => {});
   };
 
   return (

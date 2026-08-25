@@ -1095,3 +1095,32 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   font-size: 10px;
 }
 .body-scene.compact .body-scene-credit { position: static; order: 5; display: block; text-align: center; margin-top: 6px; }
+
+/* An organ written up before it is modelled. The stage stands down rather than
+   showing an empty plinth, and says so. */
+.model-pending {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  padding: 24px;
+  text-align: center;
+}
+.model-pending-glyph {
+  width: 92px;
+  height: 92px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #fff, rgba(217,138,92,.22));
+  box-shadow: inset 0 0 0 1px rgba(121,86,67,.1);
+  color: #c9713f;
+  font-size: 40px;
+}
+.model-pending strong { font: 500 19px var(--font-serif), serif; }
+.model-pending small { color: var(--muted); font-size: 13px; }
+.kids .model-pending strong { font-size: 22px; }
+.kids .model-pending small { font-size: 15px; }

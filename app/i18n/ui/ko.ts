@@ -30,6 +30,8 @@ export const ui: UiDictionary = {
     tipClick: "점을 클릭해 자세히 보기",
     loading: "{organ} 준비 중", autoRotate: "자동 회전",
     caption: "3D 표본 · 점을 클릭하세요", structures: "이 표본의 구조",
+    pending: "{organ} 3D 모형은 준비 중이에요",
+    pendingNote: "설명과 이야기는 옆에서 먼저 볼 수 있어요",
   },
   info: {
     kicker: "{organ}", keyFacts: "핵심 정보", size: "크기", weight: "무게", daily: "하루",

@@ -10,6 +10,7 @@ export type OrganId =
   | "liver"
   | "kidneys"
   | "eyeball"
+  | "stomach"
   | "intestine"
   | "pancreas"
   | "skin";
@@ -24,7 +25,11 @@ export type HotspotStructure = {
 
 export type OrganStructure = {
   id: OrganId;
-  model: string;
+  /**
+   * `null` means the organ is written but not yet modelled. It still appears
+   * in the library and the reading panels; only the 3D stage stands down.
+   */
+  model: string | null;
   icon: string;
   accent: string;
   /** Whether `/anatomy/<id>/*.webp` illustrations exist. */
@@ -117,6 +122,24 @@ export const organStructures: OrganStructure[] = [
       { id: "cornea", ta: "Cornea", position: [-0.94, 0.05, 1.47], color: "#6393d8" },
       { id: "iris", ta: "Iris", position: [-1.22, -0.53, 1.15], color: "#f2a33b" },
       { id: "optic", ta: "Nervus opticus", position: [1.61, -0.18, 0.54], color: "#d89bc4" },
+    ],
+  },
+  {
+    id: "stomach",
+    // No mesh yet — the atlas ships the stomach inside its visceral bundle and
+    // it has still to be pulled out. Everything else about this organ is ready.
+    model: null,
+    icon: "◗",
+    accent: "#d98a5c",
+    illustrated: false,
+    scientificName: "Gaster",
+    hotspots: [
+      // Positions are placeholders: with no mesh there is nothing to anchor
+      // them to. They exist so the labels survive until the model lands.
+      { id: "cardia", ta: "Cardia", position: [0, 0, 0], color: "#d98a5c" },
+      { id: "fundus", ta: "Fundus gastricus", position: [0, 0, 0], color: "#e0a56f" },
+      { id: "body", ta: "Corpus gastricum", position: [0, 0, 0], color: "#c9713f" },
+      { id: "pylorus", ta: "Pylorus", position: [0, 0, 0], color: "#b8623a" },
     ],
   },
   {

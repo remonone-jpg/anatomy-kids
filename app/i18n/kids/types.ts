@@ -16,6 +16,7 @@ export const KIDS_ORGAN_IDS: OrganId[] = [
   "heart",
   "brain",
   "lungs",
+  "stomach",
   "intestine",
   "skin",
   "eyeball",

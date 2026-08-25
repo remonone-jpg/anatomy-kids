@@ -139,6 +139,33 @@ export const organs: OrganContentDictionary = {
       optic: { label: "Зрительный нерв", detail: "Передаёт зрительные сигналы" },
     },
   },
+  // Untranslated placeholder so the type is satisfied; the Korean entry is the
+  // only written one. Filling this in is a translation task, not a code one.
+  stomach: {
+    name: "Stomach",
+    system: "",
+    description: "",
+    poetic: "",
+    size: "",
+    weight: "",
+    location: "",
+    function: "",
+    dailyFact: "",
+    medical: "",
+    bloodSupply: "",
+    funFact: "",
+    tissue: "",
+    comparison: "",
+    conditions: [],
+    stories: [],
+    deepDive: [],
+    hotspots: {
+      cardia: { label: "Cardia", detail: "" },
+      fundus: { label: "Fundus", detail: "" },
+      body: { label: "Body", detail: "" },
+      pylorus: { label: "Pylorus", detail: "" },
+    },
+  },
   intestine: {
     name: "Кишечник",
     system: "Пищеварительная система",

@@ -57,6 +57,13 @@ export type UiDictionary = {
   viewer: {
     title: string; canvas: string; tip: string; tipDrag: string; tipScroll: string; tipClick: string;
     loading: string; autoRotate: string; caption: string; structures: string;
+    /**
+     * Shown when an organ has copy but no mesh yet. Optional because only the
+     * locales that have been written carry it; the rest fall back in place
+     * rather than being given a machine translation.
+     */
+    pending?: string;
+    pendingNote?: string;
   };
   info: {
     kicker: string; keyFacts: string; size: string; weight: string; daily: string;
