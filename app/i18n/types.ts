@@ -36,7 +36,10 @@ export type OrganContent = {
 /** The angles a structure is worth looking at from, in the order they read. */
 export type DeepDiveCategory =
   | "structure" | "mechanism" | "numbers" | "development"
-  | "teamwork" | "myths" | "history" | "animals";
+  | "teamwork" | "myths" | "history" | "animals"
+  | "rhythm" | "exercise" | "food" | "aging"
+  | "microscope" | "evolution" | "space" | "weather"
+  | "etymology" | "culture" | "research" | "senses";
 
 export type DeepDive = { category: DeepDiveCategory; title: string; body: string };
 
