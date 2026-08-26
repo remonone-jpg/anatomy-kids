@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Boxes, Cog, Hash, Sprout, Users, HelpCircle, ScrollText, PawPrint,
   Clock, Activity, Apple, Hourglass, Microscope, GitBranch, Rocket,
@@ -60,9 +60,43 @@ const META: Record<DeepDiveCategory, { label: string; Icon: typeof Boxes }> = {
  * headings they read as eight things you can choose between. Closed by
  * default so the panel above it stays the main thing.
  */
-export function DeepDive({ entries, speechLang }: { entries: DeepDiveEntry[]; speechLang: string }) {
+export function DeepDive({
+  entries,
+  speechLang,
+  reveal,
+}: {
+  entries: DeepDiveEntry[];
+  speechLang: string;
+  /** A category the quiz asked to show. Opens its group and its entry. */
+  reveal?: DeepDiveEntry["category"] | null;
+}) {
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [openEntry, setOpenEntry] = useState<string | null>(null);
+
+  // The quiz names a category and this pane catches up with it. Adjusting
+  // state during render on a changed prop is the sanctioned shape for this;
+  // doing it in an effect costs an extra render and the linter says so.
+  const [honoured, setHonoured] = useState<string | null>(null);
+  if (reveal && reveal !== honoured) {
+    const entry = entries.find((e) => e.category === reveal);
+    const group = GROUPS.find((g) => g.categories.includes(reveal));
+    setHonoured(reveal);
+    if (entry && group) {
+      setOpenGroup(group.title);
+      setOpenEntry(entry.title);
+    }
+  }
+
+  // Scrolling is a real side effect, and it has to wait for the group to
+  // render its children before the target exists.
+  useEffect(() => {
+    if (!reveal) return;
+    const id = window.setTimeout(() => {
+      document.querySelector(`[data-deep-dive="${reveal}"]`)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 60);
+    return () => window.clearTimeout(id);
+  }, [reveal]);
 
   const byCategory = new Map(entries.map((e) => [e.category, e]));
   // Groups with nothing behind them are dropped, so an organ carrying only
@@ -101,7 +135,7 @@ export function DeepDive({ entries, speechLang }: { entries: DeepDiveEntry[]; sp
                   const { label, Icon } = META[entry.category];
                   const isOpen = openEntry === entry.title;
                   return (
-                    <article key={entry.title} className={isOpen ? "open" : ""}>
+                    <article key={entry.title} data-deep-dive={entry.category} className={isOpen ? "open" : ""}>
                       <h4>
                         <button
                           type="button"

@@ -229,7 +229,7 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
 
   useEffect(() => {
     organRef.current = organ;
-  }, [organ]);
+  }, [organ, modelled]);
 
   useEffect(() => {
     autoRotateRef.current = autoRotate;

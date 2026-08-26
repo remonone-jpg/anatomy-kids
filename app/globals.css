@@ -1252,3 +1252,71 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 @media (max-width: 1040px) {
   .info-panel .stories, .info-panel .deep-dive { grid-column: 2; }
 }
+
+/* Knowledge quiz — lives beside the reading panels, not over the 3D stage.
+   The label quiz already owns that space. */
+.knowledge-quiz {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid color-mix(in srgb, var(--sage), transparent 62%);
+  border-radius: 17px;
+  background: color-mix(in srgb, var(--sage), transparent 92%);
+}
+.knowledge-quiz > header { display: flex; align-items: center; gap: 9px; }
+.knowledge-quiz > header b { display: flex; align-items: center; gap: 6px; color: #4d6a4c; font-size: 14px; }
+.quiz-progress { margin-inline-start: auto; color: var(--muted); font-size: 12px; }
+.quiz-close { display: grid; place-items: center; width: 26px; height: 26px; border: 0; border-radius: 50%; background: transparent; color: var(--muted); cursor: pointer; }
+.quiz-close:hover { background: rgba(116,89,67,.09); }
+
+.quiz-question { margin: 12px 0 11px; font: 500 15px/1.6 var(--font-serif), serif; }
+
+.quiz-options { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.quiz-options button {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(255,255,255,.45);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: start;
+  font: 500 14px/1.45 var(--font-serif), serif;
+}
+.quiz-options button:hover:not(:disabled) { background: rgba(255,255,255,.8); }
+/* Right and wrong are named by colour and by an icon, so the result does not
+   depend on distinguishing green from red. */
+.quiz-options button.right { border-color: #7ba076; background: rgba(123,160,118,.18); color: #3f5a3d; }
+.quiz-options button.wrong { border-color: #c98d84; background: rgba(201,141,132,.16); color: #7d443c; }
+.quiz-options button.dim { opacity: .5; }
+.quiz-options button:disabled { cursor: default; }
+
+.quiz-explain { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.quiz-explain p { margin: 0 0 10px; color: #5d554e; font: 400 13px/1.65 var(--font-serif), serif; }
+
+.quiz-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+.quiz-actions button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 13px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: rgba(255,255,255,.4);
+  color: var(--muted);
+  cursor: pointer;
+  font: 500 12px var(--font-serif), serif;
+}
+.quiz-actions button.primary { border-color: color-mix(in srgb, var(--sage), transparent 45%); background: color-mix(in srgb, var(--sage), transparent 82%); color: #3f5a3d; }
+
+.quiz-score { margin: 16px 0 14px; text-align: center; font: 500 15px var(--font-serif), serif; }
+.quiz-score strong { font-size: 26px; color: #4d6a4c; }
+.knowledge-quiz .quiz-actions { justify-content: center; }
+
+@media (max-width: 1040px) {
+  .info-panel .knowledge-quiz { grid-column: 2; }
+}

@@ -11,6 +11,7 @@ import {
   ChevronDown,
   CircleHelp,
   Compass,
+  Crosshair,
   FileText,
   Globe,
   Heart,
@@ -32,12 +33,15 @@ import { BodyScene } from "./BodyScene";
 import { MoreFacts } from "./MoreFacts";
 import { Stories } from "./Stories";
 import { DeepDive } from "./DeepDive";
+import { KnowledgeQuiz } from "./KnowledgeQuiz";
 import type { OrganId } from "../lib/anatomy-data";
 import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
 import { buildOrgans, indexOrgans, type Organ } from "../i18n/merge";
 import { format, type Dictionary, type UiDictionary } from "../i18n/types";
 import { applyKids, getBodySense, getKidsUi, getMoreFacts, kidsAvailable, KIDS_ORGAN_IDS } from "../i18n/kids";
+import { getAllQuiz, getOrganQuiz, quizAvailable } from "../i18n/quiz";
+import type { KnowledgeQuizItem } from "../i18n/types";
 import { speak, stopSpeaking } from "../lib/speech";
 import { asset } from "../lib/asset";
 
@@ -197,6 +201,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // the body is on the main stage: two copies of it would mean two WebGL
   // contexts holding the same twelve models.
   const [stage, setStage] = useState<"organ" | "body">("organ");
+  // The knowledge quiz lives beside the reading panels, not over the 3D stage
+  // — the label quiz already owns that space.
+  const [knowledgeQuiz, setKnowledgeQuiz] = useState(false);
+  const [revealCategory, setRevealCategory] = useState<KnowledgeQuizItem["category"] | null>(null);
   const panelView = stage === "body" ? "list" : libraryView;
   const [quizActive, setQuizActive] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -446,12 +454,39 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           )}
           {/* Long-form reading is for the grown-up view. In kids mode it is not
               hidden behind a control — it is simply not there. */}
+          {/* The whole-body stage draws from every organ; a single organ on the
+              stage asks only about itself. */}
+          {knowledgeQuiz && !kidsOn && (
+            <KnowledgeQuiz
+              key={`${organId}-${stage}`}
+              pool={stage === "body" ? getAllQuiz(locale.code) : getOrganQuiz(locale.code, organId)}
+              size={stage === "body" ? 10 : 5}
+              speechLang={speechLang}
+              onOpenPassage={setRevealCategory}
+              onClose={() => setKnowledgeQuiz(false)}
+            />
+          )}
           {!kidsOn && organ.stories && <Stories entries={organ.stories} speechLang={speechLang} />}
-          {!kidsOn && organ.deepDive && <DeepDive entries={organ.deepDive} speechLang={speechLang} />}
+          {!kidsOn && organ.deepDive && (
+            <DeepDive
+              entries={organ.deepDive}
+              speechLang={speechLang}
+              // Questions drawn from the long reads have no deep-dive entry to
+              // open, and the quiz already hides the button for them.
+              reveal={revealCategory === "stories" ? null : revealCategory}
+            />
+          )}
           {!kidsOn && <button className="lesson-button" data-reveal onClick={() => setModal("lesson")}>{t.info.viewLesson} <ArrowRight size={16} /></button>}
           <div className="action-grid" data-reveal>
             <button onClick={() => setModal("animation")}><Play size={15} /> {t.info.animate}</button>
-            <button onClick={() => { setQuizActive(true); setModal(null); }}><CircleHelp size={15} /> {t.info.quiz}</button>
+            <button onClick={() => { setQuizActive(true); setModal(null); setKnowledgeQuiz(false); }}>
+              <Crosshair size={15} /> {kidsOn && kidsCopy ? kidsCopy.quizButton : "찾기 놀이"}
+            </button>
+            {!kidsOn && quizAvailable(locale.code) && (
+              <button onClick={() => { setKnowledgeQuiz(true); setQuizActive(false); setRevealCategory(null); }}>
+                <CircleHelp size={15} /> 지식 퀴즈
+              </button>
+            )}
             {!kidsOn && <button onClick={() => setCompare(!compare)} className={compare ? "active" : ""}><Share2 size={15} /> {t.info.compare}</button>}
           </div>
         </aside>
