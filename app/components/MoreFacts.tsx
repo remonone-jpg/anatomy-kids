@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 import { Sparkles, RotateCcw, Volume2 } from "lucide-react";
 import type { KidsUiCopy } from "../i18n/kids/types";
 import { speak } from "../lib/speech";
@@ -34,7 +34,17 @@ export function MoreFacts({
 }) {
   // The caller mounts this with a `key` per organ, so switching organs remounts
   // it and the round restarts on its own — no effect resetting state.
-  const order = useMemo(() => shuffle(facts), [facts]);
+  //
+  // Shuffling is client-only. `Math.random()` during render gives the server
+  // one order and the browser another, and React tears the tree down over the
+  // mismatch. Hydration sees the server snapshot (`false`, unshuffled), matches,
+  // and the shuffle lands on the re-render right after.
+  const shuffled = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+  const order = useMemo(() => (shuffled ? shuffle(facts) : facts), [facts, shuffled]);
   const [index, setIndex] = useState(0);
 
   const current = order[index];
