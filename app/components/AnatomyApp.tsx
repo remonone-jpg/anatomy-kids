@@ -30,6 +30,8 @@ import {
 import { OrganViewer } from "./OrganViewer";
 import { BodyScene } from "./BodyScene";
 import { MoreFacts } from "./MoreFacts";
+import { Stories } from "./Stories";
+import { DeepDive } from "./DeepDive";
 import type { OrganId } from "../lib/anatomy-data";
 import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
@@ -442,6 +444,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           {kidsOn && kidsCopy && moreFacts.length > 0 && (
             <MoreFacts key={organId} facts={moreFacts} copy={kidsCopy} speechLang={speechLang} />
           )}
+          {/* Long-form reading is for the grown-up view. In kids mode it is not
+              hidden behind a control — it is simply not there. */}
+          {!kidsOn && organ.stories && <Stories entries={organ.stories} speechLang={speechLang} />}
+          {!kidsOn && organ.deepDive && <DeepDive entries={organ.deepDive} speechLang={speechLang} />}
           {!kidsOn && <button className="lesson-button" data-reveal onClick={() => setModal("lesson")}>{t.info.viewLesson} <ArrowRight size={16} /></button>}
           <div className="action-grid" data-reveal>
             <button onClick={() => setModal("animation")}><Play size={15} /> {t.info.animate}</button>

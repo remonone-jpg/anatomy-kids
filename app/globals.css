@@ -1157,3 +1157,65 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 }
 .more-facts-actions button.primary { background: color-mix(in srgb, var(--lavender), transparent 80%); color: #503c78; }
 .more-facts-actions button:active { transform: scale(.98); }
+
+/* ── Long-form reading (grown-up view only) ─────────────────────────────── */
+
+.stories { margin-top: 22px; }
+.stories > h2 { display: flex; align-items: center; gap: 7px; margin: 0 0 12px; }
+.stories article { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.stories article:last-child { border-bottom: 0; }
+.stories h3 { margin: 0 0 6px; font: 500 16px var(--font-serif), serif; }
+.stories p { margin: 0 0 8px; color: #5d554e; font: 400 14px/1.72 var(--font-serif), serif; }
+
+.stories button, .deep-dive-listen {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(255,255,255,.3);
+  color: var(--muted);
+  cursor: pointer;
+  font: 500 11px var(--font-serif), serif;
+}
+
+/* Folded by default: eight paragraphs open at once read as one wall, and the
+   panel above this is meant to stay the main thing. */
+.deep-dive { margin-top: 24px; }
+.deep-dive > h2 { margin: 0 0 10px; }
+.deep-dive article { border-bottom: 1px solid var(--line); }
+.deep-dive article:last-child { border-bottom: 0; }
+.deep-dive h3 { margin: 0; }
+.deep-dive h3 button {
+  width: 100%;
+  min-height: 46px;
+  display: grid;
+  grid-template-columns: 16px auto 1fr 16px;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 2px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: start;
+}
+.deep-dive-label {
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(141,107,204,.1);
+  color: #6d5892;
+  white-space: nowrap;
+  font-size: 10px;
+}
+.deep-dive-title { font: 500 14px var(--font-serif), serif; }
+.deep-dive-chevron { color: var(--muted); transition: transform .2s; }
+.deep-dive article.open .deep-dive-chevron { transform: rotate(180deg); }
+.deep-dive-body { padding: 0 0 14px 25px; }
+.deep-dive-body p { margin: 0 0 9px; color: #5d554e; font: 400 14px/1.72 var(--font-serif), serif; }
+
+@media (max-width: 1040px) {
+  .info-panel .stories, .info-panel .deep-dive { grid-column: 2; }
+}
