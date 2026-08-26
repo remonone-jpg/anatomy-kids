@@ -11,19 +11,24 @@ import type { DeepDive as DeepDiveEntry, DeepDiveCategory } from "../i18n/types"
 import { speak } from "../lib/speech";
 
 /**
- * Reading order, fixed by hand rather than by category name.
+ * Twenty headings in one column is a scroll, not a menu. Grouped, the panel
+ * opens as five choices and the reader picks a direction first.
  *
- * It runs outward: what the thing is, then how it behaves through a day and a
- * life, then how it sits among other organs, then how we came to know about it
- * and what people say. An organ that has only the original eight simply skips
- * the rest — the order holds either way.
+ * The groups run outward: what the thing is, how it behaves through a day and
+ * a life, how it sits among the other organs, how it meets the world outside
+ * the body, and what people have come to say about it. An organ carrying fewer
+ * categories simply shows fewer rows — and a group with nothing in it does not
+ * appear at all.
  */
-const ORDER: DeepDiveCategory[] = [
-  "structure", "mechanism", "microscope", "numbers", "rhythm",
-  "exercise", "food", "senses", "teamwork", "development", "aging",
-  "evolution", "weather", "space", "myths", "history", "etymology",
-  "culture", "animals", "research",
+const GROUPS: { title: string; categories: DeepDiveCategory[] }[] = [
+  { title: "무엇인가", categories: ["structure", "mechanism", "microscope", "numbers"] },
+  { title: "어떻게 움직이나", categories: ["rhythm", "exercise", "food", "senses"] },
+  { title: "몸속에서", categories: ["teamwork", "development", "aging", "evolution"] },
+  // Weather,space and other animals are all about what lies outside this body.
+  { title: "바깥 세상과", categories: ["weather", "space", "animals"] },
+  { title: "사람들이 아는 것", categories: ["myths", "history", "etymology", "culture", "research"] },
 ];
+
 
 const META: Record<DeepDiveCategory, { label: string; Icon: typeof Boxes }> = {
   structure:   { label: "구조", Icon: Boxes },
@@ -56,43 +61,77 @@ const META: Record<DeepDiveCategory, { label: string; Icon: typeof Boxes }> = {
  * default so the panel above it stays the main thing.
  */
 export function DeepDive({ entries, speechLang }: { entries: DeepDiveEntry[]; speechLang: string }) {
-  const [open, setOpen] = useState<string | null>(null);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [openEntry, setOpenEntry] = useState<string | null>(null);
 
-  // Document order is not guaranteed; the reading order is what matters.
-  const sorted = [...entries].sort(
-    (a, b) => ORDER.indexOf(a.category) - ORDER.indexOf(b.category),
-  );
-  if (sorted.length === 0) return null;
+  const byCategory = new Map(entries.map((e) => [e.category, e]));
+  // Groups with nothing behind them are dropped, so an organ carrying only
+  // some categories never shows an empty heading.
+  const groups = GROUPS
+    .map((g) => ({ title: g.title, items: g.categories.map((c) => byCategory.get(c)).filter(Boolean) as DeepDiveEntry[] }))
+    .filter((g) => g.items.length > 0);
+
+  if (groups.length === 0) return null;
 
   return (
     <section className="deep-dive" aria-label="더 깊이 보기">
       <h2>더 깊이 보기</h2>
-      {sorted.map((entry) => {
-        const { label, Icon } = META[entry.category];
-        const isOpen = open === entry.title;
+      {groups.map((group) => {
+        const groupOpen = openGroup === group.title;
         return (
-          <article key={entry.title} className={isOpen ? "open" : ""}>
+          <div key={group.title} className={`deep-dive-group ${groupOpen ? "open" : ""}`}>
             <h3>
-              <button type="button" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? null : entry.title)}>
-                <Icon size={16} aria-hidden />
-                <span className="deep-dive-label">{label}</span>
-                <span className="deep-dive-title">{entry.title}</span>
+              <button
+                type="button"
+                aria-expanded={groupOpen}
+                onClick={() => {
+                  setOpenGroup(groupOpen ? null : group.title);
+                  setOpenEntry(null);
+                }}
+              >
+                <span className="deep-dive-group-title">{group.title}</span>
+                <span className="deep-dive-count">{group.items.length}</span>
                 <ChevronDown size={16} aria-hidden className="deep-dive-chevron" />
               </button>
             </h3>
-            {isOpen && (
-              <div className="deep-dive-body">
-                <p>{entry.body}</p>
-                <button
-                  type="button"
-                  className="deep-dive-listen"
-                  onClick={() => speak(`${entry.title}. ${entry.body}`, speechLang)}
-                >
-                  <Volume2 size={15} /> 들어보기
-                </button>
+
+            {groupOpen && (
+              <div className="deep-dive-items">
+                {group.items.map((entry) => {
+                  const { label, Icon } = META[entry.category];
+                  const isOpen = openEntry === entry.title;
+                  return (
+                    <article key={entry.title} className={isOpen ? "open" : ""}>
+                      <h4>
+                        <button
+                          type="button"
+                          aria-expanded={isOpen}
+                          onClick={() => setOpenEntry(isOpen ? null : entry.title)}
+                        >
+                          <Icon size={16} aria-hidden />
+                          <span className="deep-dive-label">{label}</span>
+                          <span className="deep-dive-title">{entry.title}</span>
+                          <ChevronDown size={16} aria-hidden className="deep-dive-chevron" />
+                        </button>
+                      </h4>
+                      {isOpen && (
+                        <div className="deep-dive-body">
+                          <p>{entry.body}</p>
+                          <button
+                            type="button"
+                            className="deep-dive-listen"
+                            onClick={() => speak(`${entry.title}. ${entry.body}`, speechLang)}
+                          >
+                            <Volume2 size={15} /> 들어보기
+                          </button>
+                        </div>
+                      )}
+                    </article>
+                  );
+                })}
               </div>
             )}
-          </article>
+          </div>
         );
       })}
     </section>
