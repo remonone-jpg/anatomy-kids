@@ -214,11 +214,15 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
     authoringRef.current = authoring;
   }, [authoring]);
 
+  // An organ can be written up before it is modelled. Everything else about it
+  // still works; only the stage stands down.
+  const modelled = organ.model !== null;
+
   // A typical organ is ready well inside a second — flashing a loading panel for
   // that reads as jank. It only appears if the fetch is genuinely slow; the flag
   // is cleared by onLoading when the next load starts.
   useEffect(() => {
-    if (!loading) return;
+    if (!loading || !modelled) return;
     const timer = window.setTimeout(() => setSlowLoad(true), 900);
     return () => window.clearTimeout(timer);
   }, [loading]);
@@ -272,16 +276,10 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
     };
   }, []);
 
-  // An organ can be written up before it is modelled. Everything else about it
-  // still works; only the stage stands down.
-  const modelled = organ.model !== null;
-
   useEffect(() => {
-    if (!organ.model) {
-      setLoading(false);
-      setProgress(0);
-      return;
-    }
+    // Nothing to load. The loader is gated on `modelled` where it renders, so
+    // there is no stale spinner to clear here.
+    if (!organ.model) return;
     viewerRef.current?.setOrgan(organ.model, organ.hotspots, organ.accent).catch(() => {
       setLoading(false);
       setProgress(0);
@@ -430,7 +428,7 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
         </div>
       )}
 
-      {loading && slowLoad && (
+      {modelled && loading && slowLoad && (
         <div className="model-loader" role="status" aria-live="polite">
           <div className="loader-orbit"><Maximize2 size={20} /></div>
           <strong>{format(t.viewer.loading, { organ: organ.name })}</strong>

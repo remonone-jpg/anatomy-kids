@@ -1124,3 +1124,36 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .model-pending small { color: var(--muted); font-size: 13px; }
 .kids .model-pending strong { font-size: 22px; }
 .kids .model-pending small { font-size: 15px; }
+
+/* Ten facts, one at a time. The dots are the only hint that the round ends —
+   without them a child presses on with no idea whether it is going anywhere. */
+.more-facts {
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--lavender), transparent 93%);
+}
+.more-facts header { display: flex; align-items: center; gap: 7px; color: #7b62b8; }
+.more-facts header b { font-size: 14px; }
+.more-facts-dots { margin: 0 0 0 auto; padding: 0; list-style: none; display: flex; gap: 4px; }
+.more-facts-dots li { width: 6px; height: 6px; border-radius: 50%; background: rgba(123,98,184,.22); }
+.more-facts-dots li.seen { background: rgba(123,98,184,.5); }
+.more-facts-dots li.now { background: var(--lavender); transform: scale(1.35); }
+.more-facts > p { margin: 10px 0 12px; font: 500 15px/1.6 var(--font-serif), serif; }
+.more-facts-actions { display: grid; grid-template-columns: auto 1fr; gap: 7px; }
+.more-facts-actions button {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 13px;
+  border: 1px solid color-mix(in srgb, var(--lavender), transparent 62%);
+  border-radius: 14px;
+  background: rgba(255,255,255,.4);
+  color: #6d5892;
+  cursor: pointer;
+  font: 500 14px var(--font-serif), serif;
+}
+.more-facts-actions button.primary { background: color-mix(in srgb, var(--lavender), transparent 80%); color: #503c78; }
+.more-facts-actions button:active { transform: scale(.98); }

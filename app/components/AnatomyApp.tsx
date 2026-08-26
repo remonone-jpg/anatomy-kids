@@ -29,12 +29,13 @@ import {
 } from "lucide-react";
 import { OrganViewer } from "./OrganViewer";
 import { BodyScene } from "./BodyScene";
+import { MoreFacts } from "./MoreFacts";
 import type { OrganId } from "../lib/anatomy-data";
 import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
 import { buildOrgans, indexOrgans, type Organ } from "../i18n/merge";
 import { format, type Dictionary, type UiDictionary } from "../i18n/types";
-import { applyKids, getBodySense, getKidsUi, kidsAvailable, KIDS_ORGAN_IDS } from "../i18n/kids";
+import { applyKids, getBodySense, getKidsUi, getMoreFacts, kidsAvailable, KIDS_ORGAN_IDS } from "../i18n/kids";
 import { speak, stopSpeaking } from "../lib/speech";
 import { asset } from "../lib/asset";
 
@@ -227,6 +228,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   }, [organId]);
 
   const bodySense = kidsOn ? getBodySense(locale.code, organId) : null;
+  const moreFacts = kidsOn ? getMoreFacts(locale.code, organId) : [];
 
   /** Everything a child would want read out for the organ on screen. */
   const readAloud = (target: Organ) => {
@@ -437,6 +439,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               drops the note rather than trying to simplify it. */}
           {!kidsOn && <div className="medical-note" data-reveal><Stethoscope size={16} /><p><b>{t.info.medical}</b>{organ.medical}</p></div>}
           <div className="fun-note" data-reveal><Sparkles size={15} /><p><b>{t.info.didYouKnow}</b>{organ.funFact}</p></div>
+          {kidsOn && kidsCopy && moreFacts.length > 0 && (
+            <MoreFacts key={organId} facts={moreFacts} copy={kidsCopy} speechLang={speechLang} />
+          )}
           {!kidsOn && <button className="lesson-button" data-reveal onClick={() => setModal("lesson")}>{t.info.viewLesson} <ArrowRight size={16} /></button>}
           <div className="action-grid" data-reveal>
             <button onClick={() => setModal("animation")}><Play size={15} /> {t.info.animate}</button>

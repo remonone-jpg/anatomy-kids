@@ -105,6 +105,15 @@ export function getBodySense(locale: string, id: OrganId): string | null {
 }
 
 /**
+ * The extra one-liners for an organ. Kids-only, so like `bodySense` they are
+ * read from here rather than threaded through `OrganContent`.
+ */
+export function getMoreFacts(locale: string, id: OrganId): string[] {
+  const copy = KIDS_COPY[locale];
+  return copy ? copy.organs[id].moreFacts.map(withChild) : [];
+}
+
+/**
  * Strings kids mode adds rather than replaces (the narration button, the mode
  * toggle). They have no home in `UiDictionary`, so components read them here.
  */

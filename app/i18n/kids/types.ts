@@ -77,6 +77,9 @@ export type KidsUiCopy = {
   quoteSign: string;
   listen: string;
   listenStop: string;
+  moreFactsTitle: string;
+  moreFactsButton: string;
+  moreFactsRestart: string;
   modeLabel: string;
   keyFacts: string;
   size: string;
