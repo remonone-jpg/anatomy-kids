@@ -43,6 +43,24 @@ export type DeepDiveCategory =
 
 export type DeepDive = { category: DeepDiveCategory; title: string; body: string };
 
+/**
+ * A question drawn from what the reading panels already say.
+ *
+ * `category` points back at the deep-dive entry the answer came from, which is
+ * what lets the result screen offer to open that passage rather than just
+ * asserting the answer. `"stories"` covers the ones drawn from the long reads,
+ * which have no category of their own.
+ */
+export type KnowledgeQuizItem = {
+  id: string;
+  organ: OrganId;
+  category: DeepDiveCategory | "stories";
+  question: string;
+  options: [string, string, string];
+  answer: 0 | 1 | 2;
+  explain: string;
+};
+
 export type OrganContentDictionary = Record<OrganId, OrganContent>;
 
 export type UiDictionary = {
