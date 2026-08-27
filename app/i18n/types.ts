@@ -44,6 +44,27 @@ export type DeepDiveCategory =
 export type DeepDive = { category: DeepDiveCategory; title: string; body: string };
 
 /**
+ * The children's quiz, kept deliberately separate from the grown-up one.
+ *
+ * Two options, and the wrong one is obviously wrong. That is the design, not a
+ * shortcut: a five-year-old who has just heard the facts should get nearly all
+ * of these right, and walk away with "I know this". A plausible trap would
+ * only teach them that they do not.
+ *
+ * `question`, `options` and `explain` all carry `{child}`, so all three have to
+ * go through the substitution.
+ */
+export type KidsQuizItem = {
+  id: string;
+  organ: OrganId;
+  question: string;
+  options: [string, string];
+  answer: 0 | 1;
+  /** One line after the answer, in a praising tone. */
+  explain: string;
+};
+
+/**
  * A question drawn from what the reading panels already say.
  *
  * `category` points back at the deep-dive entry the answer came from, which is
