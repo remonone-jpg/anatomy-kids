@@ -467,7 +467,12 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               key={organId}
               pool={getKidsQuiz(locale.code, organId)}
               speechLang={speechLang}
-              copy={{ title: kidsCopy.kidsQuizTitle, again: kidsCopy.kidsQuizAgain, listen: kidsCopy.listen }}
+              copy={{
+                title: kidsCopy.kidsQuizTitle,
+                again: kidsCopy.kidsQuizAgain,
+                listen: kidsCopy.listen,
+                wrong: kidsCopy.kidsQuizWrong,
+              }}
               onClose={() => setKidsQuiz(false)}
             />
           )}

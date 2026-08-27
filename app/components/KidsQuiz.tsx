@@ -34,7 +34,7 @@ export function KidsQuiz({
 }: {
   pool: KidsQuizItem[];
   speechLang: string;
-  copy: { title: string; again: string; listen: string };
+  copy: { title: string; again: string; listen: string; wrong: string[] };
   onClose: () => void;
 }) {
   // Client-only, as everywhere: Math.random() during render gives the server
@@ -56,6 +56,7 @@ export function KidsQuiz({
 
   const [step, setStep] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
+  const [lead, setLead] = useState<string | null>(null);
   const [score, setScore] = useState(0);
 
   const current = round[step];
@@ -65,15 +66,24 @@ export function KidsQuiz({
     (index: number) => {
       if (picked !== null) return;
       setPicked(index);
-      if (index === current.answer) setScore((s) => s + 1);
-      // Right or wrong, the child hears the same line. Nothing scolds.
-      speak(current.item.explain, speechLang);
+
+      const right = index === current.answer;
+      if (right) setScore((s) => s + 1);
+
+      // The explanation is written in a praising tone, so on a wrong pick it
+      // would read as if the child had got it right. A line in front says
+      // which one it was — sorry, not scolding. Drawn here in the click
+      // handler, never during render, so hydration stays put.
+      const line = right ? null : (copy.wrong[Math.floor(Math.random() * copy.wrong.length)] ?? null);
+      setLead(line);
+      speak(line ? `${line} ${current.item.explain}` : current.item.explain, speechLang);
     },
-    [picked, current, speechLang],
+    [picked, current, speechLang, copy.wrong],
   );
 
   const next = useCallback(() => {
     setPicked(null);
+    setLead(null);
     setStep((s) => s + 1);
   }, []);
 
@@ -81,6 +91,7 @@ export function KidsQuiz({
     setSeed((s) => s + 1);
     setStep(0);
     setPicked(null);
+    setLead(null);
     setScore(0);
   }, []);
 
@@ -139,9 +150,15 @@ export function KidsQuiz({
 
       {picked !== null && (
         <div className="kids-quiz-explain">
-          <p>{current.item.explain}</p>
+          <p>
+            {lead && <span className="kids-quiz-lead">{lead} </span>}
+            {current.item.explain}
+          </p>
           <div className="kids-quiz-actions">
-            <button type="button" onClick={() => speak(current.item.explain, speechLang)}>
+            <button
+              type="button"
+              onClick={() => speak(lead ? `${lead} ${current.item.explain}` : current.item.explain, speechLang)}
+            >
               <Volume2 size={16} /> {copy.listen}
             </button>
             <button type="button" className="primary" onClick={next}>

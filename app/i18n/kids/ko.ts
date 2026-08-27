@@ -33,6 +33,12 @@ export const kids: KidsCopy = {
     kidsQuizTitle: "맞혀 볼까요?",
     kidsQuizButton: "맞혀 볼까요?",
     kidsQuizAgain: "또 할래요",
+    kidsQuizWrong: [
+      "아쉬워요! 정답은 이쪽이에요.",
+      "이건 이쪽이었어요!",
+      "괜찮아요, 다시 볼까요?",
+      "앗, 이쪽이에요!",
+    ],
     modeLabel: "어린이 모드",
     keyFacts: "이건 어때요?",
     size: "크기는요",

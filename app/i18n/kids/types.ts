@@ -83,6 +83,9 @@ export type KidsUiCopy = {
   kidsQuizTitle: string;
   kidsQuizButton: string;
   kidsQuizAgain: string;
+  /** Shown before the explanation on a wrong pick. One is chosen at random so
+   *  the same words don't repeat all round. None of them scold. */
+  kidsQuizWrong: string[];
   modeLabel: string;
   keyFacts: string;
   size: string;

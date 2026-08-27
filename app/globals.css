@@ -1400,3 +1400,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 @media (max-width: 1040px) {
   .info-panel .kids-quiz { grid-column: 2; }
 }
+
+/* The lead-in on a wrong pick. Warm, not red — it says "over here", not "no". */
+.kids-quiz-lead { color: #a3762f; }
