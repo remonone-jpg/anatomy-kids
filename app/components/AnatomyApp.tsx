@@ -34,13 +34,14 @@ import { MoreFacts } from "./MoreFacts";
 import { Stories } from "./Stories";
 import { DeepDive } from "./DeepDive";
 import { KnowledgeQuiz } from "./KnowledgeQuiz";
+import { KidsQuiz } from "./KidsQuiz";
 import type { OrganId } from "../lib/anatomy-data";
 import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
 import { buildOrgans, indexOrgans, type Organ } from "../i18n/merge";
 import { format, type Dictionary, type UiDictionary } from "../i18n/types";
 import { applyKids, getBodySense, getKidsUi, getMoreFacts, kidsAvailable, KIDS_ORGAN_IDS } from "../i18n/kids";
-import { getAllQuiz, getOrganQuiz, quizAvailable } from "../i18n/quiz";
+import { getAllQuiz, getKidsQuiz, getOrganQuiz, kidsQuizAvailable, quizAvailable } from "../i18n/quiz";
 import type { KnowledgeQuizItem } from "../i18n/types";
 import { speak, stopSpeaking } from "../lib/speech";
 import { asset } from "../lib/asset";
@@ -204,6 +205,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // The knowledge quiz lives beside the reading panels, not over the 3D stage
   // — the label quiz already owns that space.
   const [knowledgeQuiz, setKnowledgeQuiz] = useState(false);
+  const [kidsQuiz, setKidsQuiz] = useState(false);
   const [revealCategory, setRevealCategory] = useState<KnowledgeQuizItem["category"] | null>(null);
   const panelView = stage === "body" ? "list" : libraryView;
   const [quizActive, setQuizActive] = useState(false);
@@ -252,6 +254,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     setQuery("");
     setCompare(false);
     setQuizActive(false);
+    // Each mode has its own quiz; leaving one open across the switch would
+    // show a panel the other mode is not supposed to have.
+    setKidsQuiz(false);
+    setKnowledgeQuiz(false);
     // The short list may not contain whatever adult organ was on screen, which
     // would leave the viewer showing something the library cannot select.
     if (next && !KIDS_ORGAN_IDS.includes(organId)) setOrganId("heart");
@@ -456,6 +462,15 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               hidden behind a control — it is simply not there. */}
           {/* The whole-body stage draws from every organ; a single organ on the
               stage asks only about itself. */}
+          {kidsQuiz && kidsOn && kidsCopy && (
+            <KidsQuiz
+              key={organId}
+              pool={getKidsQuiz(locale.code, organId)}
+              speechLang={speechLang}
+              copy={{ title: kidsCopy.kidsQuizTitle, again: kidsCopy.kidsQuizAgain, listen: kidsCopy.listen }}
+              onClose={() => setKidsQuiz(false)}
+            />
+          )}
           {knowledgeQuiz && !kidsOn && (
             <KnowledgeQuiz
               key={`${organId}-${stage}`}
@@ -485,6 +500,11 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             {!kidsOn && quizAvailable(locale.code) && (
               <button onClick={() => { setKnowledgeQuiz(true); setQuizActive(false); setRevealCategory(null); }}>
                 <CircleHelp size={15} /> 지식 퀴즈
+              </button>
+            )}
+            {kidsOn && kidsCopy && kidsQuizAvailable(locale.code) && (
+              <button onClick={() => { setKidsQuiz(true); setQuizActive(false); }}>
+                <Sparkles size={15} /> {kidsCopy.kidsQuizButton}
               </button>
             )}
             {!kidsOn && <button onClick={() => setCompare(!compare)} className={compare ? "active" : ""}><Share2 size={15} /> {t.info.compare}</button>}

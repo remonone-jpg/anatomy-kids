@@ -1320,3 +1320,83 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 @media (max-width: 1040px) {
   .info-panel .knowledge-quiz { grid-column: 2; }
 }
+
+/* Kids quiz — two big targets, and nothing that scolds.
+   Sized for a five-year-old's finger, not a mouse pointer. */
+.kids-quiz {
+  margin-top: 16px;
+  padding: 15px;
+  border: 2px solid color-mix(in srgb, var(--lavender), transparent 60%);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--lavender), transparent 92%);
+}
+.kids-quiz > header { display: flex; align-items: center; gap: 8px; }
+.kids-quiz > header b { display: flex; align-items: center; gap: 6px; color: #6d5892; font-size: 15px; }
+.kids-quiz-dots { margin: 0 0 0 auto; padding: 0; list-style: none; display: flex; gap: 5px; }
+.kids-quiz-dots li { width: 8px; height: 8px; border-radius: 50%; background: rgba(123,98,184,.22); }
+.kids-quiz-dots li.seen { background: rgba(123,98,184,.5); }
+.kids-quiz-dots li.now { background: var(--lavender); transform: scale(1.3); }
+
+.kids-quiz-question { margin: 13px 0 9px; font: 500 19px/1.5 var(--font-serif), serif; }
+.kids-quiz-listen {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 36px; padding: 0 12px; margin-bottom: 12px;
+  border: 1px solid color-mix(in srgb, var(--lavender), transparent 62%);
+  border-radius: 12px; background: rgba(255,255,255,.5);
+  color: #6d5892; cursor: pointer; font: 500 13px var(--font-serif), serif;
+}
+
+.kids-quiz-options { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.kids-quiz-options button {
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 16px;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.6);
+  color: var(--ink);
+  cursor: pointer;
+  font: 500 17px/1.4 var(--font-serif), serif;
+}
+.kids-quiz-options button:active:not(:disabled) { transform: scale(.98); }
+/* The right answer lights up whichever one was pressed. A wrong pick is only
+   dimmed — never marked with a cross, never coloured as a failure. */
+.kids-quiz-options button.right {
+  border-color: #7ba076;
+  background: rgba(123,160,118,.24);
+  color: #35502f;
+  animation: kids-quiz-pop .42s cubic-bezier(.2,.9,.3,1.3);
+}
+.kids-quiz-options button.picked { border-color: rgba(123,98,184,.4); opacity: .65; }
+.kids-quiz-options button:disabled { cursor: default; }
+@keyframes kids-quiz-pop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.045); }
+  100% { transform: scale(1); }
+}
+
+.kids-quiz-explain { margin-top: 13px; padding-top: 13px; border-top: 1px solid var(--line); }
+.kids-quiz-explain p { margin: 0 0 11px; font: 500 15px/1.55 var(--font-serif), serif; }
+
+.kids-quiz-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.kids-quiz-actions button {
+  min-height: 48px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 0 16px;
+  border: 2px solid color-mix(in srgb, var(--lavender), transparent 62%);
+  border-radius: 15px;
+  background: rgba(255,255,255,.5);
+  color: #6d5892;
+  cursor: pointer;
+  font: 500 15px var(--font-serif), serif;
+}
+.kids-quiz-actions button.primary { background: color-mix(in srgb, var(--lavender), transparent 76%); color: #503c78; }
+
+.kids-quiz.done { text-align: center; }
+.kids-quiz-score { margin: 6px 0 16px; font: 500 18px var(--font-serif), serif; }
+.kids-quiz-score strong { font-size: 26px; color: #6d5892; }
+.kids-quiz.done .kids-quiz-actions { justify-content: center; }
+
+@media (max-width: 1040px) {
+  .info-panel .kids-quiz { grid-column: 2; }
+}

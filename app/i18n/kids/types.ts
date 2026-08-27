@@ -80,6 +80,9 @@ export type KidsUiCopy = {
   moreFactsTitle: string;
   moreFactsButton: string;
   moreFactsRestart: string;
+  kidsQuizTitle: string;
+  kidsQuizButton: string;
+  kidsQuizAgain: string;
   modeLabel: string;
   keyFacts: string;
   size: string;
