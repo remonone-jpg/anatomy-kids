@@ -33,6 +33,9 @@ type Props = {
   kids: boolean;
   /** BCP-47 tag the narration is spoken in. */
   speechLang: string;
+  /** Filled in with a handle the walkthrough uses to drive the model: a
+   *  structure id turns to face it, null returns to the resting view. */
+  focusRef?: { current: (id: string | null) => void };
 };
 
 /** Fisher–Yates. The quiz asks for every structure once, in a fresh order. */
@@ -186,7 +189,7 @@ function useAuthoringFlag() {
   );
 }
 
-export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCompare, quizActive, onQuizExit, kids, speechLang }: Props) {
+export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCompare, quizActive, onQuizExit, kids, speechLang, focusRef }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<AnatomyViewer | null>(null);
   const organRef = useRef(organ);
@@ -291,6 +294,17 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
   useEffect(() => viewerRef.current?.setAutoRotate(autoRotate && !quizActive), [autoRotate, quizActive]);
   useEffect(() => viewerRef.current?.setQuizMode(quizActive), [quizActive]);
   useEffect(() => viewerRef.current?.setAuthoring(authoring), [authoring]);
+
+  // Handed out rather than called through props so a step change moves the
+  // camera without re-rendering the canvas. Assigned in an effect for the same
+  // reason `pickRef` is: writing a ref during render is not safe.
+  useEffect(() => {
+    if (!focusRef) return;
+    focusRef.current = (id) => {
+      if (id) viewerRef.current?.focusHotspot(id);
+      else viewerRef.current?.reset();
+    };
+  }, [focusRef]);
 
 
   // Tapping a dot is the main thing a child does here, and the callout it opens

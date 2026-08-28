@@ -600,6 +600,32 @@ export class AnatomyViewer {
     this.dirty = true;
   }
 
+  /** Turns the model until the named structure faces the camera, selects it,
+   *  and pulls in a little. Used by the walkthrough, which steps through an
+   *  organ's parts while the panel explains each one. */
+  focusHotspot(id: string) {
+    const marker = this.hotspots.list.find((item) => item.hotspot.id === id);
+    if (!marker || !this.organ) return this.reset();
+
+    this.select(id);
+    // The anchor sits in the pivot's own space, so the angle it needs to be
+    // turned to is read there and applied as the pivot's rotation — spinning
+    // the model rather than flying the camera keeps the framing predictable
+    // across organs of very different shapes.
+    const anchor = marker.anchor;
+    this.tween(this.organ.pivot.rotation, {
+      x: THREE.MathUtils.clamp(Math.atan2(anchor.y, Math.hypot(anchor.x, anchor.z)) * 0.5, -0.5, 0.5),
+      y: -Math.atan2(anchor.x, anchor.z),
+      z: 0,
+      duration: 0.85,
+      ease: "power3.inOut",
+    });
+    this.tween(this.camera.position, { x: 0, y: HOME_CAMERA.y, z: 6.6, duration: 0.85, ease: "power3.inOut" });
+    this.tween(this.controls.target, { ...HOME_TARGET, duration: 0.85, ease: "power3.inOut" });
+    // Long enough that auto-rotate does not fight the tween mid-step.
+    this.busy(1.2);
+  }
+
   reset() {
     this.select(null);
     this.tween(this.camera.position, { ...HOME_CAMERA, duration: 0.8, ease: "power3.out" });
