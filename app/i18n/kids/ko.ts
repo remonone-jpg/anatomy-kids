@@ -33,6 +33,12 @@ export const kids: KidsCopy = {
     kidsQuizTitle: "맞혀 볼까요?",
     kidsQuizButton: "맞혀 볼까요?",
     kidsQuizAgain: "또 할래요",
+    nameAsk: "누구의 몸속을 구경할까요?",
+    namePlaceholder: "이름",
+    nameStart: "시작하기",
+    nameSkip: "그냥 볼래요",
+    nameChange: "이름 바꾸기",
+    nameHint: "이 이름은 이 기기에만 저장돼요.",
     kidsQuizWrong: [
       "아쉬워요! 정답은 이쪽이에요.",
       "이건 이쪽이었어요!",
