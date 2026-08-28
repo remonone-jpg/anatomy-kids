@@ -1503,3 +1503,65 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 @media (max-width: 560px) {
   .condition-factors { grid-template-columns: 1fr; }
 }
+
+/* ── Walkthrough ─────────────────────────────────────────────────────── */
+
+/* Docked over the viewer, not in a modal: the model turning to each structure
+   is the content, and a backdrop would cover it. */
+.walkthrough {
+  position: absolute; left: 16px; right: 16px; bottom: 16px; z-index: 6;
+  padding: 13px 15px 12px;
+  border: 1px solid var(--line); border-radius: 16px;
+  background: color-mix(in srgb, var(--paper), transparent 8%);
+  backdrop-filter: blur(9px);
+  box-shadow: 0 10px 30px rgba(60,45,30,.16);
+}
+.walkthrough > header { display: flex; align-items: center; gap: 9px; }
+.walkthrough > header em {
+  font: 600 11.5px var(--font-serif), serif; letter-spacing: .06em;
+  color: var(--ink-soft); font-style: normal;
+}
+.walk-pips { margin: 0; padding: 0; list-style: none; display: flex; gap: 4px; }
+.walk-pips li { width: 6px; height: 6px; border-radius: 50%; background: rgba(117,91,70,.22); }
+.walk-pips li.seen { background: rgba(117,91,70,.45); }
+.walk-pips li.now { background: var(--accent); transform: scale(1.3); }
+.walk-count { margin-left: auto; color: var(--ink-soft); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.walkthrough > header button {
+  padding: 3px; border: 0; background: none; color: var(--ink-soft); cursor: pointer; line-height: 0;
+}
+.walkthrough > header button:hover { color: var(--ink); }
+
+.walk-body { margin: 9px 0 11px; }
+.walk-body b { display: block; margin-bottom: 4px; font: 600 15px var(--font-serif), serif; }
+.walk-body p { margin: 0; font-size: 13.5px; line-height: 1.65; color: var(--ink-soft); }
+
+.walkthrough > footer { display: flex; gap: 7px; }
+.walkthrough > footer button {
+  display: inline-flex; align-items: center; gap: 5px;
+  min-height: 34px; padding: 0 13px;
+  border: 1px solid var(--line); border-radius: 11px;
+  background: rgba(255,255,255,.5); color: var(--ink);
+  cursor: pointer; font: 500 13px var(--font-serif), serif;
+}
+.walkthrough > footer button:disabled { opacity: .4; cursor: default; }
+.walkthrough > footer button.primary {
+  margin-left: auto;
+  border-color: color-mix(in srgb, var(--accent), transparent 55%);
+  background: color-mix(in srgb, var(--accent), transparent 88%);
+  color: var(--accent);
+}
+
+/* ── Tissue view ─────────────────────────────────────────────────────── */
+
+.tissue-name {
+  margin: 12px 0 0; text-align: center;
+  font: 600 15px var(--font-serif), serif;
+}
+.tissue-passage { margin-top: 14px; text-align: left; }
+.tissue-passage h3 { margin: 0 0 6px; font: 600 15px var(--font-serif), serif; }
+.tissue-passage p { margin: 0; font-size: 14.5px; line-height: 1.7; color: var(--ink-soft); }
+
+@media (max-width: 700px) {
+  .walkthrough { left: 10px; right: 10px; bottom: 10px; padding: 11px 12px; }
+  .walk-body p { font-size: 13px; }
+}

@@ -36,6 +36,7 @@ import { DeepDive } from "./DeepDive";
 import { KnowledgeQuiz } from "./KnowledgeQuiz";
 import { KidsQuiz } from "./KidsQuiz";
 import { ConditionsModal } from "./Conditions";
+import { Walkthrough } from "./Walkthrough";
 import type { OrganId } from "../lib/anatomy-data";
 import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
@@ -48,7 +49,7 @@ import type { KnowledgeQuizItem } from "../i18n/types";
 import { speak, stopSpeaking } from "../lib/speech";
 import { asset } from "../lib/asset";
 
-type Modal = "lesson" | "quiz" | "animation" | "system" | null;
+type Modal = "lesson" | "animation" | "system" | null;
 
 /** Remembers the grown-up's choice so the tablet reopens in the same mode. */
 const KIDS_STORAGE_KEY = "anatomy:kids-mode";
@@ -210,6 +211,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const [kidsQuiz, setKidsQuiz] = useState(false);
   // null = closed. A string opens that condition directly, "" opens the list.
   const [conditionView, setConditionView] = useState<string | null>(null);
+  const [walking, setWalking] = useState(false);
+  // Set by the viewer; lets a step turn the model without a re-render.
+  const focusRef = useRef<(id: string | null) => void>(() => {});
   const [revealCategory, setRevealCategory] = useState<KnowledgeQuizItem["category"] | null>(null);
   const panelView = stage === "body" ? "list" : libraryView;
   const [quizActive, setQuizActive] = useState(false);
@@ -244,6 +248,12 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   }, [organId]);
 
   const bodySense = kidsOn ? getBodySense(locale.code, organId) : null;
+  // The tissue view and the walkthrough are built from deepDive entries, so
+  // they exist exactly where that content does — adult mode, Korean.
+  const microscope = !kidsOn ? organ.deepDive?.find((entry) => entry.category === "microscope") : undefined;
+  const mechanism = !kidsOn ? organ.deepDive?.find((entry) => entry.category === "mechanism") : undefined;
+  const walkable = Boolean(mechanism && t.walk);
+
   // Adult mode only, and only where the encyclopedia has been written.
   const conditionCopy = t.conditions;
   const conditionDetails =
@@ -268,6 +278,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     setKnowledgeQuiz(false);
     // Kids mode has no clinical card at all, so it must not inherit its modal.
     setConditionView(null);
+    setWalking(false);
     // The short list may not contain whatever adult organ was on screen, which
     // would leave the viewer showing something the library cannot select.
     if (next && !KIDS_ORGAN_IDS.includes(organId)) setOrganId("heart");
@@ -286,6 +297,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     setQuizActive(false);
     // The open condition belongs to the organ being left behind.
     setConditionView(null);
+    setWalking(false);
     // Naming the organ out loud is the whole point for a child who cannot read
     // the heading they just tapped.
     if (kidsOn) speak(organById[id].name, speechLang);
@@ -312,7 +324,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <nav className="main-nav" aria-label="Primary navigation">
             <button className="active"><Compass size={17} /> {t.nav.explore}</button>
             <button><BrainCircuit size={17} /> {t.nav.systems}</button>
-            <button onClick={() => setModal("lesson")}><BookOpen size={17} /> {t.nav.lessons}</button>
+            <button><BookOpen size={17} /> {t.nav.lessons}</button>
             <button><LibraryBig size={17} /> {t.nav.library}</button>
             <button><NotebookPen size={17} /> {t.nav.notes}</button>
           </nav>
@@ -427,6 +439,22 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               onQuizExit={() => setQuizActive(false)}
               kids={kidsOn}
               speechLang={speechLang}
+              focusRef={focusRef}
+            />
+          )}
+          {walking && mechanism && t.walk && (
+            <Walkthrough
+              key={organId}
+              mechanism={mechanism}
+              hotspots={organ.hotspots}
+              copy={t.walk}
+              // An organ with no model has nothing to turn; the steps still read.
+              onFocus={organ.model ? (id) => focusRef.current(id) : null}
+              onOpenPassage={() => {
+                setWalking(false);
+                setRevealCategory("mechanism");
+              }}
+              onClose={() => setWalking(false)}
             />
           )}
         </div>
@@ -510,7 +538,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           )}
           {!kidsOn && <button className="lesson-button" data-reveal onClick={() => setModal("lesson")}>{t.info.viewLesson} <ArrowRight size={16} /></button>}
           <div className="action-grid" data-reveal>
-            <button onClick={() => setModal("animation")}><Play size={15} /> {t.info.animate}</button>
+            <button onClick={() => (walkable ? setWalking(true) : setModal("animation"))}><Play size={15} /> {t.info.animate}</button>
             <button onClick={() => { setQuizActive(true); setModal(null); setKnowledgeQuiz(false); }}>
               <Crosshair size={15} /> {kidsOn && kidsCopy ? kidsCopy.quizButton : "찾기 놀이"}
             </button>
@@ -564,14 +592,14 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <button
             type="button"
             className="function-visual organ-card-image"
-            onClick={() => setModal("animation")}
+            onClick={() => (walkable ? setWalking(true) : setModal("animation"))}
             aria-label={format(t.cards.playAria, { organ: organ.name })}
           >
             <OrganArt organ={organ} kind="organ" alt="" />
             <i className="function-pulse" />
             <span className="play-badge"><Play size={18} fill="currentColor" /></span>
           </button>
-          <button onClick={() => setModal("animation")}>{t.cards.playAnimation} <ArrowRight size={14} /></button>
+          <button onClick={() => (walkable ? setWalking(true) : setModal("animation"))}>{t.cards.playAnimation} <ArrowRight size={14} /></button>
         </article>
         {/* A list of the eight ways an organ can fail is the last thing a child
             should meet, so kids mode leaves the clinical card out entirely. */}
@@ -622,6 +650,11 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           t={t}
           kids={kidsOn}
           speechLang={speechLang}
+          microscope={microscope}
+          onOpenPassage={() => {
+            setModal(null);
+            setRevealCategory("microscope");
+          }}
           onClose={() => setModal(null)}
         />
       )}
@@ -642,7 +675,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
 }
 
 const MODAL_ICON: Record<Exclude<Modal, null>, string> = {
-  quiz: "?",
   animation: "▶",
   system: "⌖",
   lesson: "✦",
@@ -654,6 +686,8 @@ function LearningModal({
   t,
   kids,
   speechLang,
+  microscope,
+  onOpenPassage,
   onClose,
 }: {
   type: Exclude<Modal, null>;
@@ -661,11 +695,14 @@ function LearningModal({
   t: UiDictionary;
   kids: boolean;
   speechLang: string;
+  /** The organ's microscope passage, where one has been written. */
+  microscope: { title: string; body: string } | undefined;
+  onOpenPassage: () => void;
   onClose: () => void;
 }) {
   const vars = { organ: organ.name, location: organ.location };
   const title =
-    type === "quiz" ? format(t.modal.quizTitle, vars)
+    type === "lesson" && microscope && t.tissue ? t.tissue.heading
     : type === "animation" ? format(t.modal.motionTitle, vars)
     // Avoids gluing onto `system`, whose wording varies per organ, and stays
     // grammatical for the plural organs too.
@@ -695,14 +732,7 @@ function LearningModal({
         <span className="modal-icon">{MODAL_ICON[type]}</span>
         <em>{t.modal.guided}</em>
         <h2 id="modal-title">{title}</h2>
-        {type === "quiz" ? (
-          <div className="quiz-options">
-            <p>{format(t.modal.quizPrompt, vars)}</p>
-            <button onClick={onClose}>{t.modal.quizA}</button>
-            <button onClick={onClose}>{t.modal.quizB}</button>
-            <button onClick={onClose}>{t.modal.quizC}</button>
-          </div>
-        ) : type === "system" ? (
+        {type === "system" ? (
           <>
             <p>{format(t.modal.systemIntro, vars)}</p>
             {/* Shown whole rather than cropped into the circular demo — the
@@ -719,8 +749,20 @@ function LearningModal({
             </dl>
             <button className="lesson-button" onClick={onClose}>{t.modal.continueExploring} <ArrowRight size={16} /></button>
           </>
+        ) : type === "lesson" && microscope && t.tissue ? (
+          <>
+            <div className="modal-demo"><OrganArt organ={organ} kind="microscopic" alt="" /></div>
+            <p className="tissue-name">{organ.tissue}</p>
+            <div className="tissue-passage">
+              <h3>{microscope.title}</h3>
+              <p>{microscope.body}</p>
+            </div>
+            <button className="lesson-button" onClick={onOpenPassage}>{t.tissue.passage} <ArrowRight size={16} /></button>
+          </>
         ) : (
           <>
+            {/* Kids mode, and locales with no deepDive content, keep the
+                original invitation to poke at the model. */}
             <p>{t.modal.lessonBody}</p>
             <div className={`modal-demo ${type === "animation" ? "moving" : ""}`}><OrganArt organ={organ} kind="organ" alt="" /></div>
             <button className="lesson-button" onClick={onClose}>{t.modal.continueExploring} <ArrowRight size={16} /></button>
