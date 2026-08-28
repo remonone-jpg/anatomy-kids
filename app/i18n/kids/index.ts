@@ -1,6 +1,7 @@
 import type { OrganId } from "../../lib/anatomy-data";
-import { format, type Dictionary, type OrganContent, type OrganContentDictionary, type UiDictionary } from "../types";
-import { CHILD_NAME, type KidsCopy, type KidsOrganCopy, type KidsUiCopy } from "./types";
+import type { Dictionary, OrganContent, OrganContentDictionary, UiDictionary } from "../types";
+import type { KidsCopy, KidsOrganCopy, KidsUiCopy } from "./types";
+import { applyChild } from "./child";
 import { kids as ko } from "./ko";
 
 /**
@@ -15,13 +16,15 @@ export function kidsAvailable(locale: string): boolean {
   return KIDS_COPY[locale] !== undefined;
 }
 
-const withChild = (text: string) => format(text, { child: CHILD_NAME });
+/** The name is threaded in from the app rather than read here, so this module
+ *  never touches storage and stays safe to call during a render. */
+const childName = (name: string | null) => (text: string) => applyChild(text, name);
 
 /**
  * Child copy layered over one organ. Clinical fields are left untouched rather
  * than blanked, so switching kids mode off restores the original entry intact.
  */
-function mergeOrgan(base: OrganContent, copy: KidsOrganCopy): OrganContent {
+function mergeOrgan(base: OrganContent, copy: KidsOrganCopy, withChild: (t: string) => string): OrganContent {
   return {
     ...base,
     poetic: withChild(copy.poetic),
@@ -82,13 +85,14 @@ function mergeUi(base: UiDictionary, copy: KidsUiCopy): UiDictionary {
  * the locale has no child copy. Never mutates the input — the adult dictionary
  * stays intact so the mode toggle works in both directions.
  */
-export function applyKids(dictionary: Dictionary, locale: string): Dictionary {
+export function applyKids(dictionary: Dictionary, locale: string, name: string | null): Dictionary {
   const copy = KIDS_COPY[locale];
   if (!copy) return dictionary;
+  const withChild = childName(name);
   const organs = Object.fromEntries(
     Object.entries(dictionary.organs).map(([id, content]) => [
       id,
-      mergeOrgan(content, copy.organs[id as OrganId]),
+      mergeOrgan(content, copy.organs[id as OrganId], withChild),
     ]),
   ) as OrganContentDictionary;
   return { ui: mergeUi(dictionary.ui, copy.ui), organs };
@@ -99,18 +103,18 @@ export function applyKids(dictionary: Dictionary, locale: string): Dictionary {
  * `OrganContent` — that type is shared by all twelve locales, and this only
  * exists where a child rewrite does — so it is read through here instead.
  */
-export function getBodySense(locale: string, id: OrganId): string | null {
+export function getBodySense(locale: string, id: OrganId, name: string | null): string | null {
   const copy = KIDS_COPY[locale];
-  return copy ? withChild(copy.organs[id].bodySense) : null;
+  return copy ? applyChild(copy.organs[id].bodySense, name) : null;
 }
 
 /**
  * The extra one-liners for an organ. Kids-only, so like `bodySense` they are
  * read from here rather than threaded through `OrganContent`.
  */
-export function getMoreFacts(locale: string, id: OrganId): string[] {
+export function getMoreFacts(locale: string, id: OrganId, name: string | null): string[] {
   const copy = KIDS_COPY[locale];
-  return copy ? copy.organs[id].moreFacts.map(withChild) : [];
+  return copy ? copy.organs[id].moreFacts.map((text) => applyChild(text, name)) : [];
 }
 
 /**
@@ -121,4 +125,5 @@ export function getKidsUi(locale: string): KidsUiCopy | null {
   return KIDS_COPY[locale]?.ui ?? null;
 }
 
-export { CHILD_NAME, KIDS_ORGAN_IDS } from "./types";
+export { KIDS_ORGAN_IDS } from "./types";
+export { applyChild, normaliseChildName, CHILD_NAME_MAX } from "./child";

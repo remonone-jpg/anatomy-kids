@@ -1,13 +1,6 @@
 import type { OrganId } from "../../lib/anatomy-data";
 
 /**
- * The child this build is for. Used sparingly — a couple of comparisons like
- * "your fist" land far better with a name attached, but a name sprinkled over
- * every sentence reads as a gimmick.
- */
-export const CHILD_NAME = "수호";
-
-/**
  * Every organ, ordered for a child rather than by body system: the ones they
  * can point to on themselves come first, the ones they have to be told about
  * come last. Trimming this list is how kids mode would show fewer of them.
@@ -86,6 +79,13 @@ export type KidsUiCopy = {
   /** Shown before the explanation on a wrong pick. One is chosen at random so
    *  the same words don't repeat all round. None of them scold. */
   kidsQuizWrong: string[];
+  /** The one-time question, and the way back to it. */
+  nameAsk: string;
+  namePlaceholder: string;
+  nameStart: string;
+  nameSkip: string;
+  nameChange: string;
+  nameHint: string;
   modeLabel: string;
   keyFacts: string;
   size: string;

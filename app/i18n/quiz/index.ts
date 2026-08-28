@@ -1,7 +1,6 @@
 import type { OrganId } from "../../lib/anatomy-data";
 import type { KidsQuizItem, KnowledgeQuizItem } from "../types";
-import { format } from "../types";
-import { CHILD_NAME } from "../kids/types";
+import { applyChild } from "../kids/child";
 import { knowledgeQuizKo } from "./ko";
 import { kidsQuizKo } from "./kids-ko";
 
@@ -42,14 +41,14 @@ export function kidsQuizAvailable(locale: string): boolean {
  * can praise them by name — so all three go through the substitution. Doing
  * only the question would leave the name showing raw in the answers.
  */
-export function getKidsQuiz(locale: string, organ: OrganId): KidsQuizItem[] {
-  const child = { child: CHILD_NAME };
+export function getKidsQuiz(locale: string, organ: OrganId, name: string | null): KidsQuizItem[] {
+  const sub = (text: string) => applyChild(text, name);
   return (KIDS_QUIZ[locale] ?? [])
     .filter((item) => item.organ === organ)
     .map((item) => ({
       ...item,
-      question: format(item.question, child),
-      options: [format(item.options[0], child), format(item.options[1], child)] as [string, string],
-      explain: format(item.explain, child),
+      question: sub(item.question),
+      options: [sub(item.options[0]), sub(item.options[1])] as [string, string],
+      explain: sub(item.explain),
     }));
 }
