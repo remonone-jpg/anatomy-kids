@@ -54,6 +54,31 @@ export type DeepDive = { category: DeepDiveCategory; title: string; body: string
  * `question`, `options` and `explain` all carry `{child}`, so all three have to
  * go through the substitution.
  */
+/** One entry of the clinical encyclopedia.
+ *
+ *  The three cause fields were one field to begin with. Mixing the mechanism
+ *  in with the risk factors, and the unchangeable risks in with the
+ *  changeable ones, left a reader with no idea what — if anything — to do. */
+export type ConditionDetail = {
+  id: string;
+  organ: OrganId;
+  name: string;
+  oneLine: string;
+  what: string;
+  symptoms: string[];
+  /** Why it happens. Mechanism only — no blame, no advice. */
+  causes: string;
+  /** Age, family history, and the like. Named so nobody reads the other
+   *  column as the whole story. */
+  fixedFactors: string[];
+  /** What can be reduced — never "prevented". People who do everything
+   *  right still get ill. */
+  modifiableFactors: string[];
+  seeDoctor: string;
+  urgent?: boolean;
+  note?: string;
+};
+
 export type KidsQuizItem = {
   id: string;
   organ: OrganId;
@@ -128,6 +153,16 @@ export type UiDictionary = {
     quizTitle: string; motionTitle: string; bodyTitle: string; insideTitle: string;
     quizPrompt: string; quizA: string; quizB: string; quizC: string;
     lessonBody: string; systemIntro: string; system: string; primaryRole: string; bloodSupply: string;
+  };
+  /** Optional because the clinical encyclopedia only exists in Korean. The UI
+   *  is gated on the data, so a locale without this group never reaches it —
+   *  better than eleven files of blank labels. */
+  conditions?: {
+    listTitle: string; back: string; urgent: string;
+    what: string; symptoms: string; causes: string;
+    risk: string; fixed: string; modifiable: string;
+    seeDoctor: string; note: string;
+    noDetail: string; disclaimer: string;
   };
 };
 
