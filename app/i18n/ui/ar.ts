@@ -10,7 +10,7 @@ export const ui: UiDictionary = {
     imageAlt: "عيّنة قلب تشريحية تطفو فوق قاعدة، إلى جانب شعار Anatomy Atelier",
   },
   brand: { tagline: "تعلَّم التشريح كما يفعل الفنان", home: "الصفحة الرئيسية لـ Anatomy Atelier" },
-  nav: { explore: "استكشاف", systems: "الأجهزة", lessons: "الدروس", library: "المكتبة", notes: "الملاحظات" },
+  nav: { aria: "Primary navigation", explore: "استكشاف", systems: "الأجهزة", lessons: "الدروس", library: "المكتبة", notes: "الملاحظات" },
   search: { placeholder: "ابحث عن عضو أو موضوع…" },
   profile: { open: "فتح ملف المتعلّم" },
   language: { label: "اللغة", choose: "اختر لغة" },
@@ -49,8 +49,7 @@ export const ui: UiDictionary = {
     seeAll: "عرض الكل", seeSystem: "عرض الجهاز",
     playAria: "تشغيل الرسم المتحرك لوظيفة {organ}", systemAria: "شاهد موضع {organ} في الجسم",
   },
-  quiz: {
-    start: "ابدأ اختبار التسمية", find: "حدِّد", progress: "{current} من {total}",
+  quiz: { find: "حدِّد", progress: "{current} من {total}",
     correct: "صحيح", wrong: "ليس تمامًا", reveal: "هذا هو {label}", answer: "{label} معلَّم باللون الأخضر",
     done: "انتهى الاختبار", score: "{score} من {total} صحيحة", retry: "حاول مرة أخرى",
     exit: "إنهاء الاختبار", hint: "انقر على النقطة المقابلة في النموذج",

@@ -10,7 +10,7 @@ export const ui: UiDictionary = {
     imageAlt: "Um coração anatômico flutuando sobre um pedestal, ao lado da marca Anatomy Atelier",
   },
   brand: { tagline: "Aprenda anatomia como um artista", home: "Página inicial do Anatomy Atelier" },
-  nav: { explore: "Explorar", systems: "Sistemas", lessons: "Lições", library: "Biblioteca", notes: "Notas" },
+  nav: { aria: "Primary navigation", explore: "Explorar", systems: "Sistemas", lessons: "Lições", library: "Biblioteca", notes: "Notas" },
   search: { placeholder: "Buscar órgãos, temas…" },
   profile: { open: "Abrir perfil do estudante" },
   language: { label: "Idioma", choose: "Escolha um idioma" },
@@ -49,8 +49,7 @@ export const ui: UiDictionary = {
     seeAll: "Ver todas", seeSystem: "Ver o sistema",
     playAria: "Reproduzir a animação funcional: {organ}", systemAria: "Ver onde {organ} se situa no corpo",
   },
-  quiz: {
-    start: "Começar o quiz de identificação", find: "Encontre", progress: "{current} de {total}",
+  quiz: { find: "Encontre", progress: "{current} de {total}",
     correct: "Correto", wrong: "Quase", reveal: "Isso é: {label}", answer: "{label} está marcado em verde",
     done: "Quiz concluído", score: "{score} de {total} corretas", retry: "Tentar de novo",
     exit: "Sair do quiz", hint: "Clique no ponto correspondente no modelo",

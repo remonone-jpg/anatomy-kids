@@ -10,7 +10,7 @@ export const ui: UiDictionary = {
     imageAlt: "Spesimen jantung anatomis melayang di atas alas, di samping logo Anatomy Atelier",
   },
   brand: { tagline: "Belajar anatomi seperti seorang seniman", home: "Beranda Anatomy Atelier" },
-  nav: { explore: "Jelajahi", systems: "Sistem", lessons: "Pelajaran", library: "Pustaka", notes: "Catatan" },
+  nav: { aria: "Primary navigation", explore: "Jelajahi", systems: "Sistem", lessons: "Pelajaran", library: "Pustaka", notes: "Catatan" },
   search: { placeholder: "Cari organ atau topik…" },
   profile: { open: "Buka profil pembelajar" },
   language: { label: "Bahasa", choose: "Pilih bahasa" },
@@ -49,8 +49,7 @@ export const ui: UiDictionary = {
     seeAll: "Lihat semua", seeSystem: "Lihat sistemnya",
     playAria: "Putar animasi fungsi: {organ}", systemAria: "Lihat letak {organ} di dalam tubuh",
   },
-  quiz: {
-    start: "Mulai kuis penamaan", find: "Temukan", progress: "{current} dari {total}",
+  quiz: { find: "Temukan", progress: "{current} dari {total}",
     correct: "Benar", wrong: "Belum tepat", reveal: "Itu adalah {label}", answer: "{label} ditandai dengan warna hijau",
     done: "Kuis selesai", score: "{score} dari {total} benar", retry: "Coba lagi",
     exit: "Keluar dari kuis", hint: "Klik titik yang sesuai pada model",

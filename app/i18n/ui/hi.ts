@@ -10,7 +10,7 @@ export const ui: UiDictionary = {
     imageAlt: "एक चौकी पर तैरता शारीरिक हृदय, Anatomy Atelier के नाम-चिह्न के साथ",
   },
   brand: { tagline: "शरीर रचना, एक कलाकार की तरह", home: "Anatomy Atelier मुखपृष्ठ" },
-  nav: { explore: "अन्वेषण", systems: "तंत्र", lessons: "पाठ", library: "संग्रह", notes: "टिप्पणियाँ" },
+  nav: { aria: "Primary navigation", explore: "अन्वेषण", systems: "तंत्र", lessons: "पाठ", library: "संग्रह", notes: "टिप्पणियाँ" },
   search: { placeholder: "अंग या विषय खोजें…" },
   profile: { open: "शिक्षार्थी प्रोफ़ाइल खोलें" },
   language: { label: "भाषा", choose: "भाषा चुनें" },
@@ -49,8 +49,7 @@ export const ui: UiDictionary = {
     seeAll: "सभी देखें", seeSystem: "तंत्र देखें",
     playAria: "{organ} का कार्य एनिमेशन चलाएँ", systemAria: "शरीर में {organ} की स्थिति देखें",
   },
-  quiz: {
-    start: "पहचान प्रश्नोत्तरी शुरू करें", find: "खोजें", progress: "{total} में से {current}",
+  quiz: { find: "खोजें", progress: "{total} में से {current}",
     correct: "सही", wrong: "बिलकुल नहीं", reveal: "वह है {label}", answer: "{label} हरे रंग में चिह्नित है",
     done: "प्रश्नोत्तरी पूर्ण", score: "{total} में से {score} सही", retry: "फिर से प्रयास करें",
     exit: "प्रश्नोत्तरी छोड़ें", hint: "मॉडल पर संबंधित बिंदु क्लिक करें",

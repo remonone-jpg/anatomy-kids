@@ -10,7 +10,7 @@ export const ui: UiDictionary = {
     imageAlt: "台座の上に浮かぶ解剖学的な心臓標本と、Anatomy Atelier のロゴ",
   },
   brand: { tagline: "芸術家のように解剖学を学ぶ", home: "Anatomy Atelier ホーム" },
-  nav: { explore: "探索", systems: "系統", lessons: "レッスン", library: "ライブラリ", notes: "ノート" },
+  nav: { aria: "Primary navigation", explore: "探索", systems: "系統", lessons: "レッスン", library: "ライブラリ", notes: "ノート" },
   search: { placeholder: "臓器やトピックを検索…" },
   profile: { open: "学習者プロフィールを開く" },
   language: { label: "言語", choose: "言語を選択" },
@@ -49,8 +49,7 @@ export const ui: UiDictionary = {
     seeAll: "すべて見る", seeSystem: "この系統を見る",
     playAria: "{organ}のはたらきのアニメーションを再生", systemAria: "{organ}が体のどこにあるかを見る",
   },
-  quiz: {
-    start: "ラベルクイズを始める", find: "探してください：", progress: "{total} 問中 {current} 問目",
+  quiz: { find: "探してください：", progress: "{total} 問中 {current} 問目",
     correct: "正解", wrong: "おしい", reveal: "それは{label}です", answer: "{label}は緑で示されています",
     done: "クイズ終了", score: "{total} 問中 {score} 問正解", retry: "もう一度",
     exit: "クイズを終える", hint: "モデル上の該当する点をクリック",

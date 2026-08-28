@@ -10,7 +10,7 @@ export const ui: UiDictionary = {
     imageAlt: "An anatomical heart specimen floating above a plinth, beside the Anatomy Atelier wordmark",
   },
   brand: { tagline: "Learn anatomy like an artist", home: "Anatomy Atelier home" },
-  nav: { explore: "Explore", systems: "Systems", lessons: "Lessons", library: "Library", notes: "Notes" },
+  nav: { aria: "Primary navigation", explore: "Explore", systems: "Systems", lessons: "Lessons", library: "Library", notes: "Notes" },
   search: { placeholder: "Search organs, topics…" },
   profile: { open: "Open learner profile" },
   language: { label: "Language", choose: "Choose a language" },
@@ -48,8 +48,7 @@ export const ui: UiDictionary = {
     seeAll: "See all", seeSystem: "See the system",
     playAria: "Play the {organ} function animation", systemAria: "See where the {organ} sits in the body",
   },
-  quiz: {
-    start: "Start the labelling quiz", find: "Find the", progress: "{current} of {total}",
+  quiz: { find: "Find the", progress: "{current} of {total}",
     correct: "Correct", wrong: "Not quite", reveal: "That is the {label}", answer: "{label} is marked in green",
     done: "Quiz complete", score: "{score} of {total} correct", retry: "Try again",
     exit: "Exit quiz", hint: "Click the matching dot on the model",

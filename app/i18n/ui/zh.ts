@@ -10,7 +10,7 @@ export const ui: UiDictionary = {
     imageAlt: "一颗悬浮于基座之上的解剖学心脏标本，旁边是 Anatomy Atelier 字标",
   },
   brand: { tagline: "像艺术家一样学解剖", home: "Anatomy Atelier 首页" },
-  nav: { explore: "探索", systems: "系统", lessons: "课程", library: "资料库", notes: "笔记" },
+  nav: { aria: "Primary navigation", explore: "探索", systems: "系统", lessons: "课程", library: "资料库", notes: "笔记" },
   search: { placeholder: "搜索器官或主题…" },
   profile: { open: "打开学习者档案" },
   language: { label: "语言", choose: "选择语言" },
@@ -49,8 +49,7 @@ export const ui: UiDictionary = {
     seeAll: "查看全部", seeSystem: "查看该系统",
     playAria: "播放{organ}的功能动画", systemAria: "查看{organ}在人体中的位置",
   },
-  quiz: {
-    start: "开始标注测验", find: "找出", progress: "第 {current} / {total} 题",
+  quiz: { find: "找出", progress: "第 {current} / {total} 题",
     correct: "正确", wrong: "还差一点", reveal: "那是{label}", answer: "{label}以绿色标出",
     done: "测验结束", score: "答对 {score} / {total}", retry: "再试一次",
     exit: "退出测验", hint: "在模型上点击对应的圆点",

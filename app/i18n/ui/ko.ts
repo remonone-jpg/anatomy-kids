@@ -10,7 +10,7 @@ export const ui: UiDictionary = {
     imageAlt: "받침대 위에 떠 있는 해부학적 심장 표본과 Anatomy Atelier 로고",
   },
   brand: { tagline: "예술가처럼 배우는 해부학", home: "Anatomy Atelier 홈" },
-  nav: { explore: "탐색", systems: "계통", lessons: "수업", library: "라이브러리", notes: "노트" },
+  nav: { aria: "주요 메뉴", explore: "탐색", systems: "계통", lessons: "수업", library: "라이브러리", notes: "노트" },
   search: { placeholder: "장기나 주제 검색…" },
   profile: { open: "학습자 프로필 열기" },
   language: { label: "언어", choose: "언어 선택" },
@@ -36,8 +36,8 @@ export const ui: UiDictionary = {
   info: {
     kicker: "{organ}", keyFacts: "핵심 정보", size: "크기", weight: "무게", daily: "하루",
     location: "위치", bloodSupply: "혈액 공급", function: "기능",
-    medical: "의학적 의의", didYouKnow: "알고 계셨나요", viewLesson: "수업 보기",
-    animate: "과정 보기", quiz: "퀴즈", compare: "비교",
+    medical: "의학적 의의", didYouKnow: "알고 계셨나요", viewLesson: "조직 살펴보기",
+    animate: "과정 보기", quiz: "찾기 놀이", compare: "비교",
   },
   compare: {
     title: "장기 비교", comparing: "비교 중", reference: "기준",
@@ -51,8 +51,7 @@ export const ui: UiDictionary = {
     seeAll: "전체 보기", seeSystem: "계통 보기",
     playAria: "{organ}이(가) 어떻게 움직이는지 따라가기", systemAria: "몸에서 {organ}의 위치 보기",
   },
-  quiz: {
-    start: "이름 맞히기 퀴즈 시작", find: "찾아보세요:", progress: "{total}문제 중 {current}번",
+  quiz: { find: "찾아보세요:", progress: "{total}문제 중 {current}번",
     correct: "정답", wrong: "아쉬워요", reveal: "여기가 {label}이에요", answer: "{label}이 초록색으로 표시돼 있어요",
     done: "퀴즈 완료", score: "{total}문제 중 {score}문제 정답", retry: "다시 풀기",
     exit: "퀴즈 끝내기", hint: "모델에서 해당하는 점을 클릭하세요",

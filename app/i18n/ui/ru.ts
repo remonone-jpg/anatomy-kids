@@ -10,7 +10,7 @@ export const ui: UiDictionary = {
     imageAlt: "Анатомический препарат сердца, парящий над подставкой, рядом с логотипом Anatomy Atelier",
   },
   brand: { tagline: "Учить анатомию как художник", home: "Главная страница Anatomy Atelier" },
-  nav: { explore: "Обзор", systems: "Системы", lessons: "Уроки", library: "Библиотека", notes: "Заметки" },
+  nav: { aria: "Primary navigation", explore: "Обзор", systems: "Системы", lessons: "Уроки", library: "Библиотека", notes: "Заметки" },
   search: { placeholder: "Поиск органов и тем…" },
   profile: { open: "Открыть профиль учащегося" },
   language: { label: "Язык", choose: "Выберите язык" },
@@ -49,8 +49,7 @@ export const ui: UiDictionary = {
     seeAll: "Показать все", seeSystem: "Открыть систему",
     playAria: "Запустить анимацию функции: {organ}", systemAria: "Посмотреть, где в теле находится {organ}",
   },
-  quiz: {
-    start: "Начать тест на распознавание", find: "Найдите", progress: "{current} из {total}",
+  quiz: { find: "Найдите", progress: "{current} из {total}",
     correct: "Верно", wrong: "Не совсем", reveal: "Это {label}", answer: "{label} отмечен зелёным",
     done: "Тест завершён", score: "{score} из {total} верно", retry: "Пройти снова",
     exit: "Выйти из теста", hint: "Нажмите на соответствующую точку на модели",

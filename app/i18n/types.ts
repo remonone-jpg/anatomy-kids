@@ -112,7 +112,7 @@ export type OrganContentDictionary = Record<OrganId, OrganContent>;
 export type UiDictionary = {
   meta: { title: string; description: string; ogTitle: string; ogDescription: string; imageAlt: string };
   brand: { tagline: string; home: string };
-  nav: { explore: string; systems: string; lessons: string; library: string; notes: string };
+  nav: { aria: string; explore: string; systems: string; lessons: string; library: string; notes: string };
   search: { placeholder: string };
   profile: { open: string };
   language: { label: string; choose: string };
@@ -145,7 +145,7 @@ export type UiDictionary = {
     playAria: string; systemAria: string;
   };
   quiz: {
-    start: string; find: string; progress: string; correct: string; wrong: string;
+    find: string; progress: string; correct: string; wrong: string;
     reveal: string; answer: string; done: string; score: string; retry: string; exit: string; hint: string;
   };
   modal: {
