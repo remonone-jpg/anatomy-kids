@@ -1565,3 +1565,14 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .walkthrough { left: 10px; right: 10px; bottom: 10px; padding: 11px 12px; }
   .walk-body p { font-size: 13px; }
 }
+
+/* Chrome that was never wired up. Marked disabled so it leaves the tab order
+   and stops being offered as something to press — but it is scenery, not a
+   temporarily unavailable action, so it keeps its normal weight rather than
+   greying out and implying "try again later". */
+.main-nav button:disabled,
+.profile:disabled,
+.library-panel button:disabled {
+  cursor: default;
+  opacity: 1;
+}

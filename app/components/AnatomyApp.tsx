@@ -321,12 +321,15 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <em>{t.brand.tagline}</em>
         </button>
         {!kidsOn && (
-          <nav className="main-nav" aria-label="Primary navigation">
-            <button className="active"><Compass size={17} /> {t.nav.explore}</button>
-            <button><BrainCircuit size={17} /> {t.nav.systems}</button>
-            <button><BookOpen size={17} /> {t.nav.lessons}</button>
-            <button><LibraryBig size={17} /> {t.nav.library}</button>
-            <button><NotebookPen size={17} /> {t.nav.notes}</button>
+          <nav className="main-nav" aria-label={t.nav.aria}>
+            {/* Chrome from the original design. None of these five are wired
+                to anything, so they are marked disabled rather than left as
+                buttons that silently do nothing when pressed. */}
+            <button className="active" disabled><Compass size={17} /> {t.nav.explore}</button>
+            <button disabled><BrainCircuit size={17} /> {t.nav.systems}</button>
+            <button disabled><BookOpen size={17} /> {t.nav.lessons}</button>
+            <button disabled><LibraryBig size={17} /> {t.nav.library}</button>
+            <button disabled><NotebookPen size={17} /> {t.nav.notes}</button>
           </nav>
         )}
         {!kidsOn && (
@@ -337,7 +340,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         )}
         <LanguageSwitcher locale={locale} t={t} />
         {kidsCopy && <KidsToggle on={kidsOn} label={kidsCopy.modeLabel} onChange={changeKidsMode} />}
-        {!kidsOn && <button className="profile" aria-label={t.profile.open}><span>MA</span><ChevronDown size={15} /></button>}
+        {!kidsOn && <button className="profile" aria-label={t.profile.open} disabled><span>MA</span><ChevronDown size={15} /></button>}
         <button className="mobile-library-trigger" onClick={() => setMobileLibrary(true)} aria-label={t.library.open}><LibraryBig size={20} /></button>
       </header>
 
@@ -346,7 +349,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <div className="panel-heading">
             <span>{panelView === "body" && kidsCopy ? kidsCopy.viewBody : t.library.title}</span>
             <button aria-label={t.library.close} className="mobile-close" onClick={() => setMobileLibrary(false)}><X size={17} /></button>
-            {!kidsOn && <button aria-label={t.library.saved}><Bookmark size={17} /></button>}
+            {!kidsOn && <button aria-label={t.library.saved} disabled><Bookmark size={17} /></button>}
           </div>
           {kidsCopy && (
             <div className="library-tabs" role="tablist">
@@ -540,7 +543,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <div className="action-grid" data-reveal>
             <button onClick={() => (walkable ? setWalking(true) : setModal("animation"))}><Play size={15} /> {t.info.animate}</button>
             <button onClick={() => { setQuizActive(true); setModal(null); setKnowledgeQuiz(false); }}>
-              <Crosshair size={15} /> {kidsOn && kidsCopy ? kidsCopy.quizButton : "찾기 놀이"}
+              <Crosshair size={15} /> {t.info.quiz}
             </button>
             {!kidsOn && quizAvailable(locale.code) && (
               <button onClick={() => { setKnowledgeQuiz(true); setQuizActive(false); setRevealCategory(null); }}>
@@ -615,7 +618,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                   <li key={condition}>
                     <button type="button" onClick={() => setConditionView(condition)}>
                       {condition}
-                      {entry.urgent && <em className="urgent-dot" aria-label={conditionCopy?.urgent} />}
+                      {/* The dot's label joins the button's own text, so a screen reader
+                        already hears "관상동맥질환 응급" — naming the condition here
+                        too would say it twice. */}
+                    {entry.urgent && <em className="urgent-dot" aria-label={conditionCopy?.urgent} />}
                       <ArrowRight size={13} />
                     </button>
                   </li>
