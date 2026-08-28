@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getLocale, isLocale, localeCodes, locales } from "../i18n/config";
 import { fontClassName } from "../i18n/fonts";
 import { getDictionary } from "../i18n/dictionaries";
+import { asset } from "../lib/asset";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -12,12 +13,17 @@ export function generateStaticParams() {
 /**
  * Absolute URLs for og:image and friends, resolved per host so a preview
  * deployment never advertises another origin's assets.
+ *
+ * The fallback used to be the upstream project's own domain, inherited with
+ * the fork. Every visitor's browser went off to fetch a favicon from a host
+ * that does not resolve, and every shared link advertised an og:image nobody
+ * owns here.
  */
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   (process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "https://anatomy-atelier.openai.site");
+    : "https://remonone-jpg.github.io/anatomy-kids/");
 
 export async function generateMetadata({
   params,
@@ -28,6 +34,8 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {};
   const config = getLocale(locale);
   const { ui } = await getDictionary(locale);
+  // Left relative: Next resolves this against `metadataBase`, which already
+  // carries the project-page path. Prefixing it here doubles the segment.
   const image = { url: "/og.jpg", width: 1200, height: 675, alt: ui.meta.imageAlt };
 
   return {
@@ -45,12 +53,12 @@ export async function generateMetadata({
     },
     icons: {
       icon: [
-        { url: "/favicon.svg", type: "image/svg+xml" },
-        { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-        { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+        { url: asset("/favicon.svg"), type: "image/svg+xml" },
+        { url: asset("/icon-192.png"), sizes: "192x192", type: "image/png" },
+        { url: asset("/icon-512.png"), sizes: "512x512", type: "image/png" },
       ],
-      shortcut: "/favicon.svg",
-      apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
+      shortcut: asset("/favicon.svg"),
+      apple: { url: asset("/apple-touch-icon.png"), sizes: "180x180" },
     },
     openGraph: {
       type: "website",
