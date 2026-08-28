@@ -35,6 +35,7 @@ import { Stories } from "./Stories";
 import { DeepDive } from "./DeepDive";
 import { KnowledgeQuiz } from "./KnowledgeQuiz";
 import { KidsQuiz } from "./KidsQuiz";
+import { ConditionsModal } from "./Conditions";
 import type { OrganId } from "../lib/anatomy-data";
 import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
@@ -42,6 +43,7 @@ import { buildOrgans, indexOrgans, type Organ } from "../i18n/merge";
 import { format, type Dictionary, type UiDictionary } from "../i18n/types";
 import { applyKids, getBodySense, getKidsUi, getMoreFacts, kidsAvailable, KIDS_ORGAN_IDS } from "../i18n/kids";
 import { getAllQuiz, getKidsQuiz, getOrganQuiz, kidsQuizAvailable, quizAvailable } from "../i18n/quiz";
+import { conditionsAvailable, getConditions } from "../i18n/conditions";
 import type { KnowledgeQuizItem } from "../i18n/types";
 import { speak, stopSpeaking } from "../lib/speech";
 import { asset } from "../lib/asset";
@@ -206,6 +208,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // — the label quiz already owns that space.
   const [knowledgeQuiz, setKnowledgeQuiz] = useState(false);
   const [kidsQuiz, setKidsQuiz] = useState(false);
+  // null = closed. A string opens that condition directly, "" opens the list.
+  const [conditionView, setConditionView] = useState<string | null>(null);
   const [revealCategory, setRevealCategory] = useState<KnowledgeQuizItem["category"] | null>(null);
   const panelView = stage === "body" ? "list" : libraryView;
   const [quizActive, setQuizActive] = useState(false);
@@ -240,6 +244,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   }, [organId]);
 
   const bodySense = kidsOn ? getBodySense(locale.code, organId) : null;
+  // Adult mode only, and only where the encyclopedia has been written.
+  const conditionCopy = t.conditions;
+  const conditionDetails =
+    !kidsOn && conditionCopy && conditionsAvailable(locale.code) ? getConditions(locale.code, organId) : [];
   const moreFacts = kidsOn ? getMoreFacts(locale.code, organId) : [];
 
   /** Everything a child would want read out for the organ on screen. */
@@ -258,6 +266,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     // show a panel the other mode is not supposed to have.
     setKidsQuiz(false);
     setKnowledgeQuiz(false);
+    // Kids mode has no clinical card at all, so it must not inherit its modal.
+    setConditionView(null);
     // The short list may not contain whatever adult organ was on screen, which
     // would leave the viewer showing something the library cannot select.
     if (next && !KIDS_ORGAN_IDS.includes(organId)) setOrganId("heart");
@@ -274,6 +284,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     setMobileLibrary(false);
     setCompare(false);
     setQuizActive(false);
+    // The open condition belongs to the organ being left behind.
+    setConditionView(null);
     // Naming the organ out loud is the whole point for a child who cannot read
     // the heading they just tapped.
     if (kidsOn) speak(organById[id].name, speechLang);
@@ -566,8 +578,27 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         {!kidsOn && (
           <article>
             <header><div><em>{t.cards.clinicalNotes}</em><h3>{t.cards.commonConditions}</h3></div><FileText size={17} /></header>
-            <ul>{organ.conditions.map((condition) => <li key={condition}>{condition}</li>)}</ul>
-            <button onClick={() => setModal("lesson")}>{t.cards.seeAll} <ArrowRight size={14} /></button>
+            <ul className="condition-names">
+              {organ.conditions.map((condition) => {
+                const entry = conditionDetails.find((item) => item.name === condition);
+                // Only the ones with an article behind them are clickable, so
+                // the affordance never promises a page that isn't there.
+                return entry ? (
+                  <li key={condition}>
+                    <button type="button" onClick={() => setConditionView(condition)}>
+                      {condition}
+                      {entry.urgent && <em className="urgent-dot" aria-label={conditionCopy?.urgent} />}
+                      <ArrowRight size={13} />
+                    </button>
+                  </li>
+                ) : (
+                  <li key={condition}>{condition}</li>
+                );
+              })}
+            </ul>
+            <button onClick={() => (conditionDetails.length > 0 ? setConditionView("") : setModal("lesson"))}>
+              {t.cards.seeAll} <ArrowRight size={14} />
+            </button>
           </article>
         )}
         <article className="system-card">
@@ -592,6 +623,17 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           kids={kidsOn}
           speechLang={speechLang}
           onClose={() => setModal(null)}
+        />
+      )}
+      {conditionView !== null && conditionCopy && conditionDetails.length > 0 && (
+        <ConditionsModal
+          organName={organ.name}
+          names={organ.conditions}
+          details={conditionDetails}
+          copy={conditionCopy}
+          closeLabel={t.modal.close}
+          initial={conditionView === "" ? null : conditionView}
+          onClose={() => setConditionView(null)}
         />
       )}
       {mobileLibrary && <button className="drawer-backdrop" aria-label={t.library.close} onClick={() => setMobileLibrary(false)} />}

@@ -70,4 +70,20 @@ export const ui: UiDictionary = {
     systemIntro: "{location}. {organ}이(가) 몸의 나머지 부분과 어떻게 이어지는지 따라가 보세요.",
     system: "계통", primaryRole: "주요 역할", bloodSupply: "혈액 공급",
   },
+  conditions: {
+    listTitle: "{organ}의 흔한 질환",
+    back: "목록으로",
+    urgent: "응급",
+    what: "어떤 병인가",
+    symptoms: "주요 증상",
+    causes: "왜 생기나",
+    risk: "위험 요인",
+    fixed: "바꿀 수 없는 것",
+    modifiable: "줄일 수 있는 것",
+    seeDoctor: "이럴 땐 진료를",
+    note: "알아두면 좋은 것",
+    noDetail: "자세한 설명은 준비 중입니다.",
+    disclaimer:
+      "이 내용은 교육 목적의 일반 정보입니다. 증상이 있거나 걱정된다면 의료진과 상의하세요.",
+  },
 };

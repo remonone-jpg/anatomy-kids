@@ -1403,3 +1403,103 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 /* The lead-in on a wrong pick. Warm, not red — it says "over here", not "no". */
 .kids-quiz-lead { color: #a3762f; }
+
+/* ── Clinical encyclopedia ───────────────────────────────────────────── */
+
+/* Card list: the entries with an article behind them read as links. */
+.condition-names li button {
+  display: flex; align-items: center; gap: 6px;
+  width: 100%; padding: 0; border: 0; background: none;
+  color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
+.condition-names li button > svg { margin-left: auto; opacity: .35; flex-shrink: 0; }
+.condition-names li button:hover { color: var(--accent); }
+.condition-names li button:hover > svg { opacity: .7; }
+.urgent-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #b4452f; flex-shrink: 0;
+}
+
+.conditions-modal { max-width: 620px; text-align: left; }
+.conditions-modal h2 { text-align: left; }
+.conditions-modal .modal-icon { display: inline-flex; align-items: center; justify-content: center; }
+
+.conditions-list { margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.conditions-list li.bare {
+  padding: 12px 14px; border: 1px dashed var(--line); border-radius: 12px;
+  display: flex; flex-direction: column; gap: 3px; opacity: .6;
+}
+.conditions-list li.bare small { color: var(--ink-soft); font-size: 12px; }
+.conditions-list li button {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px;
+  background: rgba(255,255,255,.4); color: inherit; text-align: left; cursor: pointer;
+}
+.conditions-list li button:hover { border-color: var(--accent); background: rgba(255,255,255,.75); }
+.conditions-list li button > span { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.conditions-list li button b { font-size: 15px; }
+.conditions-list li button small { color: var(--ink-soft); font-size: 12.5px; line-height: 1.45; }
+.conditions-list li button > svg { margin-left: auto; opacity: .4; flex-shrink: 0; }
+
+.conditions-back {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  color: var(--ink-soft); font: 500 13px var(--font-serif), serif;
+}
+.conditions-back:hover { color: var(--accent); }
+
+.urgent-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin: 10px 0 0; padding: 4px 10px;
+  border: 1px solid rgba(180,69,47,.35); border-radius: 999px;
+  background: rgba(180,69,47,.1); color: #8f3a26;
+  font: 600 12px var(--font-serif), serif; letter-spacing: .02em;
+}
+.urgent-badge.small { padding: 2px 7px; font-size: 10.5px; align-self: flex-start; font-style: normal; }
+
+.condition-oneline { margin: 6px 0 0; color: var(--ink-soft); font-size: 14.5px; }
+
+.condition-section { margin-top: 20px; }
+.condition-section h3 {
+  display: flex; align-items: center; gap: 6px;
+  margin: 0 0 7px; font: 600 13px var(--font-serif), serif;
+  letter-spacing: .04em; color: var(--ink-soft); text-transform: none;
+}
+.condition-section p { margin: 0; font-size: 14.5px; line-height: 1.7; }
+.condition-symptoms { margin: 0; padding-left: 18px; }
+.condition-symptoms li { font-size: 14.5px; line-height: 1.65; }
+
+/* Both risk columns get identical treatment — same border, same background,
+   same type. Weighting the changeable one turns the section into an
+   accusation, which is both wrong and useless to the reader. */
+.condition-factors { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.condition-factors > div {
+  padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px;
+  background: rgba(255,255,255,.4);
+}
+.condition-factors h4 {
+  margin: 0 0 7px; font: 600 12.5px var(--font-serif), serif; color: var(--ink-soft);
+}
+.condition-factors ul { margin: 0; padding-left: 16px; }
+.condition-factors li { font-size: 13.5px; line-height: 1.6; }
+
+/* The one block that must survive skimming. */
+.condition-section.see-doctor {
+  margin-top: 22px; padding: 16px 18px;
+  border: 2px solid rgba(180,69,47,.4); border-radius: 14px;
+  background: rgba(180,69,47,.07);
+}
+.condition-section.see-doctor h3 { color: #8f3a26; font-size: 14px; font-weight: 700; }
+.condition-section.see-doctor p { font-weight: 500; }
+
+.condition-note { padding: 14px 16px; border-radius: 12px; background: rgba(0,0,0,.03); }
+.condition-note p { color: var(--ink-soft); font-size: 14px; }
+
+.conditions-disclaimer {
+  margin: 22px 0 0; padding-top: 14px; border-top: 1px solid var(--line);
+  color: var(--ink-soft); font-size: 12.5px; line-height: 1.6;
+}
+
+@media (max-width: 560px) {
+  .condition-factors { grid-template-columns: 1fr; }
+}
