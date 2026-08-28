@@ -1576,3 +1576,47 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   cursor: default;
   opacity: 1;
 }
+
+/* ── Child's name ────────────────────────────────────────────────────── */
+
+.child-name-backdrop { align-items: center; }
+.child-name {
+  width: min(380px, calc(100vw - 32px));
+  padding: 26px 26px 20px;
+  border-radius: 22px;
+  background: var(--paper);
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(60,45,30,.28);
+}
+.child-name h2 { margin: 0 0 18px; font: 500 21px/1.4 var(--font-serif), serif; }
+.child-name input {
+  width: 100%; min-height: 52px; padding: 0 16px; margin-bottom: 12px;
+  border: 2px solid var(--line); border-radius: 15px;
+  background: rgba(255,255,255,.7); color: var(--ink);
+  font: 500 18px var(--font-serif), serif; text-align: center;
+}
+.child-name input:focus { outline: none; border-color: var(--lavender); }
+.child-name-actions { display: flex; flex-direction: column; gap: 8px; }
+.child-name-actions button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  min-height: 48px; padding: 0 18px;
+  border: 2px solid var(--line); border-radius: 15px;
+  background: rgba(255,255,255,.5); color: var(--ink);
+  cursor: pointer; font: 500 16px var(--font-serif), serif;
+}
+.child-name-actions button.primary {
+  border-color: color-mix(in srgb, var(--lavender), transparent 55%);
+  background: color-mix(in srgb, var(--lavender), transparent 78%);
+  color: #503c78;
+}
+.child-name-hint {
+  margin: 14px 0 0; color: var(--ink-soft); font-size: 12px; line-height: 1.5;
+}
+
+.child-name-change {
+  padding: 5px 11px;
+  border: 1px solid var(--line); border-radius: 11px;
+  background: rgba(255,255,255,.5); color: var(--ink-soft);
+  cursor: pointer; font: 500 12.5px var(--font-serif), serif;
+}
+.child-name-change:hover { color: var(--ink); }

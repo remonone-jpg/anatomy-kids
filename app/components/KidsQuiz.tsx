@@ -3,7 +3,6 @@
 import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 import { Sparkles, RotateCcw, Volume2, X } from "lucide-react";
 import type { KidsQuizItem } from "../i18n/types";
-import { CHILD_NAME } from "../i18n/kids/types";
 import { speak } from "../lib/speech";
 
 /** Fisher–Yates, same as everywhere else in the app. */
@@ -30,11 +29,14 @@ export function KidsQuiz({
   pool,
   speechLang,
   copy,
+  childName,
   onClose,
 }: {
   pool: KidsQuizItem[];
   speechLang: string;
   copy: { title: string; again: string; listen: string; wrong: string[] };
+  /** Null when no name has been given; the score line reads without one. */
+  childName: string | null;
   onClose: () => void;
 }) {
   // Client-only, as everywhere: Math.random() during render gives the server
@@ -101,7 +103,7 @@ export function KidsQuiz({
     return (
       <section className="kids-quiz done" aria-label={copy.title}>
         <p className="kids-quiz-score">
-          {CHILD_NAME}, {round.length}개 중 <strong>{score}개</strong> 맞혔어요!
+          {childName ? `${childName}, ` : ""}{round.length}개 중 <strong>{score}개</strong> 맞혔어요!
         </p>
         <div className="kids-quiz-actions">
           <button type="button" className="primary" onClick={restart}>

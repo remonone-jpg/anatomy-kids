@@ -37,6 +37,7 @@ import { KnowledgeQuiz } from "./KnowledgeQuiz";
 import { KidsQuiz } from "./KidsQuiz";
 import { ConditionsModal } from "./Conditions";
 import { Walkthrough } from "./Walkthrough";
+import { ChildNamePrompt } from "./ChildNamePrompt";
 import type { OrganId } from "../lib/anatomy-data";
 import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
@@ -47,6 +48,15 @@ import { getAllQuiz, getKidsQuiz, getOrganQuiz, kidsQuizAvailable, quizAvailable
 import { conditionsAvailable, getConditions } from "../i18n/conditions";
 import type { KnowledgeQuizItem } from "../i18n/types";
 import { speak, stopSpeaking } from "../lib/speech";
+import {
+  clearChildName,
+  readChildAsked,
+  readChildName,
+  serverChildAsked,
+  serverChildName,
+  subscribeChildName,
+  writeChildName,
+} from "../lib/child-name";
 import { asset } from "../lib/asset";
 
 type Modal = "lesson" | "animation" | "system" | null;
@@ -179,14 +189,18 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // This build exists for a five-year-old, so kids mode starts on.
   const kids = useSyncExternalStore(subscribeKidsMode, readKidsMode, () => true);
   const kidsCopy = getKidsUi(locale.code);
+  // Storage is a client-only store; reading it during a render would give the
+  // server one name and the browser another.
+  const childName = useSyncExternalStore(subscribeChildName, readChildName, serverChildName);
+  const childAsked = useSyncExternalStore(subscribeChildName, readChildAsked, serverChildAsked);
   const kidsOn = kids && kidsAvailable(locale.code);
 
   // BCP-47 for speech synthesis; `intl` is stored in the underscore form.
   const speechLang = locale.intl.replace("_", "-");
 
   const activeDictionary = useMemo(
-    () => (kidsOn ? applyKids(dictionary, locale.code) : dictionary),
-    [kidsOn, dictionary, locale.code],
+    () => (kidsOn ? applyKids(dictionary, locale.code, childName) : dictionary),
+    [kidsOn, dictionary, locale.code, childName],
   );
   const t = activeDictionary.ui;
   const organs = useMemo(() => buildOrgans(activeDictionary.organs), [activeDictionary.organs]);
@@ -247,7 +261,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     );
   }, [organId]);
 
-  const bodySense = kidsOn ? getBodySense(locale.code, organId) : null;
+  const bodySense = kidsOn ? getBodySense(locale.code, organId, childName) : null;
   // The tissue view and the walkthrough are built from deepDive entries, so
   // they exist exactly where that content does — adult mode, Korean.
   const microscope = !kidsOn ? organ.deepDive?.find((entry) => entry.category === "microscope") : undefined;
@@ -258,7 +272,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const conditionCopy = t.conditions;
   const conditionDetails =
     !kidsOn && conditionCopy && conditionsAvailable(locale.code) ? getConditions(locale.code, organId) : [];
-  const moreFacts = kidsOn ? getMoreFacts(locale.code, organId) : [];
+  const moreFacts = kidsOn ? getMoreFacts(locale.code, organId, childName) : [];
 
   /** Everything a child would want read out for the organ on screen. */
   const readAloud = (target: Organ) => {
@@ -340,6 +354,11 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         )}
         <LanguageSwitcher locale={locale} t={t} />
         {kidsCopy && <KidsToggle on={kidsOn} label={kidsCopy.modeLabel} onChange={changeKidsMode} />}
+        {kidsOn && kidsCopy && (
+          <button type="button" className="child-name-change" onClick={clearChildName}>
+            {kidsCopy.nameChange}
+          </button>
+        )}
         {!kidsOn && <button className="profile" aria-label={t.profile.open} disabled><span>MA</span><ChevronDown size={15} /></button>}
         <button className="mobile-library-trigger" onClick={() => setMobileLibrary(true)} aria-label={t.library.open}><LibraryBig size={20} /></button>
       </header>
@@ -508,7 +527,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           {kidsQuiz && kidsOn && kidsCopy && (
             <KidsQuiz
               key={organId}
-              pool={getKidsQuiz(locale.code, organId)}
+              pool={getKidsQuiz(locale.code, organId, childName)}
+            childName={childName}
               speechLang={speechLang}
               copy={{
                 title: kidsCopy.kidsQuizTitle,
@@ -673,6 +693,13 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           closeLabel={t.modal.close}
           initial={conditionView === "" ? null : conditionView}
           onClose={() => setConditionView(null)}
+        />
+      )}
+      {kidsOn && kidsCopy && !childAsked && (
+        <ChildNamePrompt
+          copy={kidsCopy}
+          onSubmit={(name) => writeChildName(name)}
+          onSkip={() => writeChildName(null)}
         />
       )}
       {mobileLibrary && <button className="drawer-backdrop" aria-label={t.library.close} onClick={() => setMobileLibrary(false)} />}
