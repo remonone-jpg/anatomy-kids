@@ -49,7 +49,7 @@ export const ui: UiDictionary = {
     clinicalNotes: "임상 노트", whereItWorks: "작용하는 곳", commonConditions: "흔한 질환",
     exploreTissue: "조직 살펴보기", openComparison: "비교 열기", playAnimation: "과정 따라가기",
     seeAll: "전체 보기", seeSystem: "계통 보기",
-    playAria: "{organ} 기능 애니메이션 재생", systemAria: "몸에서 {organ}의 위치 보기",
+    playAria: "{organ}이(가) 어떻게 움직이는지 따라가기", systemAria: "몸에서 {organ}의 위치 보기",
   },
   quiz: {
     start: "이름 맞히기 퀴즈 시작", find: "찾아보세요:", progress: "{total}문제 중 {current}번",
