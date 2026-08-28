@@ -56,13 +56,8 @@ export const ui: UiDictionary = {
     exit: "クイズを終える", hint: "モデル上の該当する点をクリック",
   },
   modal: {
-    guided: "ガイド付きの発見", close: "閉じる", continueExploring: "探索を続ける",
-    quizTitle: "{organ}のミニクイズ", motionTitle: "動く{organ}",
+    guided: "ガイド付きの発見", close: "閉じる", continueExploring: "探索を続ける", motionTitle: "動く{organ}",
     bodyTitle: "体のなかの{organ}", insideTitle: "{organ}の内部",
-    quizPrompt: "{organ}を最もよく説明しているのはどれでしょう？",
-    quizA: "体を保つうえで特化した役割を担っている",
-    quizB: "完全に独立して働いている",
-    quizC: "睡眠中だけ活動している",
     lessonBody:
       "強調された構造をたどり、標本を回転させて、かたちとはたらきを結びつけましょう。この短い学びは、長く残る理解を育てるためのものです。",
     systemIntro: "{location}。{organ}が体のほかの部分とどうつながるかをたどってみましょう。",

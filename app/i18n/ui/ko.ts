@@ -37,7 +37,7 @@ export const ui: UiDictionary = {
     kicker: "{organ}", keyFacts: "핵심 정보", size: "크기", weight: "무게", daily: "하루",
     location: "위치", bloodSupply: "혈액 공급", function: "기능",
     medical: "의학적 의의", didYouKnow: "알고 계셨나요", viewLesson: "수업 보기",
-    animate: "애니메이션", quiz: "퀴즈", compare: "비교",
+    animate: "과정 보기", quiz: "퀴즈", compare: "비교",
   },
   compare: {
     title: "장기 비교", comparing: "비교 중", reference: "기준",
@@ -45,9 +45,9 @@ export const ui: UiDictionary = {
   },
   cards: {
     resources: "{organ} 학습 자료",
-    microscopic: "현미경 소견", compareOrgans: "장기 비교", functionAnimation: "기능 애니메이션",
+    microscopic: "현미경 소견", compareOrgans: "장기 비교", functionAnimation: "어떻게 움직일까요",
     clinicalNotes: "임상 노트", whereItWorks: "작용하는 곳", commonConditions: "흔한 질환",
-    exploreTissue: "조직 살펴보기", openComparison: "비교 열기", playAnimation: "애니메이션 재생",
+    exploreTissue: "조직 살펴보기", openComparison: "비교 열기", playAnimation: "과정 따라가기",
     seeAll: "전체 보기", seeSystem: "계통 보기",
     playAria: "{organ} 기능 애니메이션 재생", systemAria: "몸에서 {organ}의 위치 보기",
   },
@@ -58,17 +58,23 @@ export const ui: UiDictionary = {
     exit: "퀴즈 끝내기", hint: "모델에서 해당하는 점을 클릭하세요",
   },
   modal: {
-    guided: "안내 탐색", close: "닫기", continueExploring: "계속 탐색하기",
-    quizTitle: "{organ} 빠른 퀴즈", motionTitle: "움직이는 {organ}",
+    guided: "안내 탐색", close: "닫기", continueExploring: "계속 탐색하기", motionTitle: "움직이는 {organ}",
     bodyTitle: "몸 속의 {organ}", insideTitle: "{organ} 속으로",
-    quizPrompt: "{organ}을(를) 가장 잘 설명하는 것은 무엇일까요?",
-    quizA: "몸을 유지하는 데 특화된 역할을 맡고 있다",
-    quizB: "완전히 독립적으로 작동한다",
-    quizC: "잠자는 동안에만 활동한다",
     lessonBody:
       "강조된 구조를 따라가고 표본을 돌려 보며 형태와 기능을 연결해 보세요. 이 짧은 학습은 오래 남는 이해를 쌓기 위한 것입니다.",
     systemIntro: "{location}. {organ}이(가) 몸의 나머지 부분과 어떻게 이어지는지 따라가 보세요.",
     system: "계통", primaryRole: "주요 역할", bloodSupply: "혈액 공급",
+  },
+  walk: {
+    title: "과정 따라가기",
+    prev: "이전",
+    next: "다음",
+    close: "그만 보기",
+    passage: "본문에서 보기",
+  },
+  tissue: {
+    heading: "현미경으로 보면",
+    passage: "본문에서 보기",
   },
   conditions: {
     listTitle: "{organ}의 흔한 질환",

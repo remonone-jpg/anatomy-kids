@@ -43,17 +43,6 @@ export type DeepDiveCategory =
 
 export type DeepDive = { category: DeepDiveCategory; title: string; body: string };
 
-/**
- * The children's quiz, kept deliberately separate from the grown-up one.
- *
- * Two options, and the wrong one is obviously wrong. That is the design, not a
- * shortcut: a five-year-old who has just heard the facts should get nearly all
- * of these right, and walk away with "I know this". A plausible trap would
- * only teach them that they do not.
- *
- * `question`, `options` and `explain` all carry `{child}`, so all three have to
- * go through the substitution.
- */
 /** One entry of the clinical encyclopedia.
  *
  *  The three cause fields were one field to begin with. Mixing the mechanism
@@ -79,6 +68,17 @@ export type ConditionDetail = {
   note?: string;
 };
 
+/**
+ * The children's quiz, kept deliberately separate from the grown-up one.
+ *
+ * Two options, and the wrong one is obviously wrong. That is the design, not a
+ * shortcut: a five-year-old who has just heard the facts should get nearly all
+ * of these right, and walk away with "I know this". A plausible trap would
+ * only teach them that they do not.
+ *
+ * `question`, `options` and `explain` all carry `{child}`, so all three have to
+ * go through the substitution.
+ */
 export type KidsQuizItem = {
   id: string;
   organ: OrganId;
@@ -150,10 +150,16 @@ export type UiDictionary = {
   };
   modal: {
     guided: string; close: string; continueExploring: string;
-    quizTitle: string; motionTitle: string; bodyTitle: string; insideTitle: string;
-    quizPrompt: string; quizA: string; quizB: string; quizC: string;
+    motionTitle: string; bodyTitle: string; insideTitle: string;
     lessonBody: string; systemIntro: string; system: string; primaryRole: string; bloodSupply: string;
   };
+  /** Optional for the same reason as `conditions` — the walkthrough is built
+   *  from deepDive content, which only exists in Korean. */
+  walk?: {
+    title: string; prev: string; next: string; close: string; passage: string;
+  };
+  /** Tissue view, likewise driven by Korean-only deepDive content. */
+  tissue?: { heading: string; passage: string };
   /** Optional because the clinical encyclopedia only exists in Korean. The UI
    *  is gated on the data, so a locale without this group never reaches it —
    *  better than eleven files of blank labels. */

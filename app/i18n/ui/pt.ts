@@ -56,13 +56,8 @@ export const ui: UiDictionary = {
     exit: "Sair do quiz", hint: "Clique no ponto correspondente no modelo",
   },
   modal: {
-    guided: "Descoberta guiada", close: "Fechar", continueExploring: "Continuar explorando",
-    quizTitle: "Quiz rápido: {organ}", motionTitle: "{organ} em movimento",
+    guided: "Descoberta guiada", close: "Fechar", continueExploring: "Continuar explorando", motionTitle: "{organ} em movimento",
     bodyTitle: "{organ} no corpo", insideTitle: "Por dentro: {organ}",
-    quizPrompt: "Qual afirmação melhor descreve este órgão ({organ})?",
-    quizA: "Desempenha um papel especializado na manutenção do corpo",
-    quizB: "Funciona de forma totalmente independente",
-    quizC: "Só está ativo durante o sono",
     lessonBody:
       "Acompanhe as estruturas destacadas, gire o espécime e ligue forma e função. Este breve momento de estudo foi pensado para construir um modelo mental duradouro.",
     systemIntro: "{location}. Acompanhe como {organ} se conecta ao restante do corpo.",

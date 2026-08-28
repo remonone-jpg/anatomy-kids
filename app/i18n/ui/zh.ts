@@ -56,13 +56,8 @@ export const ui: UiDictionary = {
     exit: "退出测验", hint: "在模型上点击对应的圆点",
   },
   modal: {
-    guided: "引导式探索", close: "关闭", continueExploring: "继续探索",
-    quizTitle: "{organ}快速测验", motionTitle: "运动中的{organ}",
+    guided: "引导式探索", close: "关闭", continueExploring: "继续探索", motionTitle: "运动中的{organ}",
     bodyTitle: "人体中的{organ}", insideTitle: "{organ}内部",
-    quizPrompt: "以下哪种说法最能描述{organ}？",
-    quizA: "它在维持身体运转中承担特定的专门作用",
-    quizB: "它完全独立运作",
-    quizC: "它只在睡眠时活动",
     lessonBody:
       "跟随高亮的结构，旋转标本，把形态与功能联系起来。这一段短暂的学习旨在建立稳固的心智模型。",
     systemIntro: "{location}。追踪{organ}如何与身体其余部分相连。",

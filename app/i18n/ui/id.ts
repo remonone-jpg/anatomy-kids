@@ -56,13 +56,8 @@ export const ui: UiDictionary = {
     exit: "Keluar dari kuis", hint: "Klik titik yang sesuai pada model",
   },
   modal: {
-    guided: "Penjelajahan terpandu", close: "Tutup", continueExploring: "Lanjutkan menjelajah",
-    quizTitle: "Kuis singkat: {organ}", motionTitle: "{organ} dalam gerak",
+    guided: "Penjelajahan terpandu", close: "Tutup", continueExploring: "Lanjutkan menjelajah", motionTitle: "{organ} dalam gerak",
     bodyTitle: "{organ} di dalam tubuh", insideTitle: "Di dalam {organ}",
-    quizPrompt: "Pernyataan mana yang paling tepat menggambarkan organ ini ({organ})?",
-    quizA: "Ia menjalankan peran khusus dalam menjaga tubuh",
-    quizB: "Ia bekerja sepenuhnya sendiri",
-    quizC: "Ia hanya aktif saat tidur",
     lessonBody:
       "Ikuti struktur yang disorot, putar spesimennya, dan hubungkan bentuk dengan fungsi. Sesi singkat ini dirancang untuk membangun pemahaman yang bertahan lama.",
     systemIntro: "{location}. Telusuri bagaimana {organ} terhubung dengan bagian tubuh lainnya.",

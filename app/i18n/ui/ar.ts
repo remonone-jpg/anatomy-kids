@@ -56,13 +56,8 @@ export const ui: UiDictionary = {
     exit: "إنهاء الاختبار", hint: "انقر على النقطة المقابلة في النموذج",
   },
   modal: {
-    guided: "اكتشاف موجَّه", close: "إغلاق", continueExploring: "واصل الاستكشاف",
-    quizTitle: "اختبار سريع: {organ}", motionTitle: "{organ} في حركة",
+    guided: "اكتشاف موجَّه", close: "إغلاق", continueExploring: "واصل الاستكشاف", motionTitle: "{organ} في حركة",
     bodyTitle: "{organ} في الجسم", insideTitle: "داخل {organ}",
-    quizPrompt: "أي العبارات يصف {organ} وصفًا أدق؟",
-    quizA: "يؤدي دورًا متخصصًا في الحفاظ على الجسم",
-    quizB: "يعمل باستقلال تام",
-    quizC: "لا ينشط إلا أثناء النوم",
     lessonBody:
       "تتبّع البنى المميّزة، وأدر العيّنة، واربط الشكل بالوظيفة. هذه الوقفة الدراسية القصيرة مصمّمة لبناء نموذج ذهني راسخ.",
     systemIntro: "{location}. تتبّع كيف يتصل {organ} ببقية الجسم.",
