@@ -7,3 +7,6 @@ export const knowledgeQuiz: KnowledgeQuizItem[] = [];
 
 // Same for the children's set: written, not translated.
 export const kidsQuiz: KidsQuizItem[] = [];
+
+// The school quiz has not been written for this locale.
+export const systemQuiz: [] = [];

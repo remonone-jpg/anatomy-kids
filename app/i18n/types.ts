@@ -79,6 +79,24 @@ export type ConditionDetail = {
  * `question`, `options` and `explain` all carry `{child}`, so all three have to
  * go through the substitution.
  */
+/**
+ * The school layer's exam practice — a third quiz, deliberately its own type.
+ *
+ * Four options, because that is what a unit test uses. `examPoint` names the
+ * `exam` entry the question came from, which is what lets a wrong answer open
+ * the paragraph that answers it instead of just asserting the right one.
+ */
+export type SystemQuizItem = {
+  id: string;
+  systemId: string;
+  examPoint?: string;
+  type: "order" | "classify" | "experiment" | "cause" | "wrong" | "match";
+  question: string;
+  options: [string, string, string, string];
+  answer: 0 | 1 | 2 | 3;
+  explain: string;
+};
+
 export type KidsQuizItem = {
   id: string;
   organ: OrganId;

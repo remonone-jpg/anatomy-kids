@@ -1,7 +1,8 @@
 import type { OrganId } from "../../lib/anatomy-data";
-import type { KidsQuizItem, KnowledgeQuizItem } from "../types";
+import type { KidsQuizItem, KnowledgeQuizItem, SystemQuizItem } from "../types";
 import { applyChild } from "../kids/child";
 import { knowledgeQuizKo } from "./ko";
+import { systemQuizKo } from "./systems-ko";
 import { kidsQuizKo } from "./kids-ko";
 
 /**
@@ -51,4 +52,21 @@ export function getKidsQuiz(locale: string, organ: OrganId, name: string | null)
       options: [sub(item.options[0]), sub(item.options[1])] as [string, string],
       explain: sub(item.explain),
     }));
+}
+
+/** Korean only, like the systems copy it is drawn from. */
+const SYSTEM_QUIZ: Partial<Record<string, SystemQuizItem[]>> = { ko: systemQuizKo };
+
+export function systemQuizAvailable(locale: string): boolean {
+  return (SYSTEM_QUIZ[locale]?.length ?? 0) > 0;
+}
+
+/** One system's paper — the whole fifteen, as a unit test would set them. */
+export function getSystemQuiz(locale: string, systemId: string): SystemQuizItem[] {
+  return (SYSTEM_QUIZ[locale] ?? []).filter((item) => item.systemId === systemId);
+}
+
+/** Every system's questions, for revising the unit as a whole. */
+export function getAllSystemQuiz(locale: string): SystemQuizItem[] {
+  return SYSTEM_QUIZ[locale] ?? [];
 }
