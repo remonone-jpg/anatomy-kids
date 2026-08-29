@@ -66,6 +66,37 @@ node scripts/build-anatomy-model.mjs "$FBX/NervousSystem100.fbx"   public/models
 node scripts/build-anatomy-model.mjs "$FBX/NervousSystem100.fbx"   public/models/atlas/eyeball.glb   --include=eyeball,bulbus_oculi
 ```
 
+### The stomach, and why it is built differently
+
+```bash
+# Geometry. The label anchors are excluded, and the cutaway window is capped.
+node scripts/build-anatomy-model.mjs "$FBX/VisceralSystem100.fbx" public/models/atlas/stomach.glb \
+  --color=#d98a5c --fill-holes=0.20 --include=stomach --exclude=stomachj,mucosa
+
+# Hotspot coordinates, from the same filter plus the four label anchors. The
+# bounding box has to match the geometry build or the positions land elsewhere.
+node scripts/build-anatomy-model.mjs "$FBX/VisceralSystem100.fbx" /tmp/anchors.glb --parts \
+  --fill-holes=0.20 --include=stomach,cardiaj,fundus_of_stomachj,body_of_stomachj,pyloric_partj \
+  --exclude=greater_curvature,lesser_curvature,anterior_wall,posterior_wall,mucosa
+```
+
+**The `--fill-holes` is not optional here, and rebuilding without it produces a
+stomach with a hole in its front wall.** Z-Anatomy's `Stomach` is an open
+surface with three boundary loops. Two of them are the anatomy — the stomach is
+a tube, open where the oesophagus arrives and where the duodenum leaves, and
+sealing those would be wrong. The third is a 7 cm cutaway window in the
+anterior wall, there for the atlas to show `Mucosa_of_stomach` through; that
+object exists in this file but carries no geometry, so the window renders as a
+hole. `--fill-holes=0.20` caps loops wider than a fifth of the mesh's diagonal,
+which is the window and neither opening.
+
+`--exclude=stomachj` drops the `j`-suffixed label anchors from the geometry.
+They are markers, not anatomy, and merging them leaves stray facets on the
+organ. They are still read in the second pass, where only their centres matter.
+
+The viewer renders front faces only (`loaders.ts`), so the cap has to be wound
+to face outwards; the script checks it against the surrounding surface normal.
+
 The filters are chosen so the sets do not overlap: `viscera.glb` carries the
 trachea while `atlas/lungs.glb` carries the bronchi below it, `viscera.glb`
 carries the stomach while `atlas/intestine.glb` starts at the duodenum. Colours

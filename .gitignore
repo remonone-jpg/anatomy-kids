@@ -41,3 +41,8 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+
+# Z-Anatomy source meshes. Downloaded to rebuild a model, never committed —
+# they are tens of megabytes and the GLB in public/models is the artefact.
+# ATTRIBUTION.md records which file each model came from and how.
+*.fbx
