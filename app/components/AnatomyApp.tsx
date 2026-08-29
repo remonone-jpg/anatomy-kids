@@ -38,6 +38,7 @@ import { KidsQuiz } from "./KidsQuiz";
 import { ConditionsModal } from "./Conditions";
 import { Walkthrough } from "./Walkthrough";
 import { ChildNamePrompt } from "./ChildNamePrompt";
+import { SystemView } from "./SystemView";
 import type { OrganId } from "../lib/anatomy-data";
 import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
@@ -46,8 +47,10 @@ import { format, type Dictionary, type UiDictionary } from "../i18n/types";
 import { applyKids, getBodySense, getKidsUi, getMoreFacts, kidsAvailable, KIDS_ORGAN_IDS } from "../i18n/kids";
 import { getAllQuiz, getKidsQuiz, getOrganQuiz, kidsQuizAvailable, quizAvailable } from "../i18n/quiz";
 import { conditionsAvailable, getConditions } from "../i18n/conditions";
+import { getSystems, schoolAvailable } from "../i18n/school";
 import type { KnowledgeQuizItem } from "../i18n/types";
 import { speak, stopSpeaking } from "../lib/speech";
+import { readMode, serverMode, subscribeMode, writeMode, type Mode } from "../lib/mode";
 import {
   clearChildName,
   readChildAsked,
@@ -60,34 +63,6 @@ import {
 import { asset } from "../lib/asset";
 
 type Modal = "lesson" | "animation" | "system" | null;
-
-/** Remembers the grown-up's choice so the tablet reopens in the same mode. */
-const KIDS_STORAGE_KEY = "anatomy:kids-mode";
-
-/**
- * `localStorage` is a client-only store, so it is read through
- * `useSyncExternalStore` rather than an effect — same approach as the
- * authoring flag in the viewer. The server snapshot is `true`, which is both
- * the default for this build and what an unset key resolves to, so the first
- * paint matches the server unless the grown-up has explicitly opted out.
- */
-const kidsListeners = new Set<() => void>();
-
-function subscribeKidsMode(listener: () => void) {
-  kidsListeners.add(listener);
-  return () => {
-    kidsListeners.delete(listener);
-  };
-}
-
-function readKidsMode() {
-  return window.localStorage.getItem(KIDS_STORAGE_KEY) !== "0";
-}
-
-function writeKidsMode(next: boolean) {
-  window.localStorage.setItem(KIDS_STORAGE_KEY, next ? "1" : "0");
-  kidsListeners.forEach((listener) => listener());
-}
 
 /**
  * Renders an organ illustration, or its accent glyph for organs that ship as a
@@ -175,25 +150,50 @@ function LanguageSwitcher({ locale, t }: { locale: LocaleConfig; t: UiDictionary
 }
 
 /** Grown-up control, so it stays a plain labelled switch rather than a toy. */
-function KidsToggle({ on, label, onChange }: { on: boolean; label: string; onChange: (next: boolean) => void }) {
+function ModeSwitch({
+  mode,
+  labels,
+  onChange,
+}: {
+  mode: Mode;
+  labels: { kids: string; school: string; adult: string; aria: string };
+  onChange: (next: Mode) => void;
+}) {
+  const options: Mode[] = ["kids", "school", "adult"];
   return (
-    <button type="button" className={`kids-toggle ${on ? "on" : ""}`} onClick={() => onChange(!on)} aria-pressed={on}>
-      <Baby size={16} aria-hidden />
-      <span>{label}</span>
-      <span className={`switch ${on ? "on" : ""}`}><i /></span>
-    </button>
+    <div className="mode-switch" role="group" aria-label={labels.aria}>
+      {options.map((option) => (
+        <button
+          key={option}
+          type="button"
+          className={mode === option ? "on" : ""}
+          aria-pressed={mode === option}
+          onClick={() => onChange(option)}
+        >
+          {option === "kids" && <Baby size={15} aria-hidden />}
+          {labels[option]}
+        </button>
+      ))}
+    </div>
   );
 }
 
 export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dictionary: Dictionary }) {
   // This build exists for a five-year-old, so kids mode starts on.
-  const kids = useSyncExternalStore(subscribeKidsMode, readKidsMode, () => true);
+  const mode = useSyncExternalStore(subscribeMode, readMode, serverMode);
   const kidsCopy = getKidsUi(locale.code);
   // Storage is a client-only store; reading it during a render would give the
   // server one name and the browser another.
   const childName = useSyncExternalStore(subscribeChildName, readChildName, serverChildName);
   const childAsked = useSyncExternalStore(subscribeChildName, readChildAsked, serverChildAsked);
-  const kidsOn = kids && kidsAvailable(locale.code);
+  // `kidsOn` keeps exactly the meaning it had — kids mode, and the locale has
+  // the copy for it. What changed is that its opposite is no longer "adult":
+  // `adultOn` is. Everything only the grown-up view should carry hangs off
+  // that instead, so school mode inherits the reading layout and none of the
+  // clinical material.
+  const kidsOn = mode === "kids" && kidsAvailable(locale.code);
+  const schoolOn = mode === "school" && schoolAvailable(locale.code);
+  const adultOn = !kidsOn && !schoolOn;
 
   // BCP-47 for speech synthesis; `intl` is stored in the underscore form.
   const speechLang = locale.intl.replace("_", "-");
@@ -226,6 +226,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // null = closed. A string opens that condition directly, "" opens the list.
   const [conditionView, setConditionView] = useState<string | null>(null);
   const [walking, setWalking] = useState(false);
+  // School mode has two views. A system id opens the systems layer; null is
+  // the organ view, which reuses the existing screen.
+  const [systemId, setSystemId] = useState<string | null>(null);
   // Set by the viewer; lets a step turn the model without a re-render.
   const focusRef = useRef<(id: string | null) => void>(() => {});
   const [revealCategory, setRevealCategory] = useState<KnowledgeQuizItem["category"] | null>(null);
@@ -271,8 +274,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // Adult mode only, and only where the encyclopedia has been written.
   const conditionCopy = t.conditions;
   const conditionDetails =
-    !kidsOn && conditionCopy && conditionsAvailable(locale.code) ? getConditions(locale.code, organId) : [];
+    adultOn && conditionCopy && conditionsAvailable(locale.code) ? getConditions(locale.code, organId) : [];
   const moreFacts = kidsOn ? getMoreFacts(locale.code, organId, childName) : [];
+  // Only school mode can have one open; the organ panel takes over when null.
+  const activeSystem = schoolOn && systemId ? getSystems(locale.code).find((s) => s.id === systemId) : undefined;
 
   /** Everything a child would want read out for the organ on screen. */
   const readAloud = (target: Organ) => {
@@ -280,8 +285,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     speak(lines.filter(Boolean).join(" "), speechLang);
   };
 
-  const changeKidsMode = (next: boolean) => {
-    writeKidsMode(next);
+  const changeMode = (next: Mode) => {
+    writeMode(next);
+    setSystemId(null);
     stopSpeaking();
     setQuery("");
     setCompare(false);
@@ -295,7 +301,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     setWalking(false);
     // The short list may not contain whatever adult organ was on screen, which
     // would leave the viewer showing something the library cannot select.
-    if (next && !KIDS_ORGAN_IDS.includes(organId)) setOrganId("heart");
+    if (next === "kids" && !KIDS_ORGAN_IDS.includes(organId)) setOrganId("heart");
   };
 
   const selectOrgan = (id: OrganId) => {
@@ -353,7 +359,13 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           </label>
         )}
         <LanguageSwitcher locale={locale} t={t} />
-        {kidsCopy && <KidsToggle on={kidsOn} label={kidsCopy.modeLabel} onChange={changeKidsMode} />}
+        {kidsCopy && (
+          <ModeSwitch
+            mode={mode}
+            labels={{ kids: kidsCopy.modeKids, school: kidsCopy.modeSchool, adult: kidsCopy.modeAdult, aria: kidsCopy.modeLabel }}
+            onChange={changeMode}
+          />
+        )}
         {kidsOn && kidsCopy && (
           <button type="button" className="child-name-change" onClick={clearChildName}>
             {kidsCopy.nameChange}
@@ -482,6 +494,59 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         </div>
 
         <aside className="info-panel" ref={contentRef}>
+          {schoolOn && kidsCopy && (
+            <div className="school-tabs" role="tablist" aria-label={kidsCopy.modeSchool}>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={systemId !== null}
+                className={systemId !== null ? "active" : ""}
+                onClick={() => setSystemId(systemId ?? getSystems(locale.code)[0]?.id ?? null)}
+              >
+                {kidsCopy.schoolSystems}
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={systemId === null}
+                className={systemId === null ? "active" : ""}
+                onClick={() => setSystemId(null)}
+              >
+                {kidsCopy.schoolOrgans}
+              </button>
+            </div>
+          )}
+          {schoolOn && kidsCopy && activeSystem && (
+            <>
+              <nav className="system-picker" aria-label={kidsCopy.schoolSystems}>
+                {getSystems(locale.code).map((entry) => (
+                  <button
+                    key={entry.id}
+                    type="button"
+                    className={entry.id === activeSystem.id ? "on" : ""}
+                    aria-pressed={entry.id === activeSystem.id}
+                    onClick={() => setSystemId(entry.id)}
+                  >
+                    {entry.name}
+                  </button>
+                ))}
+              </nav>
+              <SystemView
+                key={activeSystem.id}
+                system={activeSystem}
+                copy={{ ...kidsCopy.system }}
+                speechLang={speechLang}
+                onOpenOrgan={(id) => {
+                  setSystemId(null);
+                  selectOrgan(id);
+                }}
+              />
+            </>
+          )}
+          {/* The systems layer replaces the organ panel rather than sitting
+              above it; both want the whole reading column. */}
+          {!activeSystem && (
+          <>
           <div className="info-kicker" data-reveal><Heart size={13} fill="currentColor" /> {format(t.info.kicker, { organ: organ.name })}</div>
           <div className="info-title-row" data-reveal>
             <div><h1>{organ.name}</h1><em>{organ.poetic}</em></div>
@@ -515,7 +580,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           </dl>
           {/* Clinical framing has nothing to offer a five-year-old, so kids mode
               drops the note rather than trying to simplify it. */}
-          {!kidsOn && <div className="medical-note" data-reveal><Stethoscope size={16} /><p><b>{t.info.medical}</b>{organ.medical}</p></div>}
+          {adultOn && <div className="medical-note" data-reveal><Stethoscope size={16} /><p><b>{t.info.medical}</b>{organ.medical}</p></div>}
           <div className="fun-note" data-reveal><Sparkles size={15} /><p><b>{t.info.didYouKnow}</b>{organ.funFact}</p></div>
           {kidsOn && kidsCopy && moreFacts.length > 0 && (
             <MoreFacts key={organId} facts={moreFacts} copy={kidsCopy} speechLang={speechLang} />
@@ -539,7 +604,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               onClose={() => setKidsQuiz(false)}
             />
           )}
-          {knowledgeQuiz && !kidsOn && (
+          {knowledgeQuiz && adultOn && (
             <KnowledgeQuiz
               key={`${organId}-${stage}`}
               pool={stage === "body" ? getAllQuiz(locale.code) : getOrganQuiz(locale.code, organId)}
@@ -549,8 +614,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               onClose={() => setKnowledgeQuiz(false)}
             />
           )}
-          {!kidsOn && organ.stories && <Stories entries={organ.stories} speechLang={speechLang} />}
-          {!kidsOn && organ.deepDive && (
+          {adultOn && organ.stories && <Stories entries={organ.stories} speechLang={speechLang} />}
+          {adultOn && organ.deepDive && (
             <DeepDive
               entries={organ.deepDive}
               speechLang={speechLang}
@@ -565,7 +630,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             <button onClick={() => { setQuizActive(true); setModal(null); setKnowledgeQuiz(false); }}>
               <Crosshair size={15} /> {t.info.quiz}
             </button>
-            {!kidsOn && quizAvailable(locale.code) && (
+            {adultOn && quizAvailable(locale.code) && (
               <button onClick={() => { setKnowledgeQuiz(true); setQuizActive(false); setRevealCategory(null); }}>
                 <CircleHelp size={15} /> 지식 퀴즈
               </button>
@@ -577,6 +642,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             )}
             {!kidsOn && <button onClick={() => setCompare(!compare)} className={compare ? "active" : ""}><Share2 size={15} /> {t.info.compare}</button>}
           </div>
+          </>
+          )}
         </aside>
       </div>
 
@@ -625,8 +692,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <button onClick={() => (walkable ? setWalking(true) : setModal("animation"))}>{t.cards.playAnimation} <ArrowRight size={14} /></button>
         </article>
         {/* A list of the eight ways an organ can fail is the last thing a child
-            should meet, so kids mode leaves the clinical card out entirely. */}
-        {!kidsOn && (
+            should meet — and disease is outside the school syllabus too, so
+            only the grown-up view carries this card. */}
+        {adultOn && (
           <article>
             <header><div><em>{t.cards.clinicalNotes}</em><h3>{t.cards.commonConditions}</h3></div><FileText size={17} /></header>
             <ul className="condition-names">
