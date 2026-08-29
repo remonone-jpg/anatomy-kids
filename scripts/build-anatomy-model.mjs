@@ -66,6 +66,134 @@ const baseColor = colorFlag
       return +Math.pow(channel, 2.2).toFixed(4);
     }).concat(1)
   : [1, 1, 1, 1];
+/**
+ * `--fill-holes=<fraction>` caps boundary loops wider than that fraction of the
+ * mesh's own bounding-box diagonal.
+ *
+ * Some atlas meshes are open on purpose. A stomach is a tube: it has to stay
+ * open where the oesophagus arrives and where the duodenum leaves, and sealing
+ * those would be anatomically wrong. What it should not have is the cutaway
+ * window the atlas leaves in the front wall for a separate mucosa mesh to show
+ * through — where that mesh is missing, the organ renders with a hole in it.
+ *
+ * The fraction is what separates the two: the window is far wider than either
+ * opening, so a threshold between them keeps the anatomy and loses the gap.
+ */
+const fillFlag = flags.find((f) => f.startsWith("--fill-holes="))?.slice(13);
+const fillHoles = fillFlag ? Number(fillFlag) : 0;
+if (fillFlag && !(fillHoles > 0 && fillHoles < 1)) {
+  console.error("--fill-holes expects a fraction between 0 and 1, e.g. --fill-holes=0.15");
+  process.exit(1);
+}
+
+/**
+ * Caps the wide boundary loops of the triangles written since `start`.
+ *
+ * The cap is a fan from the loop's centre, pushed out along the average of the
+ * ring's normals so it follows the curve of the surface instead of sitting
+ * across it as a flat lid.
+ */
+function fillOpenings(positions, normals, start, fraction) {
+  // Weld by position so triangles that share an edge are seen to share it.
+  const ids = new Map();
+  const points = [];
+  const ring = [];
+  const vid = (i) => {
+    const k = `${positions[i].toFixed(4)},${positions[i + 1].toFixed(4)},${positions[i + 2].toFixed(4)}`;
+    let id = ids.get(k);
+    if (id === undefined) {
+      id = points.length;
+      ids.set(k, id);
+      points.push(new THREE.Vector3(positions[i], positions[i + 1], positions[i + 2]));
+      ring.push(new THREE.Vector3());
+    }
+    ring[id].add(new THREE.Vector3(normals[i], normals[i + 1], normals[i + 2]));
+    return id;
+  };
+
+  const edges = new Map();
+  for (let i = start; i < positions.length; i += 9) {
+    const t = [vid(i), vid(i + 3), vid(i + 6)];
+    for (let e = 0; e < 3; e += 1) {
+      const a = t[e], b = t[(e + 1) % 3];
+      const k = a < b ? `${a}_${b}` : `${b}_${a}`;
+      edges.set(k, (edges.get(k) ?? 0) + 1);
+    }
+  }
+
+  const adjacency = new Map();
+  for (const [k, n] of edges) {
+    if (n !== 1) continue;
+    const [a, b] = k.split("_").map(Number);
+    if (!adjacency.has(a)) adjacency.set(a, []);
+    if (!adjacency.has(b)) adjacency.set(b, []);
+    adjacency.get(a).push(b);
+    adjacency.get(b).push(a);
+  }
+  if (adjacency.size === 0) return 0;
+
+  const meshBox = new THREE.Box3();
+  points.forEach((p) => meshBox.expandByPoint(p));
+  const limit = meshBox.getSize(new THREE.Vector3()).length() * fraction;
+
+  const seen = new Set();
+  let filled = 0;
+  for (const startVertex of adjacency.keys()) {
+    if (seen.has(startVertex)) continue;
+    const loop = [];
+    let current = startVertex;
+    let previous = -1;
+    while (current !== undefined && !seen.has(current)) {
+      seen.add(current);
+      loop.push(current);
+      const next = adjacency.get(current).filter((n) => n !== previous && !seen.has(n));
+      previous = current;
+      current = next[0];
+    }
+    if (loop.length < 3) continue;
+
+    const box = new THREE.Box3();
+    loop.forEach((v) => box.expandByPoint(points[v]));
+    const width = box.getSize(new THREE.Vector3()).length();
+    if (width < limit) continue;   // an opening the anatomy needs
+
+    const centre = box.getCenter(new THREE.Vector3());
+    const outward = new THREE.Vector3();
+    loop.forEach((v) => outward.add(ring[v]));
+    if (outward.lengthSq() > 0) {
+      // Bulge the cap by a fraction of the hole's radius. A flat lid reads as a
+      // dent in a surface this round; this follows it closely enough.
+      outward.normalize().multiplyScalar((width / 2) * 0.35);
+      centre.add(outward);
+    }
+
+    const centreNormal = outward.lengthSq() > 0 ? outward.clone().normalize() : new THREE.Vector3(0, 1, 0);
+
+    // Which way round the loop runs decides which way the cap faces, and the
+    // viewer renders front faces only — a cap wound the wrong way is culled
+    // and leaves the hole looking exactly as it did before. Test one triangle
+    // against the surface normal and wind the whole fan to match.
+    const first = new THREE.Vector3().subVectors(points[loop[1]], points[loop[0]]);
+    const second = new THREE.Vector3().subVectors(centre, points[loop[0]]);
+    const flip = first.cross(second).dot(centreNormal) < 0;
+
+    for (let i = 0; i < loop.length; i += 1) {
+      const from = loop[i];
+      const to = loop[(i + 1) % loop.length];
+      const [x, y] = flip ? [to, from] : [from, to];
+      const a = points[x];
+      const b = points[y];
+      const na = ring[x].clone().normalize();
+      const nb = ring[y].clone().normalize();
+      positions.push(a.x, a.y, a.z, b.x, b.y, b.z, centre.x, centre.y, centre.z);
+      normals.push(na.x, na.y, na.z, nb.x, nb.y, nb.z, centreNormal.x, centreNormal.y, centreNormal.z);
+    }
+    filled += 1;
+    console.log(`  filled a ${loop.length}-vertex opening, ${width.toFixed(2)} across`);
+  }
+  return filled;
+}
+
 /** Edge of the cube the viewer fits every organ into; see `loaders.ts`. */
 const FIT_SIZE = 3.8;
 
@@ -108,6 +236,8 @@ root.traverse((object) => {
   const before = positions.length;
   if (index) for (let i = 0; i < index.count; i += 1) emit(index.getX(i));
   else for (let i = 0; i < position.count; i += 1) emit(i);
+
+  if (fillHoles > 0) fillOpenings(positions, normals, before, fillHoles);
 
   // Centre of this part in world space, kept for the parts file below.
   const partBox = new THREE.Box3();
