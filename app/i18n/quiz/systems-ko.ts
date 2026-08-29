@@ -254,7 +254,7 @@ export const quizCirculation: SystemQuizItem[] = [
     question:"순환 기관에 대한 설명으로 옳지 않은 것은?",
     options:["심장은 스스로 뛴다","맥박은 심장이 피를 밀어낼 때 동맥이 함께 뛰는 것이다","모세혈관은 동맥과 정맥을 잇는다","혈액은 심장에서만 만들어진다"], answer:3,
     explain:"혈액은 심장이 아니라 뼈 속 골수에서 만들어집니다. 심장은 피를 보내는 펌프예요." },
-  { id:"c15", systemId:"circulation", type:"cause", examPoint:"기관계 연결",
+  { id:"c15", systemId:"circulation", type:"cause", examPoint:"순환 기관이 하는 일",
     question:"순환 기관이 하는 일로 옳은 것은?",
     options:["영양분과 산소를 온몸에 배달하고 노폐물을 실어 온다","음식을 소화한다","산소를 만든다","노폐물을 걸러 낸다"], answer:0,
     explain:"소화 기관과 호흡 기관이 들여온 것을 배달하고, 세포가 만든 노폐물을 폐와 콩팥으로 가져다줍니다." },
