@@ -126,20 +126,19 @@ export const organStructures: OrganStructure[] = [
   },
   {
     id: "stomach",
-    // No mesh yet — the atlas ships the stomach inside its visceral bundle and
-    // it has still to be pulled out. Everything else about this organ is ready.
-    model: null,
+    model: "/models/atlas/stomach.glb",
     icon: "◗",
     accent: "#d98a5c",
     illustrated: false,
     scientificName: "Gaster",
     hotspots: [
-      // Positions are placeholders: with no mesh there is nothing to anchor
-      // them to. They exist so the labels survive until the model lands.
-      { id: "cardia", ta: "Cardia", position: [0, 0, 0], color: "#d98a5c" },
-      { id: "fundus", ta: "Fundus gastricus", position: [0, 0, 0], color: "#e0a56f" },
-      { id: "body", ta: "Corpus gastricum", position: [0, 0, 0], color: "#c9713f" },
-      { id: "pylorus", ta: "Pylorus", position: [0, 0, 0], color: "#b8623a" },
+      // Read off Z-Anatomy's own label anchors — the `j`-suffixed markers the
+      // atlas puts its captions on — rather than placed by eye. See
+      // ATTRIBUTION.md for the command that produced them.
+      { id: "cardia", ta: "Cardia", position: [-0.76, 0.88, -0.12], color: "#d98a5c" },
+      { id: "fundus", ta: "Fundus gastricus", position: [0.45, 1.73, 0.38], color: "#e0a56f" },
+      { id: "body", ta: "Corpus gastricum", position: [1.6, -0.24, 1.19], color: "#c9713f" },
+      { id: "pylorus", ta: "Pylorus", position: [-1.54, -1.47, 0.96], color: "#b8623a" },
     ],
   },
   {
