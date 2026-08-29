@@ -39,6 +39,7 @@ import { ConditionsModal } from "./Conditions";
 import { Walkthrough } from "./Walkthrough";
 import { ChildNamePrompt } from "./ChildNamePrompt";
 import { SystemView } from "./SystemView";
+import { SystemQuiz } from "./SystemQuiz";
 import type { OrganId } from "../lib/anatomy-data";
 import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
@@ -48,6 +49,7 @@ import { applyKids, getBodySense, getKidsUi, getMoreFacts, kidsAvailable, KIDS_O
 import { getAllQuiz, getKidsQuiz, getOrganQuiz, kidsQuizAvailable, quizAvailable } from "../i18n/quiz";
 import { conditionsAvailable, getConditions } from "../i18n/conditions";
 import { getSystems, schoolAvailable } from "../i18n/school";
+import { getAllSystemQuiz, getSystemQuiz, systemQuizAvailable } from "../i18n/quiz";
 import type { KnowledgeQuizItem } from "../i18n/types";
 import { speak, stopSpeaking } from "../lib/speech";
 import { readMode, serverMode, subscribeMode, writeMode, type Mode } from "../lib/mode";
@@ -229,6 +231,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // School mode has two views. A system id opens the systems layer; null is
   // the organ view, which reuses the existing screen.
   const [systemId, setSystemId] = useState<string | null>(null);
+  // "paper" is one system's fifteen; "mixed" samples the whole unit.
+  const [systemQuiz, setSystemQuiz] = useState<"paper" | "mixed" | null>(null);
+  const [revealExam, setRevealExam] = useState<string | null>(null);
   // Set by the viewer; lets a step turn the model without a re-render.
   const focusRef = useRef<(id: string | null) => void>(() => {});
   const [revealCategory, setRevealCategory] = useState<KnowledgeQuizItem["category"] | null>(null);
@@ -288,6 +293,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const changeMode = (next: Mode) => {
     writeMode(next);
     setSystemId(null);
+    setSystemQuiz(null);
+    setRevealExam(null);
     stopSpeaking();
     setQuery("");
     setCompare(false);
@@ -530,17 +537,48 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                     {entry.name}
                   </button>
                 ))}
+                {systemQuizAvailable(locale.code) && (
+                  <button
+                    type="button"
+                    className="system-picker-quiz"
+                    onClick={() => setSystemQuiz("mixed")}
+                  >
+                    {kidsCopy.systemQuiz.mixed}
+                  </button>
+                )}
               </nav>
-              <SystemView
-                key={activeSystem.id}
-                system={activeSystem}
-                copy={{ ...kidsCopy.system }}
-                speechLang={speechLang}
-                onOpenOrgan={(id) => {
-                  setSystemId(null);
-                  selectOrgan(id);
-                }}
-              />
+              {systemQuiz && systemQuizAvailable(locale.code) ? (
+                <SystemQuiz
+                  key={`${activeSystem.id}-${systemQuiz}`}
+                  pool={systemQuiz === "mixed" ? getAllSystemQuiz(locale.code) : getSystemQuiz(locale.code, activeSystem.id)}
+                  size={systemQuiz === "mixed" ? 30 : "all"}
+                  copy={kidsCopy.systemQuiz}
+                  onOpenPassage={(item) => {
+                    setSystemQuiz(null);
+                    setSystemId(item.systemId);
+                    // A point the data does not actually carry falls back to
+                    // the exam box, which is what a question with no
+                    // `examPoint` does anyway.
+                    setRevealExam(item.examPoint ?? "");
+                  }}
+                  onClose={() => setSystemQuiz(null)}
+                />
+              ) : (
+                <SystemView
+                  key={activeSystem.id}
+                  system={activeSystem}
+                  copy={{ ...kidsCopy.system }}
+                  speechLang={speechLang}
+                  revealExam={revealExam}
+                  onStartQuiz={() => setSystemQuiz("paper")}
+                  onOpenOrgan={(id) => {
+                    setSystemId(null);
+                    setSystemQuiz(null);
+                    setRevealExam(null);
+                    selectOrgan(id);
+                  }}
+                />
+              )}
             </>
           )}
           {/* The systems layer replaces the organ panel rather than sitting

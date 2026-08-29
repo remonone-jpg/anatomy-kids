@@ -95,7 +95,12 @@ export type KidsUiCopy = {
     madeOf: string; order: string; terms: string; experiment: string;
     prepare: string; steps: string; result: string; meaning: string; goal: string;
     why: string; numbers: string; tryIt: string; connection: string;
-    summary: string; exam: string; listen: string;
+    summary: string; exam: string; listen: string; quizPaper: string;
+  };
+  systemQuiz: {
+    title: string; paper: string; mixed: string; passage: string;
+    next: string; finish: string; scoreTitle: string; score: string;
+    retryWrong: string; restart: string; close: string; progress: string; allRight: string;
   };
   nameHint: string;
   modeLabel: string;

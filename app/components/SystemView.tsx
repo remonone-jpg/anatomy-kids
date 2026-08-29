@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   BookOpen,
@@ -35,6 +35,7 @@ type Copy = {
   exam: string;
   listen: string;
   goal: string;
+  quizPaper: string;
 };
 
 /** Declared out here rather than inside the view: a component built during
@@ -59,15 +60,36 @@ export function SystemView({
   copy,
   speechLang,
   onOpenOrgan,
+  revealExam,
+  onStartQuiz,
 }: {
   system: SystemContent;
   copy: Copy;
   speechLang: string;
   onOpenOrgan: (id: OrganId) => void;
+  /** An `exam` point to scroll to, sent by the quiz's "본문에서 보기". */
+  revealExam?: string | null;
+  onStartQuiz: () => void;
 }) {
   const [openFlow, setOpenFlow] = useState<number | null>(0);
   const [openWhy, setOpenWhy] = useState<number | null>(null);
   const [checked, setChecked] = useState<Set<number>>(new Set());
+  const examRef = useRef<HTMLElement>(null);
+
+  // Scrolling is not state, so an effect is the right place for it. A point
+  // the quiz could not resolve simply brings the exam box into view, which is
+  // the same thing a question with no `examPoint` does.
+  useEffect(() => {
+    if (!revealExam) return;
+    const box = examRef.current;
+    if (!box) return;
+    const target =
+      Array.from(box.querySelectorAll("li")).find((li) => li.querySelector("b")?.textContent === revealExam) ?? box;
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+    target.classList.add("flash");
+    const timer = window.setTimeout(() => target.classList.remove("flash"), 1600);
+    return () => window.clearTimeout(timer);
+  }, [revealExam]);
 
   return (
     <article className="system-view">
@@ -238,7 +260,7 @@ export function SystemView({
       </section>
 
       {/* The reason this layer exists, so it gets the strongest box on screen. */}
-      <section className="system-exam">
+      <section className="system-exam" ref={examRef}>
         <h3>{copy.exam}</h3>
         <ul>
           {system.exam.map((entry) => (
@@ -249,6 +271,10 @@ export function SystemView({
           ))}
         </ul>
       </section>
+
+      <button type="button" className="system-quiz-start" onClick={onStartQuiz}>
+        <GraduationCap size={16} /> {copy.quizPaper}
+      </button>
     </article>
   );
 }
