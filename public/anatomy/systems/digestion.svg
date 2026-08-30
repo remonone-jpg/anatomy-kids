@@ -208,28 +208,28 @@
   </g>
   <g transform="translate(34.775992 53.68165)">
     <path fill="#bee7fb" d="M111.58907 121.21222h91.598839v34.853489H111.58907z"/>
-    <text x="39.68927" y=".31252623" fill="#c0272d" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start" data-organ="salivary-glands">침샘</text>
-    <text x="39.263489" y="20.612324" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="16" font-weight="400" style="line-height:0%;text-align:start" data-organ="parotid">귀밑샘</text>
-    <text x="39.779114" y="59.012226" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="16" font-weight="400" style="line-height:0%;text-align:start" data-organ="sublingual">혀밑샘</text>
-    <text x="39.779114" y="39.812527" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="16" font-weight="400" style="line-height:0%;text-align:start" data-organ="submandibular">턱밑샘</text>
-    <text x="357.55969" y="300.53271" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" style="line-height:0%" data-organ="esophagus">식도</text>
-    <text x="423.62402" y="152.65366" fill="#ed1c24" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start" data-organ="tongue">혀</text>
-    <text x="422.65723" y="129.82304" fill="#00adef" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start" data-organ="pharynx">인두</text>
-    <text x="5.1267657" y="414.69931" fill="#c0272d" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" style="line-height:0%" data-organ="liver">간</text>
-    <text x="5.4871173" y="442.86664" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" style="line-height:0%" data-organ="gallbladder">쓸개</text>
-    <text x="471.19269" y="470.00946" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start" data-organ="stomach">위</text>
-    <text x="224.64015" y="361.75989" fill="#0071bc" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start" data-organ="pancreas">이자</text>
-    <text x="5.0564532" y="473.59662" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" style="line-height:0%" data-organ="duodenum">샘창자</text>
-    <text x="8.0335426" y="596.4126" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="16" font-weight="400" style="line-height:0%;text-align:start" data-organ="transverse-colon">가로잘록창자</text>
-    <text x="8.4319801" y="623.01221" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="16" font-weight="400" style="line-height:0%;text-align:start" data-organ="ascending-colon">오름잘록창자</text>
-    <text x="68.046638" y="705.1701" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start" data-organ="cecum">막창자</text>
-    <text x="52.546822" y="742.66046" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start" data-organ="appendix">막창자꼬리</text>
-    <text x="317.24786" y="798.64313" fill="#2e3192" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" style="line-height:0%" data-organ="anus">항문</text>
-    <text x="194.47513" y="777.65521" fill="#2e3192" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start" data-organ="rectum">곧창자</text>
-    <text x="7.1741672" y="651.26221" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="16" font-weight="400" style="line-height:0%;text-align:start" data-organ="descending-colon">내림잘록창자</text>
-    <text x="456.22607" y="636.17963" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="400" style="line-height:0%;text-align:start" data-organ="small-intestine-note">(작은창자)</text>
-    <text x="4.638473" y="503.12286" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start" data-organ="bile-duct">온쓸개관</text>
-    <text fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" style="line-height:0%" transform="translate(480.211256 616.216356)" data-organ="ileum">돌창자</text>
+    <text x="39.68927" y=".31252623" fill="#c0272d" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="salivary-glands">침샘</text>
+    <text x="39.263489" y="20.612324" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="parotid">귀밑샘</text>
+    <text x="39.779114" y="59.012226" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="sublingual">혀밑샘</text>
+    <text x="39.779114" y="39.812527" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="submandibular">턱밑샘</text>
+    <text x="357.55969" y="300.53271" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" style="line-height:0%" data-organ="esophagus">식도</text>
+    <text x="423.62402" y="152.65366" fill="#ed1c24" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="tongue">혀</text>
+    <text x="422.65723" y="129.82304" fill="#00adef" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="pharynx">인두</text>
+    <text x="5.1267657" y="414.69931" fill="#c0272d" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" style="line-height:0%" data-organ="liver">간</text>
+    <text x="5.4871173" y="442.86664" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" style="line-height:0%" data-organ="gallbladder">쓸개</text>
+    <text x="471.19269" y="470.00946" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="stomach">위</text>
+    <text x="224.64015" y="361.75989" fill="#0071bc" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="pancreas">이자</text>
+    <text x="5.0564532" y="473.59662" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" style="line-height:0%" data-organ="duodenum">샘창자</text>
+    <text x="8.0335426" y="596.4126" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="transverse-colon">가로잘록창자</text>
+    <text x="8.4319801" y="623.01221" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="ascending-colon">오름잘록창자</text>
+    <text x="68.046638" y="705.1701" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="cecum">막창자</text>
+    <text x="52.546822" y="742.66046" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="appendix">막창자꼬리</text>
+    <text x="317.24786" y="798.64313" fill="#2e3192" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" style="line-height:0%" data-organ="anus">항문</text>
+    <text x="194.47513" y="777.65521" fill="#2e3192" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="rectum">곧창자</text>
+    <text x="7.1741672" y="651.26221" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="descending-colon">내림잘록창자</text>
+    <text x="456.22607" y="636.17963" fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="small-intestine-note">(작은창자)</text>
+    <text x="4.638473" y="503.12286" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="bile-duct">온쓸개관</text>
+    <text fill="#f26522" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" style="line-height:0%" transform="translate(480.211256 616.216356)" data-organ="ileum">돌창자</text>
     <path fill="none" stroke="#006e3a" stroke-width="1.60048747" d="M-1.0515178 656.0965v-98.84192"/>
     <path fill="none" stroke="#c0272d" stroke-width="2.10355449" d="M28.049797-11.12328v73.848954"/>
     <path fill="none" stroke="#000" d="m140.64837 592.30329 98.76394-21.97408"/>
@@ -237,7 +237,7 @@
     <path fill="none" stroke="#000" d="M142.67807 646.69931h261.3362"/>
     <path fill="none" stroke="#000" d="M205.1929 700.6894h-71.03958"/>
     <path fill="none" stroke="#000" d="M246.42514 723.43062c-37.15331 21.95634-73.35197 17.13892-111.45994 16.22907"/>
-    <text x="7.5120578" y="570.39789" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start" data-organ="colon">잘록창자</text><text x="83.5121" y="570.3979" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="400" style="line-height:0%" data-organ="large-intestine-note">(큰창자)</text>
+    <text x="7.5120578" y="570.39789" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="colon">잘록창자</text><text x="83.5121" y="570.3979" fill="#006e3a" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%" data-organ="large-intestine-note">(큰창자)</text>
     <path fill="none" stroke="#000" d="m288.52584 635.79748 182.55809-24.82093"/>
     <path fill="none" stroke="#000" d="m261.61863 771.72899 35.72277-32.38577"/>
     <path fill="none" stroke="#000" stroke-width="1.21012688" d="M55.402713 411.63494c63.838647 2.92158 127.822697 5.66141 171.797497 33.41279"/>
@@ -252,9 +252,9 @@
     <path fill="none" stroke="#000" d="M269.99358 172.10447 229.83661 35.601736h-74.6393"/>
     <path fill="none" stroke="#000" d="M246.17097 158.53554 218.48688 55.404316h-94.78993"/>
     <path fill="none" stroke="#000" stroke-width="1.017" d="M295.87939 122.37839 263.88325 18.038235l-163.00434-1.909302"/>
-    <text x="472.4292" y="506.96912" fill="#0054a6" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start" data-organ="pancreatic-duct">이자관</text>
+    <text x="472.4292" y="506.96912" fill="#0054a6" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="pancreatic-duct">이자관</text>
     <text x="491.52109" y="526.04169" fill="#0054a6" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start"></text>
-    <text x="118.18926" y="140.21242" fill="#2e3192" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="400" style="line-height:0%;text-align:start" data-organ="oral-cavity">입안</text>
+    <text x="118.18926" y="140.21242" fill="#2e3192" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="400" style="line-height:0%;text-align:start" data-organ="oral-cavity">입안</text>
     <path fill="none" stroke="#000" d="M282.74398 527.62432c7.81037-50.29306 12.81094-103.01977-7.66516-157.5165"/>
   </g>
 </svg>

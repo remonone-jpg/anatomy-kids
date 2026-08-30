@@ -110,10 +110,10 @@ kept in `docs/content/images-source/` so these can be rebuilt.
 
 | File | Source | Author | Licence | Changes made |
 |---|---|---|---|---|
-| `digestion.svg` | [Digestive system diagram edit.svg](https://commons.wikimedia.org/wiki/File:Digestive_system_diagram_edit.svg) | Mariana Ruiz, edited by Joaquim Alves Gaspar, Jmarchn | Public domain | **All 26 labels replaced with Korean**; **a subtitle "(큰창자)" added** beside 잘록창자, which the original does not have; `data-organ` attributes added to every label. Artwork and leader lines untouched. |
+| `digestion.svg` | [Digestive system diagram edit.svg](https://commons.wikimedia.org/wiki/File:Digestive_system_diagram_edit.svg) | Mariana Ruiz, edited by Joaquim Alves Gaspar, Jmarchn | Public domain | **All 26 labels replaced with Korean**; **a subtitle "(큰창자)" added** beside 잘록창자, which the original does not have; `data-organ` attributes added to every label; **font size lowered from 18 units to 13** so the labels come out the same size on screen as the other diagrams'. Artwork and leader lines untouched. |
 | `circulation-ko.svg` | [Circulatory System en.svg](https://commons.wikimedia.org/wiki/File:Circulatory_System_en.svg) | LadyofHats, Mariana Ruiz Villarreal | Public domain | **All 51 labels replaced with Korean**; `data-organ` attributes added to every label; **the "Text to path" layer deleted and the "Text" layer un-hidden** — the original carries its labels twice, and the baked-in outline copy was the one that painted. Artwork and leader lines untouched. The `-ko` suffix keeps the relabelled file from ever being confused with the English original. |
 | `movement.svg` | [Human skeleton front en.svg](https://commons.wikimedia.org/wiki/File:Human_skeleton_front_en.svg) | LadyofHats, Mariana Ruiz Villarreal | Public domain | **All 28 labels replaced with Korean**; the roman numerals in the three vertebrae labels dropped, which also brought each onto one line; font set to the Hangul stack at 12 units — as far as it can grow before 자뼈 and 노뼈, 13.3 units apart, would meet; `data-organ` attributes added, each label wrapped in a `<g>` with an invisible box sized to its own neighbours. Artwork, leader lines and the grouping bars untouched. **Replaces the unlabelled edition by Mikael Häggström** used until now, which was this same drawing with the labels removed; the artwork is identical, 906 of 906 paths matching. |
-| `excretion.svg` | [Illu urinary system numbers.svg](https://commons.wikimedia.org/wiki/File:Illu_urinary_system_numbers.svg) | Unknown (US federal government work); SVG by Luigi Chiesa | Public domain | **The four numbers replaced with Korean names** — 콩팥, 오줌관, 방광, 요도. The original is the language-neutral cut and publishes no legend, so what each number meant was established from the labelled edition of the same drawing and from the leader lines in the file itself; both are recorded in `excretion_terms.py`. The numbers, which the original holds as `<tspan>` children of one `<text>`, split into a `<text>` each at the same coordinates; **a `viewBox` added**, absent in the original, without which the drawing will not scale; font set to the Hangul stack at 5.6 units so the labels match the other diagrams on screen; `data-organ` attributes added, each label wrapped in a `<g>` with an invisible box so a fingertip can hit it. Artwork and leader lines untouched. |
+| `excretion.svg` | [Illu urinary system numbers.svg](https://commons.wikimedia.org/wiki/File:Illu_urinary_system_numbers.svg) | Unknown (US federal government work); SVG by Luigi Chiesa | Public domain | **The four numbers replaced with Korean names** — 콩팥, 오줌관, 방광, 요도. The original is the language-neutral cut and publishes no legend, so what each number meant was established from the labelled edition of the same drawing and from the leader lines in the file itself; both are recorded in `excretion_terms.py`. The numbers, which the original holds as `<tspan>` children of one `<text>`, split into a `<text>` each at the same coordinates; **a `viewBox` added**, absent in the original, without which the drawing will not scale; font set to the Hangul stack at 4 units so the labels match the other diagrams on screen; `data-organ` attributes added, each label wrapped in a `<g>` with an invisible box so a fingertip can hit it. Artwork and leader lines untouched. |
 
 Public domain carries no legal obligation to credit, but these are somebody's
 work and the table is the least that is owed.
@@ -158,7 +158,20 @@ python3 docs/content/images-source/relabel.py \
 python3 docs/content/images-source/annotate.py \
   /tmp/skeleton-ko.svg \
   public/anatomy/systems/movement.svg skeleton_ids
+
+# The digestive diagram predates this pipeline and has no terms module, so its
+# label size is set on the built file instead of during the rebuild.
+python3 docs/content/images-source/resize_labels.py \
+  public/anatomy/systems/digestion.svg 13
 ```
+
+Label sizes are chosen so the four diagrams read as one set. A label's size on
+screen is its size in the file times however much the panel scales the drawing,
+and that factor is not the same twice: 0.82 for the digestive drawing, 0.87 for
+the skeleton, 0.88 for the circulatory, 2.61 for the urinary one, which is only
+270 units wide. The numbers in the files — 13, 12, 12.7 and 4 — all come out
+between 10.4 and 11.1px. The skeleton is what sets that band: 자뼈 and 노뼈 sit
+13.3 units apart, so its labels cannot grow past 12 without colliding.
 
 Every label is kept and translated rather than removed. Dropping labels means
 also finding and cutting the lines that pointed at them, which costs an order

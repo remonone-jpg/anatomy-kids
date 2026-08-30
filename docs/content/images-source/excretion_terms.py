@@ -18,11 +18,12 @@ TERMS = {
     "4": "요도",
 }
 
-# This drawing is 270 units wide where the digestive one is 644, so it is
-# scaled up about three times to fill the same panel and its labels come out
-# three times the size of everybody else's. 5.6 units lands at roughly 15px on
-# screen, which is what the digestive diagram's labels measure.
-FONT_SIZE = 5.6
+# This drawing is 270 units wide where the digestive one is 644 and the
+# skeleton 436, so the panel scales it up about 2.6 times where it shrinks the
+# others — the same number here comes out three times the size it does there.
+# 4 units lands at 10.4px on screen, matching the skeleton, whose labels sit
+# too close together to grow any further.
+FONT_SIZE = 4
 
 # The four labels are <tspan> children of a single <text> here, one per label —
 # not one label wrapped over several lines, which is the other thing a run of

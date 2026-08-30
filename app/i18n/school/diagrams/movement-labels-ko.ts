@@ -163,7 +163,7 @@ export const movementLabels: DiagramLabel[] = [
   id: "tibia",
   label: "정강뼈",
   name: "정강뼈",
-  desc: "종아리 안쪽의 굵은 뼈예요. 여기를 부딪히면 유난히 아픈 게 그 때문이에요.",
+  desc: "종아리 안쪽의 굵은 뼈예요. 여기를 부딪히면 유난히 아픈 것도 살이 얇기 때문이에요.",
   tryIt: "정강이 앞을 만져 보세요. 살이 거의 없어 뼈가 바로 잡힙니다.",
  },
  {
