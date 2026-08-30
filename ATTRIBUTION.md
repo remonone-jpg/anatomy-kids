@@ -121,18 +121,26 @@ work and the table is the least that is owed.
 
 ### Colours changed at display time
 
-Three of the original colours are overridden by the stylesheet when a diagram
-is shown. The files themselves are not edited — open any of them outside this
-app and the original colours are what you get — but what a reader sees here is
-not what the author drew, and that is worth stating.
+Some of the original colours are overridden by the stylesheet when a diagram is
+shown. The files themselves are not edited — open any of them outside this app
+and the original colours are what you get — but what a reader sees here is not
+what the author drew, and that is worth stating.
+
+The overrides are applied by shape, not by name: none of these elements carry
+an id or a class, so the viewer finds them by what they are — a closed run of
+straight black lines the size of a group box, a white shape the size of a line
+of text — and marks them for the stylesheet. Only the respiratory diagram
+matches; the other four come back with none.
 
 | What | Original | Shown as | Why |
 |---|---|---|---|
 | The skeleton's two group bars, beside 머리뼈 and 척추뼈 | `#dff3f4` | `--lavender` at 22% | At its published tint the bar is invisible against a cream page, so the grouping it exists to show does not read. |
 | Labels that hold other labels — 머리뼈, 척추뼈, 침샘, 잘록창자 | plain text | bold, with a pale halo behind the letters | Marks them as headings before anything is clicked, so a reader can tell the drawing names three bones and their parts rather than eight separate bones. |
 | The label being read, and the labels it contains | plain text | `--coral`, and `--lavender` for the parts | Shows which labels the open note is talking about. |
+| The respiratory diagram's seven group boxes | black, 0.63–1.18 units | `#9a9a9a` at 0.35 units | Drawn as heavily as the anatomy they enclose, so the boxes read louder than the drawing. Thinned and greyed to the weight the other diagrams' leader lines sit at. Kept rather than removed: they are what says 코·코안·코선반·코안뜰 are one group. |
+| The white cards behind those groups | `#ffffff` | two of them transparent, five `#fffaf2` | A white card on a cream page reads as a stain. The two with nothing but leader lines beneath them are not holding anything back and go; the five with artwork beneath still keep the drawing off the letters, so they take the page colour instead, which is invisible here. |
 
-Nothing is moved, removed or redrawn; only these fills change.
+Nothing is moved, removed or redrawn; only these fills and two stroke widths change. The respiratory diagram's leader lines are left exactly as drawn — the author uses one dark red for both the general leaders and the pulmonary vessels, so there is no way to soften the first without also changing the second.
 
 ### Relabelling
 

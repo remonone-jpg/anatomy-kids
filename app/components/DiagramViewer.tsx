@@ -182,6 +182,65 @@ export function DiagramViewer({
       bar.classList.add("diagram-group-bar");
     });
 
+    // The respiratory drawing groups its labels inside hard black rectangles
+    // and lays a white card behind each group. Both are the author's, and both
+    // are louder than anything in the other diagrams — the boxes are drawn as
+    // heavily as the anatomy, and a white card on a cream page reads as a
+    // stain. Neither is removed: the boxes are what say 코·코안·코선반·코안뜰
+    // are one group, and some cards are the only thing keeping the artwork off
+    // the letters. They are picked out by shape and repainted by the
+    // stylesheet, so the file itself is untouched.
+    //
+    // A card with nothing but leader lines under it can simply go; one with
+    // artwork under it becomes the page colour, which hides it just as well
+    // while still holding the drawing away from the words.
+    const shapes = Array.from(svg.querySelectorAll<SVGGraphicsElement>("path,polygon"));
+    const size = (node: SVGGraphicsElement) => {
+      try {
+        const b = node.getBBox();
+        return b.width > 0 ? b : null;
+      } catch {
+        return null;
+      }
+    };
+    const paintOf = (node: SVGGraphicsElement, prop: "fill" | "stroke") =>
+      (node.style[prop] || node.getAttribute(prop) || "").trim().toLowerCase();
+    const isWhite = (v: string) => /^(#fff|#ffffff|white|rgb\(255,\s*255,\s*255\))$/.test(v);
+    const isBlack = (v: string) => /^(#000|#000000|black|rgb\(0,\s*0,\s*0\))$/.test(v);
+
+    for (const node of shapes) {
+      const box = size(node);
+      if (!box) continue;
+      const d = node.getAttribute("d") ?? "";
+      // One closed run of straight lines. The single-subpath test matters: the
+      // excretory diagram draws all four of its leader lines as one path, and
+      // without it that path is a big straight closed black shape too.
+      const straight =
+        !/[csqta]/i.test(d) && /z\s*$/i.test(d.trim()) && (d.match(/[Mm]/g) ?? []).length === 1;
+      if (straight && isBlack(paintOf(node, "stroke")) && box.width >= 100 && box.height >= 25) {
+        node.classList.add("diagram-frame");
+        continue;
+      }
+      if (
+        isWhite(paintOf(node, "fill")) &&
+        box.width >= 60 && box.width <= 220 &&
+        box.height >= 15 && box.height <= 40
+      ) {
+        // Anything filled underneath means the card is doing work.
+        const covered = shapes.some((other) => {
+          if (other === node) return false;
+          const paint = paintOf(other, "fill");
+          if (!paint || paint === "none" || isWhite(paint)) return false;
+          const o = size(other);
+          return (
+            !!o && o.x < box.x + box.width && box.x < o.x + o.width &&
+            o.y < box.y + box.height && box.y < o.y + o.height
+          );
+        });
+        node.classList.add(covered ? "diagram-chip-keep" : "diagram-chip-drop");
+      }
+    }
+
     // Two of the four drawings paint their own white page behind the artwork.
     // On a cream card that reads as a photograph pasted on rather than a
     // picture belonging to the page, and it is the only thing making the four

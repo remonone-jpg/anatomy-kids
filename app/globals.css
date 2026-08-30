@@ -2115,6 +2115,17 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
    cream page that it reads as nothing. */
 .diagram-group-bar { fill: var(--lavender) !important; opacity: 0.22; }
 
+/* The respiratory drawing's own group boxes, drawn as heavily as the anatomy
+   inside them. Thinned and greyed to the weight the other diagrams' leaders
+   sit at, so the grouping still reads without competing with the drawing. */
+.diagram-frame { stroke: #9a9a9a !important; stroke-width: 0.35 !important; }
+
+/* The white cards behind those groups. One with only leader lines beneath it
+   is not holding anything back and goes; one with artwork beneath keeps its
+   job and takes the page colour instead, which is invisible here. */
+.diagram-chip-drop { fill: transparent !important; }
+.diagram-chip-keep { fill: #fffaf2 !important; }
+
 .diagram-active,
 .diagram-active text { fill: var(--coral) !important; }
 
