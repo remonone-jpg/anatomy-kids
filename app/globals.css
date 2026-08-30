@@ -1980,10 +1980,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
      height inside an auto row never resolves — the drawing then kept its own
      height and ran off the bottom of the card. */
   grid-template-rows: minmax(0, 1fr);
-  /* The panel is as tall as what it has to say. Stretched to the full row it
-     left a field of empty paper under short notes — most of them are short —
-     with the pager stranded at the bottom of it. */
-  align-items: start;
   gap: 18px; padding: 0 20px 20px;
 }
 
@@ -1991,7 +1987,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
    most of a wide screen. */
 .diagram-stage {
   min-width: 0; min-height: 0;
-  align-self: stretch;          /* the drawing still gets the whole row */
   display: grid; place-items: center;
   overflow: hidden; touch-action: none; cursor: grab;
   border: 1px solid var(--line); border-radius: 26px;
@@ -2022,15 +2017,17 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 .diagram-panel {
   display: flex; flex-direction: column;
-  min-height: 0; max-height: 100%;
+  min-height: 0;
   padding: 26px 24px 18px;
   border: 1px solid var(--line); border-radius: 26px;
   background: #fffaf2;
   box-shadow: var(--shadow);
 }
-/* The note scrolls; the pager below it does not, so a reader stepping through
-   twenty-eight labels never has to scroll to find the next one. */
-.diagram-read { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; }
+/* The note takes only the height it needs and stacks from the top; the pager
+   is pushed to the bottom of the panel by the auto margin below, so a reader
+   stepping through twenty-eight labels always finds 다음 in the same place.
+   A long note scrolls inside this box rather than moving the pager. */
+.diagram-read { flex: 0 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: none; }
 .diagram-panel h3 { margin: 0 0 10px; font: 500 19px var(--font-serif), serif; }
 .diagram-panel p { margin: 0; color: #6e655f; font: 500 15px/1.75 var(--font-serif), serif; }
 
@@ -2082,7 +2079,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 .diagram-step {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  margin-top: 14px; padding-top: 14px;
+  margin-top: auto; padding-top: 14px;
   border-top: 1px solid var(--line);
 }
 .diagram-step span { color: var(--muted); font: 500 12px var(--font-sans), sans-serif; }
