@@ -1,55 +1,28 @@
 """Give a diagram's labels stable ids so the UI can hang data off them.
 
+Usage: annotate.py <in.svg> <out.svg> <term-module>
+The module supplies IDS, a map from the visible label to the id the notes use.
+
 Matching on the visible string would break the first time a word is reworded.
 Where a label runs over two lines the two halves are still separate targets:
 "돌창자" names one stretch of the small intestine and "(작은창자)" names the
 whole of it, and the notes say different things.
 """
+import importlib
 import re
 import sys
 
-src_path, out_path = sys.argv[1], sys.argv[2]
+src_path, out_path, module = sys.argv[1], sys.argv[2], sys.argv[3]
+IDS = importlib.import_module(module).IDS
 
 # Visible text -> id. Two entries may share an id; that is the split-label case.
-IDS = {
-    "입안": "oral-cavity",
-    "침샘": "salivary-glands",
-    "귀밑샘": "parotid",
-    "턱밑샘": "submandibular",
-    "혀밑샘": "sublingual",
-    "혀": "tongue",
-    "인두": "pharynx",
-    "식도": "esophagus",
-    "위": "stomach",
-    "간": "liver",
-    "쓸개": "gallbladder",
-    "이자": "pancreas",
-    "샘창자": "duodenum",
-    "온쓸개관": "bile-duct",
-    "이자관": "pancreatic-duct",
-    "돌창자": "ileum",
-    # The subtitles carry their own note — 돌창자 is one part of the small
-    # intestine, "(작은창자)" is the whole of it — so they get their own ids
-    # rather than sharing with the line above.
-    "(작은창자)": "small-intestine-note",
-    "잘록창자": "colon",
-    "(큰창자)": "large-intestine-note",
-    "가로잘록창자": "transverse-colon",
-    "오름잘록창자": "ascending-colon",
-    "내림잘록창자": "descending-colon",
-    "막창자": "cecum",
-    "막창자꼬리": "appendix",
-    "곧창자": "rectum",
-    "항문": "anus",
-}
-
 svg = open(src_path, encoding="utf-8").read()
 
-# The original pairs "돌창자" with a smaller "(작은창자)" beneath it but leaves
-# "잘록창자" bare. Our organ list calls that part 큰창자, so without a subtitle
-# a reader has to guess the two are the same thing. Placed on the same line
-# rather than below: the three sub-colons start only 26 units down.
-if "(큰창자)" not in svg:
+# Digestion only: the original pairs "돌창자" with a smaller "(작은창자)" beneath
+# it but leaves "잘록창자" bare. Our organ list calls that part 큰창자, so without
+# a subtitle a reader has to guess the two are the same thing. Placed on the
+# same line rather than below: the three sub-colons start only 26 units down.
+if "잘록창자" in svg and "(큰창자)" not in svg:
     m = re.search(r'<text\b([^>]*)>잘록창자</text>', svg)
     attrs = m.group(1)
     x = float(re.search(r'\bx="([-\d.]+)"', attrs).group(1))
