@@ -464,7 +464,7 @@ export const circulation: SystemContent = {
     "우리 몸의 세포들은 살아가려면 산소와 영양분을 받아야 하고, 생기는 노폐물은 내보내야 해요. 이 배달을 맡은 것이 피이고, 피가 몸을 도는 것을 순환이라고 합니다. 순환 기관은 심장, 혈관, 혈액 이렇게 셋으로 이루어져 있어요. 심장은 펌프, 혈관은 길, 혈액은 배달하는 짐차라고 생각하면 쉽습니다.",
 
   image: {
-    src: "/anatomy/systems/circulation.svg",
+    src: "/anatomy/systems/circulation-ko.svg",
     alt:
       "심장과 온몸의 혈관 그림. 동맥은 빨강, 정맥은 파랑으로 그려져 있고 주요 혈관에 이름표가 붙어 있습니다.",
   },

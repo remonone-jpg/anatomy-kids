@@ -1974,7 +1974,12 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 .diagram-body {
   flex: 1; min-height: 0;
-  display: grid; grid-template-columns: minmax(0, 1fr) 340px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  /* The row has to be sized here. Left implicit it is `auto`, and a percentage
+     height inside an auto row never resolves — the drawing then kept its own
+     height and ran off the bottom of the card. */
+  grid-template-rows: minmax(0, 1fr);
   gap: 18px; padding: 0 20px 20px;
 }
 
@@ -1989,6 +1994,15 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   box-shadow: var(--shadow);
 }
 .diagram-stage:active { cursor: grabbing; }
+/* An SVG ignores `height: 100%` and grows to its own aspect ratio, so a tall
+   drawing overflowed the card: the circulatory figure is 550×830, which at
+   850 wide came out 1283 tall in a 732-tall box and had its legs cut off.
+   Capping both axes and letting the other one follow keeps the whole figure
+   inside, and the file's own preserveAspectRatio centres it. */
+/* The viewer strips each file's own width/height, so the box here decides the
+   size and the viewBox scales the drawing into it. Without that a tall figure
+   — the circulatory one is 550×830 — kept its intrinsic height and had its
+   legs cut off below the card. */
 .diagram-stage svg { width: 100%; height: 100%; }
 .diagram-loading { color: var(--muted); font: 500 14px var(--font-serif), serif; }
 
@@ -2011,6 +2025,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 }
 .diagram-panel h3 { margin: 0 0 10px; font: 500 26px var(--font-serif), serif; }
 .diagram-panel p { margin: 0; color: #6e655f; font: 500 15px/1.75 var(--font-serif), serif; }
+
 .diagram-prompt { color: var(--muted) !important; }
 .diagram-beyond {
   align-self: flex-start; margin: 0 0 12px; padding: 3px 10px;

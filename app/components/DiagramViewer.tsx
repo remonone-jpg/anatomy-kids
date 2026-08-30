@@ -71,7 +71,9 @@ export function DiagramViewer({
 
   useEffect(() => {
     let live = true;
-    fetch(asset(src))
+    // Revalidate rather than trust the disk copy: the diagrams are edited in
+    // place and keep their filename, so a stale hit shows last week's labels.
+    fetch(asset(src), { cache: "no-cache" })
       .then((r) => (r.ok ? r.text() : Promise.reject(new Error(String(r.status)))))
       .then((text) => {
         if (!live) return;
@@ -106,6 +108,20 @@ export function DiagramViewer({
     svgRef.current = svg;
     svg.setAttribute("role", "img");
     svg.setAttribute("aria-label", alt);
+    // A file that carries its own width/height keeps that size whatever the
+    // stylesheet says, and a tall one then hangs out of the card. Dropping
+    // them leaves the viewBox in charge, which is what scales the drawing to
+    // whatever box it is given.
+    svg.removeAttribute("width");
+    svg.removeAttribute("height");
+    // Inkscape writes overflow="visible" on some exports, which lets the
+    // drawing paint outside its own viewport — the figure then keeps its
+    // natural size and hangs off the bottom of the card instead of scaling
+    // into it.
+    svg.removeAttribute("overflow");
+    if (!svg.getAttribute("preserveAspectRatio")) {
+      svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+    }
     // Captured once: this effect re-runs whenever the parent re-renders, and
     // re-reading here would make the current zoom the new home.
     if (!homeRef.current) homeRef.current = parseViewBox(svg);

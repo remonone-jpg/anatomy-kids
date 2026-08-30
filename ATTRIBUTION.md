@@ -111,7 +111,7 @@ kept in `docs/content/images-source/` so these can be rebuilt.
 | File | Source | Author | Licence | Changes made |
 |---|---|---|---|---|
 | `digestion.svg` | [Digestive system diagram edit.svg](https://commons.wikimedia.org/wiki/File:Digestive_system_diagram_edit.svg) | Mariana Ruiz, edited by Joaquim Alves Gaspar, Jmarchn | Public domain | **All 26 labels replaced with Korean**; **a subtitle "(큰창자)" added** beside 잘록창자, which the original does not have; `data-organ` attributes added to every label. Artwork and leader lines untouched. |
-| `circulation.svg` | [Circulatory System en.svg](https://commons.wikimedia.org/wiki/File:Circulatory_System_en.svg) | LadyofHats, Mariana Ruiz Villarreal | Public domain | **All 51 labels replaced with Korean.** Artwork and leader lines untouched. |
+| `circulation-ko.svg` | [Circulatory System en.svg](https://commons.wikimedia.org/wiki/File:Circulatory_System_en.svg) | LadyofHats, Mariana Ruiz Villarreal | Public domain | **All 51 labels replaced with Korean**; `data-organ` attributes added to every label; **the "Text to path" layer deleted and the "Text" layer un-hidden** — the original carries its labels twice, and the baked-in outline copy was the one that painted. Artwork and leader lines untouched. The `-ko` suffix keeps the relabelled file from ever being confused with the English original. |
 | `movement.svg` | [Human skeleton front - no labels.svg](https://commons.wikimedia.org/wiki/File:Human_skeleton_front_-_no_labels.svg) | Mikael Häggström | Public domain | None — used as published. |
 | `excretion.svg` | [Illu urinary system numbers.svg](https://commons.wikimedia.org/wiki/File:Illu_urinary_system_numbers.svg) | Unknown (US federal government work) | Public domain | None yet — the numbered labels still have to be replaced. |
 
@@ -124,7 +124,7 @@ work and the table is the least that is owed.
 # Terms live beside the script, one module per diagram.
 python3 docs/content/images-source/relabel.py \
   docs/content/images-source/Circulatory_System_en.svg \
-  public/anatomy/systems/circulation.svg circ_terms
+  public/anatomy/systems/circulation-ko.svg circ_terms
 ```
 
 Every label is kept and translated rather than removed. Dropping labels means
