@@ -82,10 +82,22 @@ export function DiagramViewer({
     };
   }, [src]);
 
-  // Wire the inlined SVG once it is in the DOM.
+  // Put the markup in ourselves, and only when it actually changes.
+  const [mounted, setMounted] = useState(0);
   useEffect(() => {
     const host = hostRef.current;
     if (!markup || !host) return;
+    host.innerHTML = markup;
+    setMounted((n) => n + 1);
+    return () => {
+      host.innerHTML = "";
+    };
+  }, [markup]);
+
+  // Wire the labels. Safe to re-run: it removes its own listeners first.
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!mounted || !host) return;
     const svg = host.querySelector("svg");
     if (!svg) return;
     svgRef.current = svg;
@@ -120,7 +132,7 @@ export function DiagramViewer({
       });
     }
     return () => cleanups.forEach((fn) => fn());
-  }, [markup, labels, alt]);
+  }, [mounted, labels, alt]);
 
   const setBox = useCallback((next: Box) => {
     const svg = svgRef.current;
@@ -207,25 +219,15 @@ export function DiagramViewer({
           </button>
         </header>
 
-        {/* Two branches rather than one element with both children and
-            `dangerouslySetInnerHTML`: passing both lets React manage the
-            children and wipe the injected markup on the next render, taking
-            the click handlers with it. */}
-        {markup ? (
-          <div
-            className="diagram-stage"
-            ref={hostRef}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={endDrag}
-            onPointerCancel={endDrag}
-            dangerouslySetInnerHTML={{ __html: markup }}
-          />
-        ) : (
-          <div className="diagram-stage">
-            <p className="diagram-loading">{failed ? alt : copy.loading}</p>
-          </div>
-        )}
+        <div
+          className="diagram-stage"
+          ref={hostRef}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+        />
+        {!markup && <p className="diagram-loading">{failed ? alt : copy.loading}</p>}
 
         {picked && (
           <aside className="diagram-note" aria-live="polite">
