@@ -17,6 +17,10 @@ export type SystemContent = {
   name: string;
   oneLine: string;
   intro: string;
+  /** A diagram of the whole system, under `public/anatomy/systems/`. Optional
+   *  because not every system has one drawn yet. Credits live in
+   *  ATTRIBUTION.md — every one of these is a third party's work. */
+  image?: { src: string; alt: string };
   /** `organId` links to an organ this site already has a page for. Blood
    *  vessels, bladder, ears and the rest have no page yet and simply read. */
   organs: { name: string; role: string; organId?: OrganId }[];
