@@ -1900,3 +1900,103 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   0%, 60% { background: color-mix(in srgb, #b4832f, transparent 78%); }
   100% { background: transparent; }
 }
+
+/* The system diagram. Third-party artwork — see ATTRIBUTION.md. */
+.system-figure {
+  margin: 18px 0 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: #fff;
+}
+.system-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Diagram viewer ──────────────────────────────────────────────────── */
+
+.system-figure-open {
+  position: relative; display: block; width: 100%; padding: 0;
+  border: 0; background: none; cursor: zoom-in;
+}
+.system-figure-open img { display: block; width: 100%; height: auto; border-radius: 10px; }
+.system-figure-open span {
+  position: absolute; right: 8px; bottom: 8px;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--paper), transparent 8%);
+  border: 1px solid var(--line);
+  color: var(--ink-soft); font: 500 12px var(--font-serif), serif;
+}
+.system-figure-open:hover span { color: var(--accent); border-color: var(--accent); }
+
+.diagram-backdrop { align-items: stretch; padding: 0; }
+.diagram-viewer {
+  display: flex; flex-direction: column;
+  width: 100vw; height: 100dvh;
+  background: var(--paper);
+}
+.diagram-viewer > header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-bottom: 1px solid var(--line); flex-shrink: 0;
+}
+.diagram-hint { color: var(--ink-soft); font-size: 13px; }
+.diagram-tools { display: flex; gap: 4px; margin-left: auto; }
+.diagram-tools button,
+.diagram-viewer .modal-close {
+  display: grid; place-items: center;
+  width: 38px; height: 38px;
+  border: 1px solid var(--line); border-radius: 11px;
+  background: rgba(255,255,255,.5); color: var(--ink-soft); cursor: pointer;
+}
+.diagram-tools button:hover,
+.diagram-viewer .modal-close:hover { color: var(--ink); border-color: var(--accent); }
+.diagram-viewer .modal-close { position: static; flex-shrink: 0; }
+
+.diagram-stage {
+  flex: 1; min-height: 0; overflow: hidden;
+  display: grid; place-items: center;
+  background: #fff; touch-action: none; cursor: grab;
+}
+.diagram-stage:active { cursor: grabbing; }
+.diagram-stage svg { width: 100%; height: 100%; max-height: 100%; }
+.diagram-loading { color: var(--ink-soft); font-size: 14px; }
+
+/* Every label is a target, so it has to look like one. */
+.diagram-stage .diagram-hit { cursor: pointer; }
+.diagram-stage .diagram-hit:hover,
+.diagram-stage .diagram-hit:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+  outline: none;
+}
+
+.diagram-note {
+  flex-shrink: 0; padding: 15px 18px calc(15px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--accent), transparent 94%);
+  max-height: 42dvh; overflow-y: auto;
+}
+.diagram-note b { display: block; margin-bottom: 5px; font: 600 16px var(--font-serif), serif; }
+.diagram-note p { margin: 0; font-size: 14.5px; line-height: 1.7; }
+.diagram-beyond {
+  display: inline-block; margin: 0 0 6px; padding: 2px 8px;
+  border: 1px solid var(--line); border-radius: 999px;
+  color: var(--ink-soft); font: 600 11px var(--font-serif), serif; font-style: normal;
+}
+.diagram-note button {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 38px; margin-top: 11px; padding: 0 14px;
+  border: 1px solid color-mix(in srgb, var(--accent), transparent 55%);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent), transparent 86%);
+  color: var(--accent); cursor: pointer; font: 500 13.5px var(--font-serif), serif;
+}
+
+@media (max-width: 560px) {
+  .diagram-hint { font-size: 12px; }
+  .diagram-note { max-height: 38dvh; }
+}

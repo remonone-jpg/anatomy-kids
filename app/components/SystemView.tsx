@@ -17,6 +17,7 @@ import {
 import type { OrganId } from "../lib/anatomy-data";
 import type { SystemContent } from "../i18n/school";
 import { speak } from "../lib/speech";
+import { DiagramCard } from "./DiagramViewer";
 
 type Copy = {
   madeOf: string;
@@ -36,6 +37,7 @@ type Copy = {
   listen: string;
   goal: string;
   quizPaper: string;
+  diagramOpen: string;
 };
 
 /** Declared out here rather than inside the view: a component built during
@@ -62,6 +64,7 @@ export function SystemView({
   onOpenOrgan,
   revealExam,
   onStartQuiz,
+  onOpenDiagram,
 }: {
   system: SystemContent;
   copy: Copy;
@@ -70,6 +73,7 @@ export function SystemView({
   /** An `exam` point to scroll to, sent by the quiz's "본문에서 보기". */
   revealExam?: string | null;
   onStartQuiz: () => void;
+  onOpenDiagram: () => void;
 }) {
   const [openFlow, setOpenFlow] = useState<number | null>(0);
   const [openWhy, setOpenWhy] = useState<number | null>(null);
@@ -98,6 +102,17 @@ export function SystemView({
       <p className="system-oneline">{system.oneLine}</p>
       <p className="system-intro">{system.intro}</p>
       <Listen text={system.intro} label={copy.listen} lang={speechLang} />
+
+      {/* The diagram sits above the parts list: the list names what the
+          picture shows, and the picture answers "where is that". */}
+      {system.image && (
+        <DiagramCard
+          src={system.image.src}
+          alt={system.image.alt}
+          label={copy.diagramOpen}
+          onOpen={onOpenDiagram}
+        />
+      )}
 
       <section className="system-section">
         <h3><Sparkles size={15} aria-hidden /> {copy.madeOf}</h3>

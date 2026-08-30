@@ -40,6 +40,7 @@ import { Walkthrough } from "./Walkthrough";
 import { ChildNamePrompt } from "./ChildNamePrompt";
 import { SystemView } from "./SystemView";
 import { SystemQuiz } from "./SystemQuiz";
+import { DiagramViewer } from "./DiagramViewer";
 import type { OrganId } from "../lib/anatomy-data";
 import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
@@ -50,6 +51,7 @@ import { getAllQuiz, getKidsQuiz, getOrganQuiz, kidsQuizAvailable, quizAvailable
 import { conditionsAvailable, getConditions } from "../i18n/conditions";
 import { getSystems, schoolAvailable } from "../i18n/school";
 import { getAllSystemQuiz, getSystemQuiz, systemQuizAvailable } from "../i18n/quiz";
+import { getDiagramLabels } from "../i18n/school/diagrams";
 import type { KnowledgeQuizItem } from "../i18n/types";
 import { speak, stopSpeaking } from "../lib/speech";
 import { readMode, serverMode, subscribeMode, writeMode, type Mode } from "../lib/mode";
@@ -234,6 +236,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // "paper" is one system's fifteen; "mixed" samples the whole unit.
   const [systemQuiz, setSystemQuiz] = useState<"paper" | "mixed" | null>(null);
   const [revealExam, setRevealExam] = useState<string | null>(null);
+  const [diagramOpen, setDiagramOpen] = useState(false);
   // Set by the viewer; lets a step turn the model without a re-render.
   const focusRef = useRef<(id: string | null) => void>(() => {});
   const [revealCategory, setRevealCategory] = useState<KnowledgeQuizItem["category"] | null>(null);
@@ -295,6 +298,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     setSystemId(null);
     setSystemQuiz(null);
     setRevealExam(null);
+    setDiagramOpen(false);
     stopSpeaking();
     setQuery("");
     setCompare(false);
@@ -571,6 +575,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                   speechLang={speechLang}
                   revealExam={revealExam}
                   onStartQuiz={() => setSystemQuiz("paper")}
+                  onOpenDiagram={() => setDiagramOpen(true)}
                   onOpenOrgan={(id) => {
                     setSystemId(null);
                     setSystemQuiz(null);
@@ -806,6 +811,22 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           copy={kidsCopy}
           onSubmit={(name) => writeChildName(name)}
           onSkip={() => writeChildName(null)}
+        />
+      )}
+      {diagramOpen && activeSystem?.image && kidsCopy && (
+        <DiagramViewer
+          src={activeSystem.image.src}
+          alt={activeSystem.image.alt}
+          labels={getDiagramLabels(locale.code, activeSystem.id)}
+          copy={kidsCopy.diagram}
+          onOpenOrgan={(id) => {
+            setDiagramOpen(false);
+            setSystemId(null);
+            setSystemQuiz(null);
+            setRevealExam(null);
+            selectOrgan(id);
+          }}
+          onClose={() => setDiagramOpen(false)}
         />
       )}
       {mobileLibrary && <button className="drawer-backdrop" aria-label={t.library.close} onClick={() => setMobileLibrary(false)} />}
