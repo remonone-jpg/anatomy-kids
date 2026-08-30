@@ -121,7 +121,7 @@ export const movementLabels: DiagramLabel[] = [
     label: "척추뼈",
     name: "척추뼈",
     children: ["cervical", "thoracic", "lumbar", "sacrum", "coccyx"],
-    related: ["cervical", "thoracic", "lumbar", "sacrum", "coccyx"],
+    related: ["skull", "pelvis", "ribs"],
     desc: "등을 따라 이어진 몸의 기둥이에요. 작은 뼈 33개가 블록처럼 쌓여 있어서 굽히고 돌릴 수 있습니다. 뼈 사이마다 물렁뼈가 끼어 있어 충격을 흡수하고, 가운데 통로로는 척수라는 굵은 신경이 지나가요.",
   },
   {
