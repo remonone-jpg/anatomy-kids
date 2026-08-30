@@ -8,10 +8,67 @@ import re
 import sys
 
 src_path, out_path, module = sys.argv[1], sys.argv[2], sys.argv[3]
-TERMS = importlib.import_module(module).TERMS
+terms = importlib.import_module(module)
+TERMS = terms.TERMS
+# A label's size on screen is its size here times however much the drawing is
+# scaled to fill the panel, and that factor differs wildly between diagrams —
+# the circulatory drawing is 550 units wide and shrinks, the urinary one is 270
+# and nearly triples. A diagram whose scaling makes its labels the wrong size
+# beside the others says so here, in its own units.
+FONT_SIZE = getattr(terms, "FONT_SIZE", None)
 
 src = open(src_path, encoding="utf-8").read()
 seen, missing = set(), []
+
+# A file that gives its size only as width and height has nothing left to scale
+# by once the viewer strips those — it then draws at 1:1 in the corner of
+# whatever box it is given. The viewBox says the same thing in the form that
+# survives.
+box = re.search(r'<svg\b[^>]*?\bwidth="([\d.]+)"[^>]*?\bheight="([\d.]+)"', src)
+if "viewBox" not in src and box:
+    src = src[:box.end(2) + 1] + ' viewBox="0 0 %s %s"' % (box.group(1), box.group(2)) + src[box.end(2) + 1:]
+    print("viewBox 추가: 0 0 %s %s" % (box.group(1), box.group(2)))
+
+# Some drawings keep every label in one <text> as a run of <tspan> children.
+# The viewer hangs tabindex, role and aria-label on whatever node carries the
+# id, and focus on a <tspan> is not dependable across browsers, so each label
+# becomes its own <text> at the coordinates its tspan carried. Nothing moves.
+split = re.search(r'<text\b([^>]*)>(\s*(?:<tspan\b[^>]*>[^<]*</tspan>\s*){2,})</text>', src)
+if split:
+    shared, pieces = split.group(1).rstrip(), []
+    for t in re.finditer(r'<tspan\b([^>]*)>([^<]*)</tspan>', split.group(2)):
+        x = re.search(r'\bx="([-\d.]+)"', t.group(1))
+        y = re.search(r'\by="([-\d.]+)"', t.group(1))
+        if x and y and t.group(2).strip():
+            pieces.append(
+                '<text%s x="%s" y="%s">%s</text>' % (shared, x.group(1), y.group(1), t.group(2).strip())
+            )
+    if pieces:
+        src = src[:split.start()] + "".join(pieces) + src[split.end():]
+        print("tspan %d개를 <text> 로 분리" % len(pieces))
+
+
+def restyle(attrs):
+    """Point the label at a Hangul font, and resize it if the module asked.
+
+    Both settings have to go into the style attribute rather than beside it: a
+    style declaration beats the matching presentation attribute however the
+    attribute is written, so a font-family left in there would keep winning.
+    """
+    attrs = re.sub(r'\sfont-family="[^"]*"', "", attrs)
+    attrs = re.sub(r'\sfont-size="[^"]*"', "", attrs)
+    css = re.search(r'style="([^"]*)"', attrs)
+    props = ["font-family", "-inkscape-font-specification"]
+    if FONT_SIZE:
+        props.append("font-size")
+    drop = r"\s*(%s)\s*:" % "|".join(props)
+    add = "font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif"
+    if FONT_SIZE:
+        add += ";font-size:%spx" % FONT_SIZE
+    if css:
+        kept = [d for d in css.group(1).split(";") if d.strip() and not re.match(drop, d)]
+        return attrs[:css.start(1)] + ";".join(kept) + ";" + add + attrs[css.end(1):]
+    return attrs.rstrip() + ' style="%s"' % add
 
 
 def swap(m):
@@ -23,10 +80,7 @@ def swap(m):
         missing.append(plain)
         return m.group(0)
     seen.add(plain)
-    # Arial and friends carry no Hangul; name a stack the browser can satisfy.
-    attrs = re.sub(r'font-family="[^"]*"', "", attrs)
-    attrs = attrs.rstrip() + " font-family=\"'Noto Sans KR','Apple SD Gothic Neo',sans-serif\""
-    return "<text" + attrs + ">" + TERMS[plain] + "</text>"
+    return "<text" + restyle(attrs) + ">" + TERMS[plain] + "</text>"
 
 
 out = re.sub(r"<text\b([^>]*)>(.*?)</text>", swap, src, flags=re.S)
