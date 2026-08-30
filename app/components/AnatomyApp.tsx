@@ -817,6 +817,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         <DiagramViewer
           src={activeSystem.image.src}
           alt={activeSystem.image.alt}
+          title={activeSystem.name}
           labels={getDiagramLabels(locale.code, activeSystem.id)}
           copy={kidsCopy.diagram}
           onOpenOrgan={(id) => {

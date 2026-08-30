@@ -47,6 +47,7 @@ function parseViewBox(svg: SVGSVGElement): Box {
 export function DiagramViewer({
   src,
   alt,
+  title,
   labels,
   copy,
   onOpenOrgan,
@@ -54,6 +55,8 @@ export function DiagramViewer({
 }: {
   src: string;
   alt: string;
+  /** Shown in the title bar, so the reader knows which system is open. */
+  title: string;
   labels: DiagramLabel[];
   copy: Copy;
   onOpenOrgan: (id: OrganId) => void;
@@ -204,43 +207,51 @@ export function DiagramViewer({
         className="diagram-viewer"
         role="dialog"
         aria-modal="true"
-        aria-label={alt}
+        aria-label={title}
         onMouseDown={(event) => event.stopPropagation()}
       >
-        <header>
-          <span className="diagram-hint">{copy.hint}</span>
+        <header className="diagram-bar">
+          <h2>{title}</h2>
           <div className="diagram-tools">
-            <button type="button" onClick={() => zoom(1)} aria-label={copy.zoomIn}><Plus size={16} /></button>
-            <button type="button" onClick={() => zoom(-1)} aria-label={copy.zoomOut}><Minus size={16} /></button>
-            <button type="button" onClick={home} aria-label={copy.reset}><RotateCcw size={16} /></button>
+            <button type="button" onClick={() => zoom(1)} aria-label={copy.zoomIn} title={copy.zoomIn}><Plus size={17} /></button>
+            <button type="button" onClick={() => zoom(-1)} aria-label={copy.zoomOut} title={copy.zoomOut}><Minus size={17} /></button>
+            <button type="button" onClick={home} aria-label={copy.reset} title={copy.reset}><RotateCcw size={17} /></button>
+            <button type="button" onClick={onClose} aria-label={copy.close} title={copy.close}><X size={18} /></button>
           </div>
-          <button type="button" className="modal-close" onClick={onClose} aria-label={copy.close}>
-            <X size={18} />
-          </button>
         </header>
 
-        <div
-          className="diagram-stage"
-          ref={hostRef}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={endDrag}
-          onPointerCancel={endDrag}
-        />
-        {!markup && <p className="diagram-loading">{failed ? alt : copy.loading}</p>}
+        <div className="diagram-body">
+          <div
+            className="diagram-stage"
+            ref={hostRef}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+          />
+          {!markup && <p className="diagram-loading">{failed ? alt : copy.loading}</p>}
 
-        {picked && (
-          <aside className="diagram-note" aria-live="polite">
-            <b>{picked.name}</b>
-            {picked.beyond && <em className="diagram-beyond">{copy.beyond}</em>}
-            <p>{picked.desc}</p>
-            {picked.organId && (
-              <button type="button" onClick={() => onOpenOrgan(picked.organId as OrganId)}>
-                {copy.detail} <ArrowRight size={14} />
-              </button>
+          <aside className="diagram-panel" aria-live="polite">
+            {picked ? (
+              <>
+                <h3>{picked.name}</h3>
+                {picked.beyond && <em className="diagram-beyond">{copy.beyond}</em>}
+                <p>{picked.desc}</p>
+                {picked.organId && (
+                  <button
+                    type="button"
+                    className="diagram-detail"
+                    onClick={() => onOpenOrgan(picked.organId as OrganId)}
+                  >
+                    {copy.detail} <ArrowRight size={15} />
+                  </button>
+                )}
+              </>
+            ) : (
+              <p className="diagram-prompt">{copy.hint}</p>
             )}
           </aside>
-        )}
+        </div>
       </section>
     </div>
   );
