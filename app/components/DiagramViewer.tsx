@@ -117,8 +117,11 @@ export function DiagramViewer({
     // Inkscape writes overflow="visible" on some exports, which lets the
     // drawing paint outside its own viewport — the figure then keeps its
     // natural size and hangs off the bottom of the card instead of scaling
-    // into it.
+    // into it. It writes it in both places, and a style declaration beats the
+    // presentation attribute, so removing only the attribute fixes the files
+    // that carry one and misses the files that carry both.
     svg.removeAttribute("overflow");
+    svg.style.removeProperty("overflow");
     if (!svg.getAttribute("preserveAspectRatio")) {
       svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
     }
