@@ -5021,284 +5021,416 @@
    sodipodi:cy="53.942001"
    sodipodi:rx="1.166"
    sodipodi:ry="1.166"
-   style="fill:#003cff;display:inline;overflow:visible" /><g data-organ="skull"><rect x="250.70" y="24.02" width="44.00" height="15.39" fill="none" pointer-events="all" /><text
+   style="fill:#003cff;display:inline;overflow:visible" /><text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#003cff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#003cff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="254.69786"
    y="35.917721"
    id="l_Skull"
    sodipodi:linespacing="125%"
-   inkscape:label="Skull">머리뼈</text></g>
+   inkscape:label="Skull"><tspan
+     sodipodi:role="line"
+     id="tspan6689"
+     x="254.69786"
+     y="35.917721"
+     style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial">Skull</tspan></text>
 
 
-<g data-organ="cranium"><rect x="256.06" y="40.41" width="68.00" height="15.39" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="260.05814"
    y="52.302723"
    id="l_Cranium"
    sodipodi:linespacing="125%"
-   inkscape:label="Cranium">머리덮개뼈</text></g>
+   inkscape:label="Cranium"><tspan
+     sodipodi:role="line"
+     id="tspan6693"
+     x="260.05814"
+     y="52.302723">Cranium</tspan></text>
 
 
-<g data-organ="mandible"><rect x="255.14" y="96.24" width="56.00" height="32.94" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="259.1376"
    y="116.91109"
    id="l_Mandible"
    sodipodi:linespacing="125%"
-   inkscape:label="Mandible">아래턱뼈</text></g>
+   inkscape:label="Mandible"><tspan
+     sodipodi:role="line"
+     id="tspan6697"
+     x="259.1376"
+     y="116.91109">Mandible</tspan></text>
 
 
-<g data-organ="clavicle"><rect x="321.12" y="139.38" width="44.00" height="14.56" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="325.12314"
    y="150.85573"
    id="l_Clavicle"
    sodipodi:linespacing="125%"
-   inkscape:label="Clavicle">빗장뼈</text></g>
+   inkscape:label="Clavicle"><tspan
+     sodipodi:role="line"
+     id="tspan6701"
+     x="325.12314"
+     y="150.85573">Clavicle</tspan></text>
 
 
-<g data-organ="manubrium"><rect x="320.84" y="155.89" width="68.00" height="12.64" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="324.84061"
    y="166.41409"
    id="l_Manubrium"
    sodipodi:linespacing="125%"
-   inkscape:label="Manubrium">복장뼈자루</text></g>
+   inkscape:label="Manubrium"><tspan
+     sodipodi:role="line"
+     id="tspan3939"
+     x="324.84061"
+     y="166.41409">Manubrium</tspan></text>
 
 
-<g data-organ="scapula"><rect x="319.77" y="169.53" width="44.00" height="12.64" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="323.76587"
    y="180.05397"
    id="l_Scapula"
    sodipodi:linespacing="125%"
-   inkscape:label="Scapula">어깨뼈</text></g>
+   inkscape:label="Scapula"><tspan
+     sodipodi:role="line"
+     id="tspan3943"
+     x="323.76587"
+     y="180.05397">Scapula</tspan></text>
 
 
-<g data-organ="sternum"><rect x="320.31" y="183.73" width="44.00" height="13.75" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="324.31085"
    y="194.80872"
    id="l_Sternum"
    sodipodi:linespacing="125%"
-   inkscape:label="Sternum">복장뼈</text></g>
+   inkscape:label="Sternum"><tspan
+     sodipodi:role="line"
+     id="tspan3947"
+     x="324.31085"
+     y="194.80872">Sternum</tspan></text>
 
 
-<g data-organ="ribs"><rect x="319.94" y="202.94" width="44.00" height="22.66" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="323.93625"
    y="218.46509"
    id="l_Ribs"
    sodipodi:linespacing="125%"
-   inkscape:label="Ribs">갈비뼈</text></g>
+   inkscape:label="Ribs"><tspan
+     sodipodi:role="line"
+     id="tspan3951"
+     x="323.93625"
+     y="218.46509">Ribs</tspan></text>
 
 
-<g data-organ="humerus"><rect x="333.19" y="261.83" width="44.00" height="40.91" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="337.18713"
    y="286.48712"
    id="l_Humerus"
    sodipodi:linespacing="125%"
-   inkscape:label="Humerus">위팔뼈</text></g>
+   inkscape:label="Humerus"><tspan
+     sodipodi:role="line"
+     id="tspan3955"
+     x="337.18713"
+     y="286.48712">Humerus</tspan></text>
 
 
-<g data-organ="ulna"><rect x="362.98" y="318.05" width="32.00" height="12.28" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="366.97925"
    y="328.39273"
    id="l_Ulna"
    sodipodi:linespacing="125%"
-   inkscape:label="Ulna">자뼈</text></g>
+   inkscape:label="Ulna"><tspan
+     sodipodi:role="line"
+     id="tspan3959"
+     x="366.97925"
+     y="328.39273">Ulna</tspan></text>
 
 
-<g data-organ="radius"><rect x="362.80" y="331.33" width="32.00" height="12.28" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="366.79825"
    y="341.6731"
    id="l_Radius"
    sodipodi:linespacing="125%"
-   inkscape:label="Radius">노뼈</text></g>
+   inkscape:label="Radius"><tspan
+     sodipodi:role="line"
+     id="tspan3963"
+     x="366.79825"
+     y="341.6731">Radius</tspan></text>
 
 
-<g data-organ="pelvis"><rect x="363.89" y="346.16" width="32.00" height="15.38" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="367.88937"
    y="358.05472"
    id="l_Pelvic_Girdle"
    sodipodi:linespacing="125%"
-   inkscape:label="Pelvic girdle">골반</text></g>
+   inkscape:label="Pelvic girdle"><tspan
+     sodipodi:role="line"
+     id="tspan3967"
+     x="367.88937"
+     y="358.05472">Pelvic girdle</tspan></text>
 
 
-<g data-organ="carpals"><rect x="280.81" y="398.43" width="44.00" height="21.30" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="284.81116"
    y="413.27896"
    id="l_Carpals"
    sodipodi:linespacing="125%"
-   inkscape:label="Carpals">손목뼈</text></g>
+   inkscape:label="Carpals"><tspan
+     sodipodi:role="line"
+     id="tspan3971"
+     x="284.81116"
+     y="413.27896">Carpals</tspan></text>
 
 
-<g data-organ="metacarpals"><rect x="271.97" y="422.66" width="56.00" height="17.42" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="275.9736"
    y="435.57498"
    id="l_Metacarpals"
    sodipodi:linespacing="125%"
-   inkscape:label="Metacarpals">손허리뼈</text></g>
+   inkscape:label="Metacarpals"><tspan
+     sodipodi:role="line"
+     id="tspan3975"
+     x="275.9736"
+     y="435.57498">Metacarpals</tspan></text>
 
 
-<g data-organ="phalanges-hand"><rect x="271.44" y="441.08" width="56.00" height="17.42" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="275.43536"
    y="453.99307"
    id="l_Phalanges"
    sodipodi:linespacing="125%"
-   inkscape:label="Phalanges">손가락뼈</text></g>
+   inkscape:label="Phalanges"><tspan
+     sodipodi:role="line"
+     id="tspan3979"
+     x="275.43536"
+     y="453.99307">Phalanges</tspan></text>
 
 
-<g data-organ="femur"><rect x="272.16" y="538.19" width="68.00" height="33.18" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="276.16367"
    y="558.9801"
    id="l_Femur"
    sodipodi:linespacing="125%"
-   inkscape:label="Femur">넓적다리뼈</text></g>
+   inkscape:label="Femur"><tspan
+     sodipodi:role="line"
+     id="tspan3983"
+     x="276.16367"
+     y="558.9801">Femur</tspan></text>
 
 
-<g data-organ="patella"><rect x="271.07" y="573.79" width="44.00" height="30.34" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="275.07037"
    y="593.15808"
    id="l_Patella"
    sodipodi:linespacing="125%"
-   inkscape:label="Patella">무릎뼈</text></g>
+   inkscape:label="Patella"><tspan
+     sodipodi:role="line"
+     id="tspan3987"
+     x="275.07037"
+     y="593.15808">Patella</tspan></text>
 
 
-<g data-organ="tibia"><rect x="269.98" y="605.13" width="44.00" height="30.34" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="273.97519"
    y="624.50208"
    id="l_Tibia"
    sodipodi:linespacing="125%"
-   inkscape:label="Tibia">정강뼈</text></g>
+   inkscape:label="Tibia"><tspan
+     sodipodi:role="line"
+     id="tspan3991"
+     x="273.97519"
+     y="624.50208">Tibia</tspan></text>
 
 
-<g data-organ="fibula"><rect x="271.07" y="638.82" width="56.00" height="35.04" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="275.07166"
    y="660.53809"
    id="l_Fibula"
    sodipodi:linespacing="125%"
-   inkscape:label="Fibula">종아리뼈</text></g>
+   inkscape:label="Fibula"><tspan
+     sodipodi:role="line"
+     id="tspan3995"
+     x="275.07166"
+     y="660.53809">Fibula</tspan></text>
 
 
-<g data-organ="tarsals"><rect x="271.07" y="754.02" width="44.00" height="18.66" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="275.06818"
    y="767.55408"
    id="l_Tarsals"
    sodipodi:linespacing="125%"
-   inkscape:label="Tarsals">발목뼈</text></g>
+   inkscape:label="Tarsals"><tspan
+     sodipodi:role="line"
+     id="tspan3999"
+     x="275.06818"
+     y="767.55408">Tarsals</tspan></text>
 
 
-<g data-organ="metatarsals"><rect x="271.06" y="773.68" width="56.00" height="18.66" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="275.0636"
    y="787.21008"
    id="l_Metatarsals"
    sodipodi:linespacing="125%"
-   inkscape:label="Metatarsals">발허리뼈</text></g>
+   inkscape:label="Metatarsals"><tspan
+     sodipodi:role="line"
+     id="tspan4003"
+     x="275.0636"
+     y="787.21008">Metatarsals</tspan></text>
 
 
-<g data-organ="phalanges-foot"><rect x="274.44" y="794.81" width="56.00" height="21.59" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="278.43536"
    y="809.80206"
    id="l_PhalangesFoot"
    sodipodi:linespacing="125%"
-   inkscape:label="Phalanges">발가락뼈</text></g>
+   inkscape:label="Phalanges"><tspan
+     sodipodi:role="line"
+     id="tspan4007"
+     x="278.43536"
+     y="809.80206">Phalanges</tspan></text>
 
 
-<g data-organ="cervical"><rect x="17.10" y="88.94" width="32.00" height="13.59" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="21.095659"
    y="99.933304"
    id="l_Cervicle_Vertebrae"
    sodipodi:linespacing="120%"
-   inkscape:label="Cervical Vertebrae (I-VII)">목뼈</text></g>
+   inkscape:label="Cervical Vertebrae (I-VII)"><tspan
+     sodipodi:role="line"
+     id="tspan4015"
+     x="21.095659"
+     y="99.933304">Cervical</tspan><tspan
+     sodipodi:role="line"
+     x="21.095659"
+     y="113.1333"
+     id="tspan4017">Vertebrae <tspan
+   style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+   id="tspan4019">(I-VII)</tspan></tspan></text>
 
 
-<g data-organ="thoracic"><rect x="17.83" y="114.56" width="35.66" height="35.66" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="21.825661"
    y="136.59131"
    id="l_Thoracic_Vertebrae"
    sodipodi:linespacing="120%"
-   inkscape:label="Thoracic Vertebrae (T I - T XII)">등뼈</text></g>
+   inkscape:label="Thoracic Vertebrae (T I - T XII)"><tspan
+     sodipodi:role="line"
+     id="tspan6779"
+     x="21.825661"
+     y="136.59131">Thoracic</tspan><tspan
+     sodipodi:role="line"
+     x="21.825661"
+     y="149.79131"
+     id="tspan6781">Vertebrae <tspan
+   style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+   id="tspan6783">(T I - T XII)</tspan></tspan></text>
 
 
-<g data-organ="lumbar"><rect x="17.83" y="249.97" width="52.00" height="52.00" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="21.825661"
    y="280.16531"
    id="l_Lumbar_Vertebrae"
    sodipodi:linespacing="120%"
-   inkscape:label="Lumbar Vertebrae (L I - L V)">허리뼈</text></g>
+   inkscape:label="Lumbar Vertebrae (L I - L V)"><tspan
+     sodipodi:role="line"
+     id="tspan6787"
+     x="21.825661"
+     y="280.16531">Lumbar</tspan><tspan
+     sodipodi:role="line"
+     x="21.825661"
+     y="293.36533"
+     id="tspan6789">Vertebrae <tspan
+   style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:120.00000477%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial"
+   id="tspan6791">(L I - L V)</tspan></tspan></text>
 
 
-<g data-organ="sacrum"><rect x="17.22" y="359.14" width="44.00" height="13.91" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="21.22386"
    y="370.29971"
    id="l_Sacrum"
    sodipodi:linespacing="125%"
-   inkscape:label="Sacrum">엉치뼈</text></g>
+   inkscape:label="Sacrum"><tspan
+     sodipodi:role="line"
+     id="tspan6795"
+     x="21.22386"
+     y="370.29971">Sacrum</tspan></text>
 
 
-<g data-organ="coccyx"><rect x="17.40" y="374.05" width="44.00" height="13.91" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="21.395149"
    y="385.20505"
    id="l_Coccyx"
    sodipodi:linespacing="125%"
-   inkscape:label="Coccyx">꼬리뼈</text></g>
+   inkscape:label="Coccyx"><tspan
+     sodipodi:role="line"
+     id="tspan6799"
+     x="21.395149"
+     y="385.20505">Coccyx</tspan></text>
 
 
-<g data-organ="spine"><rect x="9.29" y="74.34" width="44.00" height="13.59" fill="none" pointer-events="all" /><text
+<text
    xml:space="preserve"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#003cff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;font-size:12px"
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#003cff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    x="13.29186"
    y="85.339966"
    id="l_Spinal_Column"
    sodipodi:linespacing="125%"
-   inkscape:label="Spinal Column">척추뼈</text></g>
+   inkscape:label="Spinal Column"><tspan
+     sodipodi:role="line"
+     id="tspan6803"
+     x="13.29186"
+     y="85.339966"
+     style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial">Spinal Column</tspan></text>
 
 
 </g></svg>

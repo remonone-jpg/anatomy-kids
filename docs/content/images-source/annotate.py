@@ -67,6 +67,31 @@ svg = re.sub(r'<text\b([^>]*)>([^<]*)</text>', annotate, svg)
 HIT = getattr(importlib.import_module(module), "HIT", None)
 widened = []
 
+# How tall each label's box may be. A fixed height suits a diagram whose labels
+# are evenly spaced; where they are not — the skeleton's sit anywhere from 13
+# to 143 units apart — one height for all of them is set by the tightest pair
+# and robs every other label. So each is given the most room its own
+# neighbours leave, capped at the point where more stops helping.
+heights = {}
+if HIT and "height" not in HIT:
+    placed = []
+    for m in re.finditer(r'<text\b([^>]*)>([^<]*)</text>', svg):
+        oid = re.search(r'\sdata-organ="([^"]*)"', m.group(1))
+        x = re.search(r'\bx="([-\d.]+)"', m.group(1))
+        y = re.search(r'\by="([-\d.]+)"', m.group(1))
+        if oid and x and y:
+            placed.append((oid.group(1), float(x.group(1)), float(y.group(1))))
+    for oid, x, y in placed:
+        # Only labels in the same column can collide; the two sides of the
+        # drawing are hundreds of units apart.
+        column = [p for p in placed if p[0] != oid and abs(p[1] - x) < HIT["column"]]
+        gaps = [abs(p[2] - y) for p in column]
+        # Two boxes centred d apart, each of height h, meet when h reaches d.
+        # Taking h a little under the nearest gap therefore keeps every pair
+        # apart, whichever of the two is the shorter.
+        room = HIT["max"] if not gaps else min(HIT["max"], min(gaps) - HIT["gap"])
+        heights[oid] = max(HIT["min"], round(room, 2))
+
 
 def widen(m):
     attrs, body = m.group(1), m.group(2)
@@ -76,12 +101,13 @@ def widen(m):
     if not (oid and x and y and body.strip()):
         return m.group(0)
     size = re.search(r"font-size\s*:\s*([\d.]+)", attrs)
-    em = float(size.group(1)) if size else HIT["height"]
+    height = HIT["height"] if "height" in HIT else heights[oid.group(1)]
+    em = float(size.group(1)) if size else height
     # Hangul is full-width, so a word is about as wide as its letter count.
-    width = max(len(body.strip()) * em + 2 * HIT["pad"], HIT["height"])
+    width = max(len(body.strip()) * em + 2 * HIT["pad"], height)
     # x is the left edge and y the baseline; letters sit roughly 0.35em above it.
     left = float(x.group(1)) - HIT["pad"]
-    top = float(y.group(1)) - 0.35 * em - HIT["height"] / 2
+    top = float(y.group(1)) - 0.35 * em - height / 2
     widened.append(oid.group(1))
     return (
         '<g data-organ="%s">'
@@ -89,14 +115,19 @@ def widen(m):
         "<text%s>%s</text>"
         "</g>"
     ) % (
-        oid.group(1), left, top, width, HIT["height"],
+        oid.group(1), left, top, width, height,
         re.sub(r'\sdata-organ="[^"]*"', "", attrs), body,
     )
 
 
 if HIT:
     svg = re.sub(r'<text\b([^>]*)>([^<]*)</text>', widen, svg)
-    print("라벨 %d개에 투명 히트 영역을 덧댐 (높이 %s단위)" % (len(widened), HIT["height"]))
+    if "height" in HIT:
+        print("라벨 %d개에 투명 히트 영역을 덧댐 (높이 %s단위)" % (len(widened), HIT["height"]))
+    else:
+        sizes = sorted(heights.values())
+        print("라벨 %d개에 투명 히트 영역을 덧댐 (높이 %.1f~%.1f단위, 이웃 간격에 맞춤)"
+              % (len(widened), sizes[0], sizes[-1]))
 
 open(out_path, "w", encoding="utf-8").write(svg)
 

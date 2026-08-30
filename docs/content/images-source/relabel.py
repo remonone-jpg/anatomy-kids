@@ -9,7 +9,14 @@ import sys
 
 src_path, out_path, module = sys.argv[1], sys.argv[2], sys.argv[3]
 terms = importlib.import_module(module)
-TERMS = terms.TERMS
+# Most diagrams are keyed by the words on the page. Some cannot be: the
+# skeleton labels two different bones "Phalanges", once in the hand and once in
+# the foot, so the visible string does not identify the label. Those diagrams
+# key by the id the file already carries on each <text> instead.
+TERMS = getattr(terms, "TERMS", None)
+TERMS_BY_ID = getattr(terms, "TERMS_BY_ID", None)
+if not (TERMS or TERMS_BY_ID):
+    raise SystemExit("%s 에 TERMS 나 TERMS_BY_ID 가 없습니다" % module)
 # A label's size on screen is its size here times however much the drawing is
 # scaled to fill the panel, and that factor differs wildly between diagrams —
 # the circulatory drawing is 550 units wide and shrinks, the urinary one is 270
@@ -81,11 +88,20 @@ def swap(m):
     plain = re.sub(r"\s+", " ", re.sub(r"<[^>]*>", "", body)).strip()
     if not plain:
         return m.group(0)
-    if plain not in TERMS:
-        missing.append(plain)
+    if TERMS_BY_ID is not None:
+        eid = re.search(r'\bid="([^"]*)"', attrs)
+        key = eid.group(1) if eid else None
+        table = TERMS_BY_ID
+    else:
+        key, table = plain, TERMS
+    if key not in table:
+        missing.append("%s (%s)" % (plain, key) if key != plain else plain)
         return m.group(0)
-    seen.add(plain)
-    return "<text" + restyle(attrs) + ">" + TERMS[plain] + "</text>"
+    seen.add(key)
+    # Replacing the whole body drops any <tspan> the label was split over,
+    # which is what we want: the Korean names are one word where the English
+    # ran to two lines.
+    return "<text" + restyle(attrs) + ">" + table[key] + "</text>"
 
 
 out = re.sub(r"<text\b([^>]*)>(.*?)</text>", swap, src, flags=re.S)
@@ -127,6 +143,6 @@ if editable:
     print("'Text' 레이어 표시")
 
 open(out_path, "w", encoding="utf-8").write(out)
-print("교체 %d / 사전 %d" % (len(seen), len(TERMS)))
+print("교체 %d / 사전 %d" % (len(seen), len(TERMS_BY_ID or TERMS)))
 if missing:
     print("사전에 없어 남긴 라벨:", sorted(set(missing)))
