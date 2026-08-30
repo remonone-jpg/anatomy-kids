@@ -23,3 +23,8 @@ TERMS = {
 # three times the size of everybody else's. 5.6 units lands at roughly 15px on
 # screen, which is what the digestive diagram's labels measure.
 FONT_SIZE = 5.6
+
+# The four labels are <tspan> children of a single <text> here, one per label —
+# not one label wrapped over several lines, which is the other thing a run of
+# tspans can mean.
+SPLIT_TSPANS = True

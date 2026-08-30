@@ -16,6 +16,11 @@ TERMS = terms.TERMS
 # and nearly triples. A diagram whose scaling makes its labels the wrong size
 # beside the others says so here, in its own units.
 FONT_SIZE = getattr(terms, "FONT_SIZE", None)
+# Whether this diagram keeps each label in its own <tspan>. Asked for rather
+# than detected: a run of tspans is just as likely to be one label wrapped over
+# two lines — the circulatory drawing holds "Palmar digital v." that way — and
+# splitting those leaves two halves that match nothing.
+SPLIT_TSPANS = getattr(terms, "SPLIT_TSPANS", False)
 
 src = open(src_path, encoding="utf-8").read()
 seen, missing = set(), []
@@ -33,7 +38,7 @@ if "viewBox" not in src and box:
 # The viewer hangs tabindex, role and aria-label on whatever node carries the
 # id, and focus on a <tspan> is not dependable across browsers, so each label
 # becomes its own <text> at the coordinates its tspan carried. Nothing moves.
-split = re.search(r'<text\b([^>]*)>(\s*(?:<tspan\b[^>]*>[^<]*</tspan>\s*){2,})</text>', src)
+split = re.search(r'<text\b([^>]*)>(\s*(?:<tspan\b[^>]*>[^<]*</tspan>\s*){2,})</text>', src) if SPLIT_TSPANS else None
 if split:
     shared, pieces = split.group(1).rstrip(), []
     for t in re.finditer(r'<tspan\b([^>]*)>([^<]*)</tspan>', split.group(2)):
