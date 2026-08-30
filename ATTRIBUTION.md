@@ -154,3 +154,45 @@ below because the three sub-colons start only 26 units down.
 
 Shipped with the upstream `thebuggeddev/anatomy` repository; generated with
 Tripo. Not modified here. They are what the single-organ viewer shows.
+
+## Organ illustrations — `public/anatomy/{organ}/*.webp` — ⚠ needs checking
+
+Forty-five images: nine organs — brain, eyeball, heart, intestine, kidneys,
+liver, lungs, pancreas, skin — each with `location`, `thumb`, `organ`,
+`microscopic` and `compare`. All 720×720. They are most of what the organ
+pages show, including the "몸속의 {organ}" panel.
+
+**Where they come from is not established, and this entry records only what
+was verified.**
+
+What is known:
+
+| | |
+|---|---|
+| Added by | `thebuggeddev`, in commits `0fc4ad7` (30 files) and `758b397` (15 files) |
+| Added on | 2026-08-02, the day this project's history begins |
+| Came from | the upstream repository this one is forked from, `github.com/thebuggeddev/anatomy` |
+| Licence stated there | **none** — that repository declares no licence on GitHub and carries no `LICENSE`, `ATTRIBUTION`, `CREDITS` or `NOTICE` file at any commit its author made |
+| Licence stated here | none, until this entry |
+| Metadata in the files | none — no Exif, XMP, ICC or copyright field in any of them |
+
+What is not known:
+
+- **Whether the upstream author drew them or took them from somewhere else.**
+  Nothing in the files, the commit messages, or the repository says. Both
+  possibilities are open, and no evidence here favours either.
+- Consequently, who holds copyright, and on what terms these may be used.
+
+Why this matters: an absent licence is not permission. If the upstream author
+made them, using them in a fork is a question to put to that author. If they
+came from elsewhere, there is a third party whose name is missing from this
+file. The two lead to different obligations, and until it is known which
+applies, neither can be discharged.
+
+This differs from every other asset listed above, each of which names its
+source and its licence — the Z-Anatomy meshes are CC BY-SA, the Commons
+diagrams are public domain. These images alone have neither.
+
+Ways to settle it, none of them taken yet: ask the upstream author directly —
+the repository is public and accepts issues — or run a reverse image search on
+one of the files.
