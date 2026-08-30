@@ -112,10 +112,10 @@ export const digestionLabels: DiagramLabel[] = [
     desc: "큰창자의 마지막 부분으로, 항문 바로 앞이에요. 여기에 내용물이 모이면 뇌에 신호를 보내 화장실에 가고 싶어집니다." },
 
   { id: "small-intestine-note", label: "(작은창자)", name: "작은창자", organId: "intestine",
-    related: ["duodenum", "ileum"],
+    related: ["duodenum"],
     desc: "샘창자·빈창자·돌창자를 합쳐 작은창자라고 해요. 약 6~7m로 소화 기관 중 가장 길고, 영양분을 흡수하는 일을 맡습니다." },
 
   { id: "large-intestine-note", label: "(큰창자)", name: "큰창자", organId: "intestine",
-    related: ["colon", "cecum", "rectum"],
+    related: ["cecum", "rectum"],
     desc: "막창자·잘록창자·곧창자를 합쳐 큰창자라고 해요. 약 1.5m로 작은창자보다 짧지만 굵습니다. 물을 흡수하는 일을 맡아요." },
 ];
