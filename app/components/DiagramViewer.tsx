@@ -61,6 +61,7 @@ export function DiagramViewer({
   alt,
   title,
   labels,
+  relatedHeading,
   copy,
   onOpenOrgan,
   onClose,
@@ -70,6 +71,8 @@ export function DiagramViewer({
   /** Shown in the title bar, so the reader knows which system is open. */
   title: string;
   labels: DiagramLabel[];
+  /** Overrides the generic heading for the nearby-labels list. */
+  relatedHeading?: string;
   copy: Copy;
   onOpenOrgan: (id: OrganId) => void;
   onClose: () => void;
@@ -359,7 +362,13 @@ export function DiagramViewer({
 
                   {[
                     { key: "within", head: copy.contains, ids: picked.children },
-                    { key: "near", head: copy.related, ids: picked.related },
+                    {
+                      key: "near",
+                      head: relatedHeading ?? copy.related,
+                      // A part of this label is already listed above it. Left
+                      // in, 척추뼈 would show the same five names twice.
+                      ids: picked.related?.filter((id) => !picked.children?.includes(id)),
+                    },
                   ].map(({ key, head, ids }) =>
                     ids?.length ? (
                       <div key={key} className={`diagram-jump diagram-jump-${key}`}>

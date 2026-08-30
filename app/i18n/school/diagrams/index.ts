@@ -18,4 +18,22 @@ export function getDiagramLabels(locale: string, systemId: string): DiagramLabel
   return LABELS[locale]?.[systemId] ?? [];
 }
 
+/**
+ * What to call the list of nearby labels, which is not the same thing in every
+ * diagram: bones sit next to each other, vessels and organs run into each
+ * other. A generic heading would be true of all four and say nothing.
+ */
+const RELATED: Partial<Record<string, Partial<Record<string, string>>>> = {
+  ko: {
+    movement: "가까이 있는 뼈",
+    digestion: "이어지는 기관",
+    circulation: "이어지는 혈관",
+    excretion: "이어지는 기관",
+  },
+};
+
+export function getRelatedHeading(locale: string, systemId: string): string | undefined {
+  return RELATED[locale]?.[systemId];
+}
+
 export type { DiagramLabel };

@@ -51,7 +51,7 @@ import { getAllQuiz, getKidsQuiz, getOrganQuiz, kidsQuizAvailable, quizAvailable
 import { conditionsAvailable, getConditions } from "../i18n/conditions";
 import { getSystems, schoolAvailable } from "../i18n/school";
 import { getAllSystemQuiz, getSystemQuiz, systemQuizAvailable } from "../i18n/quiz";
-import { getDiagramLabels } from "../i18n/school/diagrams";
+import { getDiagramLabels, getRelatedHeading } from "../i18n/school/diagrams";
 import type { KnowledgeQuizItem } from "../i18n/types";
 import { speak, stopSpeaking } from "../lib/speech";
 import { readMode, serverMode, subscribeMode, writeMode, type Mode } from "../lib/mode";
@@ -819,6 +819,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           alt={activeSystem.image.alt}
           title={activeSystem.name}
           labels={getDiagramLabels(locale.code, activeSystem.id)}
+          relatedHeading={getRelatedHeading(locale.code, activeSystem.id)}
           copy={kidsCopy.diagram}
           onOpenOrgan={(id) => {
             setDiagramOpen(false);
