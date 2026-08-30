@@ -127,7 +127,11 @@ export function DiagramViewer({
     if (!homeRef.current) homeRef.current = parseViewBox(svg);
 
     const byId = new Map(labels.map((l) => [l.id, l]));
-    const targets = Array.from(svg.querySelectorAll<SVGTextElement>("text[data-organ]"));
+    // Usually the <text> itself. Where a label is a single digit it is a <g>
+    // wrapping the digit and an invisible square, because a glyph that small
+    // is not a target a fingertip can hit. Either way the id sits on exactly
+    // one element, so a label is never two tab stops.
+    const targets = Array.from(svg.querySelectorAll<SVGGraphicsElement>("[data-organ]"));
     const cleanups: (() => void)[] = [];
     for (const node of targets) {
       const entry = byId.get(node.dataset.organ ?? "");
@@ -188,7 +192,7 @@ export function DiagramViewer({
   const onPointerDown = (event: React.PointerEvent) => {
     const svg = svgRef.current;
     if (!svg) return;
-    if ((event.target as Element).closest("text[data-organ]")) return;   // let the label take it
+    if ((event.target as Element).closest("[data-organ]")) return;   // let the label take it
     drag.current = { x: event.clientX, y: event.clientY, box: parseViewBox(svg) };
     try {
       (event.currentTarget as Element).setPointerCapture(event.pointerId);
