@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Served as-is, not authored here: the Draco and Basis decoders are
+    // vendored emscripten output. Linting them reported eleven errors that
+    // nobody could act on, and a run that always fails is a run nobody reads.
+    "public/**",
   ]),
 ]);
 
