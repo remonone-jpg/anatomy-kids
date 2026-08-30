@@ -17,4 +17,11 @@ export type DiagramLabel = {
   organId?: OrganId;
   /** Beyond the school syllabus — shown, but set apart. */
   beyond?: boolean;
+  /**
+   * Labels that name parts of this one, by id. Some diagrams label a thing and
+   * its pieces both — 머리뼈 next to 머리덮개뼈 and 아래턱뼈 — and without
+   * saying so the two readings sit at the same level and the drawing looks
+   * like it is naming eight separate bones where it means three.
+   */
+  children?: string[];
 };

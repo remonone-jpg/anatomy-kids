@@ -100,6 +100,8 @@ export type KidsUiCopy = {
   diagram: {
     open: string; close: string; zoomIn: string; zoomOut: string; reset: string;
     hint: string; detail: string; beyond: string; loading: string;
+    /** Heads the list of labels that name parts of the one being read. */
+    contains: string;
   };
   systemQuiz: {
     title: string; paper: string; mixed: string; passage: string;

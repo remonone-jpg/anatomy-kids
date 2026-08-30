@@ -16,6 +16,7 @@ type Copy = {
   detail: string;
   beyond: string;
   loading: string;
+  contains: string;
 };
 
 /** A box in the SVG's own coordinates; panning and zooming move this, not the
@@ -140,6 +141,9 @@ export function DiagramViewer({
       const entry = byId.get(node.dataset.organ ?? "");
       if (!entry) continue;
       node.classList.add("diagram-hit");
+      // Named as holding parts before anything is clicked, so the grouping is
+      // visible in the drawing rather than only after the reader finds it.
+      if (entry.children?.length) node.classList.add("diagram-parent");
       node.setAttribute("tabindex", "0");
       node.setAttribute("role", "button");
       node.setAttribute("aria-label", entry.name);
@@ -157,8 +161,29 @@ export function DiagramViewer({
         node.removeEventListener("keydown", key);
       });
     }
+    // The skeleton draws a pale bar down the side of each group it names. The
+    // original tints them so faintly they read as nothing; the stylesheet
+    // deepens them, and this is the hook it needs.
+    svg.querySelectorAll('[id$="BlueBar"]').forEach((bar) => {
+      bar.classList.add("diagram-group-bar");
+    });
     return () => cleanups.forEach((fn) => fn());
   }, [mounted, labels, alt]);
+
+  // Light the chosen label, and anything it contains along with it: reading
+  // 척추뼈 should show which five labels are the parts being talked about.
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!mounted || !host || !picked) return;
+    const lit: Element[] = [];
+    for (const id of [picked.id, ...(picked.children ?? [])]) {
+      const node = host.querySelector(`[data-organ="${CSS.escape(id)}"]`);
+      if (!node) continue;
+      node.classList.add(id === picked.id ? "diagram-active" : "diagram-within");
+      lit.push(node);
+    }
+    return () => lit.forEach((n) => n.classList.remove("diagram-active", "diagram-within"));
+  }, [picked, mounted]);
 
   const setBox = useCallback((next: Box) => {
     const svg = svgRef.current;
@@ -260,6 +285,23 @@ export function DiagramViewer({
                 <h3>{picked.name}</h3>
                 {picked.beyond && <em className="diagram-beyond">{copy.beyond}</em>}
                 <p>{picked.desc}</p>
+                {picked.children?.length ? (
+                  <div className="diagram-within-list">
+                    <h4>{copy.contains}</h4>
+                    <ul>
+                      {picked.children.map((id) => {
+                        const child = labels.find((l) => l.id === id);
+                        return child ? (
+                          <li key={id}>
+                            <button type="button" onClick={() => setPicked(child)}>
+                              {child.name}
+                            </button>
+                          </li>
+                        ) : null;
+                      })}
+                    </ul>
+                  </div>
+                ) : null}
                 {picked.organId && (
                   <button
                     type="button"

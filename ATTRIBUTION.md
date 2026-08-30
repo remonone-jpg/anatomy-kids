@@ -118,6 +118,21 @@ kept in `docs/content/images-source/` so these can be rebuilt.
 Public domain carries no legal obligation to credit, but these are somebody's
 work and the table is the least that is owed.
 
+### Colours changed at display time
+
+Three of the original colours are overridden by the stylesheet when a diagram
+is shown. The files themselves are not edited — open any of them outside this
+app and the original colours are what you get — but what a reader sees here is
+not what the author drew, and that is worth stating.
+
+| What | Original | Shown as | Why |
+|---|---|---|---|
+| The skeleton's two group bars, beside 머리뼈 and 척추뼈 | `#dff3f4` | `--lavender` at 22% | At its published tint the bar is invisible against a cream page, so the grouping it exists to show does not read. |
+| Labels that hold other labels — 머리뼈, 척추뼈, 침샘, 잘록창자 | plain text | bold, with a pale halo behind the letters | Marks them as headings before anything is clicked, so a reader can tell the drawing names three bones and their parts rather than eight separate bones. |
+| The label being read, and the labels it contains | plain text | `--coral`, and `--lavender` for the parts | Shows which labels the open note is talking about. |
+
+Nothing is moved, removed or redrawn; only these fills change.
+
 ### Relabelling
 
 ```bash

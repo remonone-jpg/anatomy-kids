@@ -13,6 +13,7 @@ export const movementLabels: DiagramLabel[] = [
     id: "skull",
     label: "머리뼈",
     name: "머리뼈",
+    children: ["cranium", "mandible"],
     desc: "뇌를 감싸 보호하는 뼈예요. 하나처럼 보이지만 여러 조각이 톱니처럼 맞물려 붙어 있습니다. 갓 태어난 아기는 아직 다 붙지 않아 정수리에 말랑한 숨구멍이 있어요.",
   },
   {
@@ -97,6 +98,7 @@ export const movementLabels: DiagramLabel[] = [
     id: "spine",
     label: "척추뼈",
     name: "척추뼈",
+    children: ["cervical", "thoracic", "lumbar", "sacrum", "coccyx"],
     desc: "등을 따라 이어진 몸의 기둥이에요. 작은 뼈 33개가 블록처럼 쌓여 있어서 굽히고 돌릴 수 있습니다. 뼈 사이마다 물렁뼈가 끼어 있어 충격을 흡수하고, 가운데 통로로는 척수라는 굵은 신경이 지나가요.",
   },
   {

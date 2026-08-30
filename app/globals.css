@@ -2026,6 +2026,53 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .diagram-panel h3 { margin: 0 0 10px; font: 500 26px var(--font-serif), serif; }
 .diagram-panel p { margin: 0; color: #6e655f; font: 500 15px/1.75 var(--font-serif), serif; }
 
+/* The diagrams arrive with Inkscape's own inline styles on nearly every
+   element, and an inline style beats any rule written here. Overriding one is
+   the whole reason these declarations are marked important; they are not
+   winning a fight with our own stylesheet. */
+
+/* A label that names a group, marked before anything is clicked so the reader
+   can see 머리뼈 holds 머리덮개뼈 and 아래턱뼈 without hunting for it. The pale
+   halo reads as a background behind the letters without a box to align. */
+.diagram-parent,
+.diagram-parent text {
+  paint-order: stroke !important;
+  stroke: var(--canvas) !important;
+  stroke-width: 5px !important;
+  stroke-linejoin: round !important;
+  font-weight: 700 !important;
+}
+
+/* The bar the original draws beside each group, at #dff3f4 — so faint on a
+   cream page that it reads as nothing. */
+.diagram-group-bar { fill: var(--lavender) !important; opacity: 0.22; }
+
+.diagram-active,
+.diagram-active text { fill: var(--coral) !important; }
+
+/* Parts of whatever is being read: lit too, a step below the label itself. */
+.diagram-within,
+.diagram-within text { fill: var(--lavender) !important; }
+
+.diagram-within-list { margin-top: 16px; }
+.diagram-within-list h4 {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font: 600 12px var(--font-sans), sans-serif;
+  letter-spacing: 0.04em;
+}
+.diagram-within-list ul { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.diagram-within-list button {
+  padding: 5px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 500 13px var(--font-serif), serif;
+  cursor: pointer;
+}
+.diagram-within-list button:hover { border-color: var(--lavender); color: var(--lavender); }
+
 .diagram-prompt { color: var(--muted) !important; }
 .diagram-beyond {
   align-self: flex-start; margin: 0 0 12px; padding: 3px 10px;

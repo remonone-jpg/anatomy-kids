@@ -73,6 +73,7 @@ export const kids: KidsCopy = {
       detail: "자세히 보기",
       beyond: "더 알고 싶다면",
       loading: "그림을 불러오는 중이에요",
+      contains: "여기에 속하는 것",
     },
     systemQuiz: {
       title: "기관계 문제",

@@ -24,6 +24,7 @@ export const digestionLabels: DiagramLabel[] = [
     desc: "음식을 완전히 소화하고 영양분을 흡수해요. 길이가 약 6m로 가장 길어요. 그림의 '돌창자'는 작은창자의 마지막 부분을 가리키는 이름이에요." },
 
   { id: "colon", label: "잘록창자", name: "큰창자", organId: "intestine",
+    children: ["transverse-colon", "ascending-colon", "descending-colon"],
     desc: "남은 것에서 물을 흡수하고 나머지를 내보낼 준비를 해요. 잘록창자는 큰창자의 가장 긴 부분이에요." },
 
   { id: "anus", label: "항문", name: "항문",
@@ -44,6 +45,7 @@ export const digestionLabels: DiagramLabel[] = [
     desc: "음식을 이 사이로 밀어 넣고 침과 골고루 섞어 줘요. 맛도 느끼고, 다 씹은 음식을 목구멍으로 넘기는 일도 합니다." },
 
   { id: "salivary-glands", label: "침샘", name: "침샘",
+    children: ["parotid", "submandibular", "sublingual"],
     desc: "침을 만들어 입안으로 내보내는 곳이에요. 하루에 우유갑 하나 반쯤 되는 침을 만들어요. 침에는 녹말을 분해하는 물질이 들어 있어서, 밥을 오래 씹으면 단맛이 나요." },
 
   { id: "parotid", label: "귀밑샘", name: "귀밑샘", beyond: true,
