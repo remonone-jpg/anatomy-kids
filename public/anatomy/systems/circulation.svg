@@ -2490,79 +2490,79 @@
        y="147.46869"
        x="274.43484"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">빗장밑동맥·정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="subclavian">빗장밑동맥·정맥</text>
     <text
        id="text5588-9-8"
        y="184.62634"
        x="249.16463"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">노쪽피부정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="cephalic">노쪽피부정맥</text>
     <text
        id="text5596-2-2"
        y="165.84732"
        x="260.19446"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">겨드랑동맥·정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="axillary">겨드랑동맥·정맥</text>
     <text
        id="text5604-3-1"
        y="203.00497"
        x="242.14513"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">위대정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="svc">위대정맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
        x="235.82759"
        y="223.32214"
-       id="text5608-7-5" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">아래대정맥</text>
+       id="text5608-7-5" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="ivc">아래대정맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
        x="224.61589"
        y="281.75519"
-       id="text5616-5-0" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">위팔동맥·정맥</text>
+       id="text5616-5-0" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="brachial">위팔동맥·정맥</text>
     <text
        id="text5620-3-1"
        y="302.86661"
        x="221.08662"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">자쪽피부정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="basilic">자쪽피부정맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
        x="217.22591"
        y="347.57678"
-       id="text5624-6-5" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">팔오금중간정맥</text>
+       id="text5624-6-5" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="median-cubital">팔오금중간정맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
        x="215.28642"
        y="379.25522"
-       id="text5632-1-1" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">자동맥</text>
+       id="text5632-1-1" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="ulnar">자동맥</text>
     <text
        id="text5636-8-5"
        y="398.02771"
        x="215.82204"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">노동맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="radial">노동맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
        x="169.42242"
        y="435.50873"
-       id="text5640-2-4" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">손바닥쪽손가락정맥</text>
+       id="text5640-2-4" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="palmar-digital-vein">손바닥쪽손가락정맥</text>
     <text
        id="text5644-8-3"
        y="463.11627"
        x="170.61935"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">손가락동맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="digital-artery">손가락동맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="229.56972"
        y="243.67178"
-       id="text5700-1-0" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">간정맥</text>
+       id="text5700-1-0" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="hepatic-vein">간정맥</text>
     <text
        id="text6990-8-3"
        y="17.599344"
@@ -2581,87 +2581,87 @@
        y="263.02957"
        x="229.56972"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">간문맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="portal-vein">간문맥</text>
     <text
        id="text5648-5-8"
        y="777.90027"
        x="304.01419"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">활동맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="arcuate">활동맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
        x="304.01419"
        y="795.51947"
-       id="text5652-9-7" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">발등쪽발가락동맥</text>
+       id="text5652-9-7" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="dorsal-digital-artery">발등쪽발가락동맥</text>
     <text
        x="459.40628"
        y="46.744354"
        id="text3493-5-1"
        
        font-size="11.25px"
-       style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:start;text-anchor:start" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">정맥굴</text>
+       style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:start;text-anchor:start" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="venous-sinus">정맥굴</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
        x="516.90094"
        y="191.37955"
-       id="text5600-1-1" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">대동맥</text>
+       id="text5600-1-1" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="aorta">대동맥</text>
     <text
        id="text5612-7-5"
        y="264.29242"
        x="485.34476"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:end;text-anchor:end"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">내림대동맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="descending-aorta">내림대동맥</text>
     <text
        id="text5656-1-8"
        y="64.255516"
        x="458.74069"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">뇌바닥동맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="basilar">뇌바닥동맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="458.74069"
        y="81.766678"
-       id="text5660-7-4" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">속목동맥</text>
+       id="text5660-7-4" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="internal-carotid">속목동맥</text>
     <text
        id="text5664-9-0"
        y="99.27784"
        x="458.74069"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">바깥목동맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="external-carotid">바깥목동맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="458.74069"
        y="116.789"
-       id="text5668-3-6" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">바깥목정맥</text>
+       id="text5668-3-6" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="external-jugular">바깥목정맥</text>
     <text
        id="text5672-2-4"
        y="136.80505"
        x="458.74069"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">속목정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="internal-jugular">속목정맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="459.85397"
        y="156.82111"
-       id="text5676-3-8" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">척추동맥</text>
+       id="text5676-3-8" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="vertebral">척추동맥</text>
     <text
        id="text5680-9-9"
        y="174.33226"
        x="485.74051"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">온목동맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="common-carotid">온목동맥</text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-weight:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#800080;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="534.76929"
        y="205.77708"
        id="text5684-6-2"
-       transform="translate(-17.852721,2.545927)" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">허파동맥·정맥</text>
+       transform="translate(-17.852721,2.545927)" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="pulmonary">허파동맥·정맥</text>
     <text
        id="text5688-7-4"
        y="206.91264"
@@ -2679,127 +2679,127 @@
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#000000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="516.43317"
        y="227.60405"
-       id="text5692-7-8" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">심장</text>
+       id="text5692-7-8" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="heart">심장</text>
     <text
        id="text5696-9-5"
        y="284.30847"
        x="485.74051"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">복강동맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="celiac">복강동맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="485.34476"
        y="349.90799"
-       id="text5708-9-9" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">콩팥동맥·정맥</text>
+       id="text5708-9-9" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="renal">콩팥동맥·정맥</text>
     <text
        id="text5720-4-1"
        y="384.39938"
        x="485.74081"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">온엉덩동맥·정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="common-iliac">온엉덩동맥·정맥</text>
     <text
        id="text5728-8-4"
        y="401.91055"
        x="485.21487"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">속엉덩동맥·정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="internal-iliac">속엉덩동맥·정맥</text>
     <text
        id="text5736-7-4"
        y="419.42169"
        x="485.34476"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">바깥엉덩동맥·정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="external-iliac">바깥엉덩동맥·정맥</text>
     <text
        id="text5744-5-5"
        y="630.02362"
        x="465.10599"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">큰두렁정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="great-saphenous">큰두렁정맥</text>
     <text
        id="text5748-1-4"
        y="507.41956"
        x="465.18533"
        style="font-size:11.3334px;font-weight:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">넙다리동맥·정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="femoral">넙다리동맥·정맥</text>
     <text
        id="text5756-0-4"
        y="594.52808"
        x="465.18533"
        style="font-size:11.3334px;font-weight:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">오금동맥·정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="popliteal">오금동맥·정맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="465.10599"
        y="649.94305"
-       id="text5764-1-3" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">작은두렁정맥</text>
+       id="text5764-1-3" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="small-saphenous">작은두렁정맥</text>
     <text
        id="text5772-6-5"
        y="687.58484"
        x="465.8873"
        style="font-size:11.3334px;font-weight:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">뒤정강동맥·정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="posterior-tibial">뒤정강동맥·정맥</text>
     <text
        id="text5784-2-9"
        y="774.93945"
        x="467.29117"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">발등정맥활</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="dorsal-venous-arch">발등정맥활</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#0000ff;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="467.29117"
        y="791.82288"
-       id="text5788-3-8" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">발등쪽발가락정맥</text>
+       id="text5788-3-8" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="dorsal-digital-vein">발등쪽발가락정맥</text>
     <text
        xml:space="preserve"
        style="font-size:11.3334px;font-weight:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="465.8873"
        y="669.86237"
-       id="text5768-6-6" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">앞정강동맥·정맥</text>
+       id="text5768-6-6" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="anterior-tibial">앞정강동맥·정맥</text>
     <text
        xml:space="preserve"
        style="font-size:11.3334px;font-weight:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="465.8873"
        y="705.30731"
-       id="text5776-3-9" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">종아리동맥·정맥</text>
+       id="text5776-3-9" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="fibular">종아리동맥·정맥</text>
     <text
        xml:space="preserve"
        style="font-size:11.3334px;font-weight:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="465.18533"
        y="490.11356"
-       id="text6879-6-2" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">깊은넙다리동맥·정맥</text>
+       id="text6879-6-2" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="deep-femoral">깊은넙다리동맥·정맥</text>
     <text
        id="text5716-2-3"
        y="366.85147"
        x="485.74734"
        style="font-size:11.3334px;font-weight:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">생식샘동맥·정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="gonadal">생식샘동맥·정맥</text>
     <text
        xml:space="preserve"
        style="font-size:12.6667px;font-weight:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="485.80856"
        y="320.99683"
-       id="text5827-7-0" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">위창자간막동맥·정맥</text>
+       id="text5827-7-0" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="superior-mesenteric">위창자간막동맥·정맥</text>
     <text
        xml:space="preserve"
        style="font-size:11.3334px;font-weight:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
        x="516.83582"
        y="244.54752"
-       id="text9168-0" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">심장동맥·정맥</text>
+       id="text9168-0" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="coronary">심장동맥·정맥</text>
     <text
        id="text1628-9"
        y="301.25192"
        x="485.63669"
        style="font-size:11.3334px;font-weight:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">지라동맥·정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="splenic">지라동맥·정맥</text>
     <text
        id="text14733"
        y="472.26407"
        x="465.18533"
        style="font-size:11.3334px;font-weight:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#ff0000;stroke:none;stroke-width:1;text-align:start;text-anchor:start"
-       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif">온넙다리동맥·정맥</text>
+       xml:space="preserve" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" data-organ="common-femoral">온넙다리동맥·정맥</text>
   </g>
   <g
      inkscape:groupmode="layer"

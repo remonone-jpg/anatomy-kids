@@ -1,9 +1,10 @@
 import type { DiagramLabel } from "./types";
+import { circulationLabels } from "./circulation-labels-ko";
 import { digestionLabels } from "./digestion-labels-ko";
 
 /** Korean only, like the rest of the school layer. */
 const LABELS: Partial<Record<string, Partial<Record<string, DiagramLabel[]>>>> = {
-  ko: { digestion: digestionLabels },
+  ko: { digestion: digestionLabels, circulation: circulationLabels },
 };
 
 export function getDiagramLabels(locale: string, systemId: string): DiagramLabel[] {
