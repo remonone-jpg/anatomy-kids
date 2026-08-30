@@ -112,6 +112,7 @@ kept in `docs/content/images-source/` so these can be rebuilt.
 |---|---|---|---|---|
 | `digestion.svg` | [Digestive system diagram edit.svg](https://commons.wikimedia.org/wiki/File:Digestive_system_diagram_edit.svg) | Mariana Ruiz, edited by Joaquim Alves Gaspar, Jmarchn | Public domain | **All 26 labels replaced with Korean**; **a subtitle "(큰창자)" added** beside 잘록창자, which the original does not have; `data-organ` attributes added to every label; **font size lowered from 18 units to 13** so the labels come out the same size on screen as the other diagrams'. Artwork and leader lines untouched. |
 | `circulation-ko.svg` | [Circulatory System en.svg](https://commons.wikimedia.org/wiki/File:Circulatory_System_en.svg) | LadyofHats, Mariana Ruiz Villarreal | Public domain | **All 51 labels replaced with Korean**; `data-organ` attributes added to every label; **the "Text to path" layer deleted and the "Text" layer un-hidden** — the original carries its labels twice, and the baked-in outline copy was the one that painted. Artwork and leader lines untouched. The `-ko` suffix keeps the relabelled file from ever being confused with the English original. |
+| `respiration.svg` | [Respiratory system complete en.svg](https://commons.wikimedia.org/wiki/File:Respiratory_system_complete_en.svg) | Wikimedia Commons contributors | Public domain | **All 48 labels replaced with Korean**; **the multilingual `<switch>` wrappers unwrapped** — the original serves Kurdish, Persian, Central Kurdish and English from one file, and a browser picks by its own locale, so a Kurdish reader would have seen the original Kurdish where everyone else saw Korean. The English fallback is kept and the other 167 `<text>` elements removed, which takes the file from 222 labels to 48. Seven labels the original sets over two lines are joined ("Alveolar"+"sacs", "Oral"+"cavity" and five more). Font set to the Hangul stack at 15 units so the labels match the other diagrams on screen; `data-organ` attributes added. Artwork and leader lines untouched. **The original misspells "Capillary" as "Capilllary"**, with three l's; the Korean replacement does not carry it through. |
 | `movement.svg` | [Human skeleton front en.svg](https://commons.wikimedia.org/wiki/File:Human_skeleton_front_en.svg) | LadyofHats, Mariana Ruiz Villarreal | Public domain | **All 28 labels replaced with Korean**; the roman numerals in the three vertebrae labels dropped, which also brought each onto one line; font set to the Hangul stack at 12 units — as far as it can grow before 자뼈 and 노뼈, 13.3 units apart, would meet; `data-organ` attributes added, each label wrapped in a `<g>` with an invisible box sized to its own neighbours. Artwork, leader lines and the grouping bars untouched. **Replaces the unlabelled edition by Mikael Häggström** used until now, which was this same drawing with the labels removed; the artwork is identical, 906 of 906 paths matching. |
 | `excretion.svg` | [Illu urinary system numbers.svg](https://commons.wikimedia.org/wiki/File:Illu_urinary_system_numbers.svg) | Unknown (US federal government work); SVG by Luigi Chiesa | Public domain | **The four numbers replaced with Korean names** — 콩팥, 오줌관, 방광, 요도. The original is the language-neutral cut and publishes no legend, so what each number meant was established from the labelled edition of the same drawing and from the leader lines in the file itself; both are recorded in `excretion_terms.py`. The numbers, which the original holds as `<tspan>` children of one `<text>`, split into a `<text>` each at the same coordinates; **a `viewBox` added**, absent in the original, without which the drawing will not scale; font set to the Hangul stack at 4 units so the labels match the other diagrams on screen; `data-organ` attributes added, each label wrapped in a `<g>` with an invisible box so a fingertip can hit it. Artwork and leader lines untouched. |
 
@@ -158,6 +159,16 @@ python3 docs/content/images-source/relabel.py \
 python3 docs/content/images-source/annotate.py \
   /tmp/skeleton-ko.svg \
   public/anatomy/systems/movement.svg skeleton_ids
+
+# The respiratory diagram is a multilingual file: relabel.py unwraps its
+# <switch> wrappers, keeps the English fallback and joins the seven two-line
+# labels before putting the Korean in.
+python3 docs/content/images-source/relabel.py \
+  docs/content/images-source/Respiratory_system_complete_en.svg \
+  /tmp/respiration-ko.svg respiration_terms
+python3 docs/content/images-source/annotate.py \
+  /tmp/respiration-ko.svg \
+  public/anatomy/systems/respiration.svg respiration_ids
 
 # The digestive diagram predates this pipeline and has no terms module, so its
 # label size is set on the built file instead of during the rebuild.

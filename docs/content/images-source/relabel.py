@@ -28,6 +28,15 @@ FONT_SIZE = getattr(terms, "FONT_SIZE", None)
 # two lines — the circulatory drawing holds "Palmar digital v." that way — and
 # splitting those leaves two halves that match nothing.
 SPLIT_TSPANS = getattr(terms, "SPLIT_TSPANS", False)
+# Commons hosts some of these as one file serving several languages: each label
+# is a <switch> holding a <text> per language, and the browser picks by its own
+# locale. Ours has to be the only one left, or a Kurdish reader gets the
+# original Kurdish where every other reader gets Korean.
+UNWRAP_SWITCH = getattr(terms, "UNWRAP_SWITCH", False)
+# Labels the original breaks over two lines, as (id to keep, id to drop). The
+# kept one takes the whole phrase; the other would otherwise be a second,
+# meaningless target.
+MERGE = getattr(terms, "MERGE", [])
 
 src = open(src_path, encoding="utf-8").read()
 seen, missing = set(), []
@@ -58,6 +67,40 @@ if split:
     if pieces:
         src = src[:split.start()] + "".join(pieces) + src[split.end():]
         print("tspan %d개를 <text> 로 분리" % len(pieces))
+
+
+if UNWRAP_SWITCH:
+    # Keep the branch with no systemLanguage — the fallback, which is the
+    # English one — and lift it out with whatever the <switch> was carrying for
+    # it. Leaving the <switch> in place and only emptying it would keep the
+    # drawing dependent on conditional rendering for no reason, and put our
+    # click targets and highlight rules inside it.
+    kept = 0
+
+    def unwrap(m):
+        global kept
+        head, body = m.group(1), m.group(2)
+        inherited = dict(re.findall(r'([\w-]+)="([^"]*)"', head))
+        for t in re.findall(r"<text\b.*?</text>", body, re.S):
+            if "systemLanguage=" in t[: t.find(">")]:
+                continue
+            own = t[: t.find(">") + 1]
+            add = "".join(
+                ' %s="%s"' % (k, v) for k, v in inherited.items() if ('%s="' % k) not in own
+            )
+            kept += 1
+            return own[:-1].rstrip() + add + ">" + t[t.find(">") + 1 : ]
+        return m.group(0)     # no fallback branch; leave it alone
+
+    src = re.sub(r"<switch\b([^>]*)>(.*?)</switch>", unwrap, src, flags=re.S)
+    print("switch %d개를 풀어 기본 언어만 남김" % kept)
+
+for keep_id, drop_id in MERGE:
+    m = re.search(r'<text\b[^>]*\bid="%s".*?</text>' % re.escape(drop_id), src, re.S)
+    if m:
+        src = src[: m.start()] + src[m.end() :]
+if MERGE:
+    print("두 줄로 나뉜 라벨 %d건을 하나로 합침" % len(MERGE))
 
 
 def restyle(attrs):
