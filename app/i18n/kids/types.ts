@@ -102,6 +102,14 @@ export type KidsUiCopy = {
     hint: string; detail: string; beyond: string; loading: string;
     /** Heads the list of labels that name parts of the one being read. */
     contains: string;
+    /** Badge on a label that is part of a larger one; takes the parent's name. */
+    belongsTo: string;
+    tryIt: string;
+    related: string;
+    /** Takes the position and the total, e.g. 28개 중 3번째. */
+    position: string;
+    prev: string;
+    next: string;
   };
   systemQuiz: {
     title: string; paper: string; mixed: string; passage: string;

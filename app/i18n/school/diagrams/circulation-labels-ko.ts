@@ -38,9 +38,10 @@ export const circulationLabels: DiagramLabel[] = [
   // ─── 머리와 목 ───
 
   { id: "common-carotid", label: "온목동맥", name: "온목동맥", beyond: true,
-    desc: "머리로 피를 보내는 굵은 동맥이에요. 목 옆에 손가락을 대면 맥박이 잡히는 그 자리입니다. 위로 올라가다 속목동맥과 바깥목동맥으로 갈라져요." },
+  desc: "머리로 피를 보내는 굵은 동맥이에요. 위로 올라가다 속목동맥과 바깥목동맥으로 갈라져요.",
+  tryIt: "목 옆에 손가락 두 개를 살짝 대 보세요. 맥박이 잡혀요." },
 
-  { id: "internal-carotid", label: "속목동맥", name: "속목동맥", beyond: true,
+ { id: "internal-carotid", label: "속목동맥", name: "속목동맥", beyond: true,
     desc: "머리뼈 안으로 들어가 뇌에 피를 대는 동맥이에요. 뇌는 몸에서 가장 많은 피를 쓰는 기관이라 이 혈관이 매우 중요합니다." },
 
   { id: "external-carotid", label: "바깥목동맥", name: "바깥목동맥", beyond: true,
@@ -73,9 +74,10 @@ export const circulationLabels: DiagramLabel[] = [
     desc: "위팔 안쪽을 지나는 혈관이에요. 혈압을 잴 때 팔에 감는 띠가 누르는 것이 바로 이 동맥입니다." },
 
   { id: "radial", label: "노동맥", name: "노동맥", beyond: true,
-    desc: "아래팔의 엄지손가락 쪽을 지나는 동맥이에요. 손목 안쪽에서 맥박을 짚을 때 만져지는 그 혈관입니다. '노'는 아래팔 바깥쪽 뼈의 이름이에요." },
+  desc: "아래팔의 엄지손가락 쪽을 지나는 동맥이에요. '노'는 아래팔 바깥쪽 뼈의 이름이에요.",
+  tryIt: "손목 안쪽 엄지 쪽에 손가락을 대 보세요. 맥박이 느껴집니다." },
 
-  { id: "ulnar", label: "자동맥", name: "자동맥", beyond: true,
+ { id: "ulnar", label: "자동맥", name: "자동맥", beyond: true,
     desc: "아래팔의 새끼손가락 쪽을 지나는 동맥이에요. 노동맥과 짝을 이루어 손에 피를 댑니다. '자'는 아래팔 안쪽 뼈의 이름이에요." },
 
   { id: "cephalic", label: "노쪽피부정맥", name: "노쪽피부정맥", beyond: true,
@@ -143,9 +145,10 @@ export const circulationLabels: DiagramLabel[] = [
     desc: "정강이 앞쪽을 따라 내려가는 혈관이에요. 발등까지 이어져 발가락에 피를 댑니다." },
 
   { id: "posterior-tibial", label: "뒤정강동맥·정맥", name: "뒤정강동맥과 정맥", beyond: true,
-    desc: "종아리 뒤쪽을 따라 내려가는 혈관이에요. 안쪽 복사뼈 뒤에서 맥박을 짚을 수 있습니다. 발에 피가 잘 가는지 확인할 때 여기를 만져 봐요." },
+  desc: "종아리 뒤쪽을 따라 내려가는 혈관이에요. 안쪽 복사뼈 뒤에서 맥박을 짚을 수 있습니다.",
+  tryIt: "안쪽 복사뼈 뒤를 살짝 만져 보세요. 여기서도 맥박이 잡혀요." },
 
-  { id: "fibular", label: "종아리동맥·정맥", name: "종아리동맥과 정맥", beyond: true,
+ { id: "fibular", label: "종아리동맥·정맥", name: "종아리동맥과 정맥", beyond: true,
     desc: "종아리 바깥쪽 뼈를 따라 내려가는 혈관이에요. 뒤정강혈관과 짝을 이루어 종아리 근육에 피를 댑니다." },
 
   { id: "great-saphenous", label: "큰두렁정맥", name: "큰두렁정맥", beyond: true,

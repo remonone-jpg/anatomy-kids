@@ -74,6 +74,12 @@ export const kids: KidsCopy = {
       beyond: "더 알고 싶다면",
       loading: "그림을 불러오는 중이에요",
       contains: "여기에 속하는 것",
+      belongsTo: "{name}에 속함",
+      tryIt: "직접 해봐요",
+      related: "가까이 있는 것",
+      position: "{total}개 중 {n}번째",
+      prev: "이전",
+      next: "다음",
     },
     systemQuiz: {
       title: "기관계 문제",

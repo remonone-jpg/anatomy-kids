@@ -1975,7 +1975,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .diagram-body {
   flex: 1; min-height: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-columns: minmax(0, 1fr) 320px;
   /* The row has to be sized here. Left implicit it is `auto`, and a percentage
      height inside an auto row never resolves — the drawing then kept its own
      height and ran off the bottom of the card. */
@@ -2017,14 +2017,80 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 .diagram-panel {
   display: flex; flex-direction: column;
-  min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: 26px 24px;
+  min-height: 0;
+  padding: 26px 24px 18px;
   border: 1px solid var(--line); border-radius: 26px;
   background: #fffaf2;
   box-shadow: var(--shadow);
 }
-.diagram-panel h3 { margin: 0 0 10px; font: 500 26px var(--font-serif), serif; }
+/* The note scrolls; the pager below it does not, so a reader stepping through
+   twenty-eight labels never has to scroll to find the next one. */
+.diagram-read { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; }
+.diagram-panel h3 { margin: 0 0 10px; font: 500 19px var(--font-serif), serif; }
 .diagram-panel p { margin: 0; color: #6e655f; font: 500 15px/1.75 var(--font-serif), serif; }
+
+.diagram-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px !important; }
+.diagram-badge {
+  padding: 3px 9px;
+  border-radius: 999px;
+  font: 600 11px var(--font-sans), sans-serif;
+  letter-spacing: 0.02em;
+}
+.diagram-badge-parent { background: rgba(141, 107, 204, 0.12); color: var(--lavender); }
+.diagram-badge-beyond { background: rgba(118, 157, 116, 0.14); color: var(--sage); }
+
+/* Something to do with your hands, kept out of the paragraph so it is not read
+   as one more fact. */
+.diagram-try {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border: 1px dashed rgba(118, 157, 116, 0.45);
+  border-radius: 14px;
+  background: rgba(118, 157, 116, 0.07);
+}
+.diagram-try h4 {
+  display: flex; align-items: center; gap: 6px;
+  margin: 0 0 6px;
+  color: var(--sage);
+  font: 700 12px var(--font-sans), sans-serif;
+}
+.diagram-try p { color: var(--ink) !important; font-size: 14px !important; }
+
+.diagram-jump { margin-top: 16px; }
+.diagram-jump h4 {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font: 600 12px var(--font-sans), sans-serif;
+  letter-spacing: 0.04em;
+}
+.diagram-jump ul { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.diagram-jump button {
+  padding: 5px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 500 13px var(--font-serif), serif;
+  cursor: pointer;
+}
+.diagram-jump button:hover { border-color: var(--lavender); color: var(--lavender); }
+
+.diagram-step {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.diagram-step span { color: var(--muted); font: 500 12px var(--font-sans), sans-serif; }
+.diagram-step button {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 6px 10px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: var(--paper); color: var(--ink);
+  font: 600 12px var(--font-sans), sans-serif;
+  cursor: pointer;
+}
+.diagram-step button:hover:not(:disabled) { border-color: var(--coral); color: var(--coral); }
+.diagram-step button:disabled { opacity: 0.35; cursor: default; }
 
 /* The diagrams arrive with Inkscape's own inline styles on nearly every
    element, and an inline style beats any rule written here. Overriding one is
@@ -2054,24 +2120,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .diagram-within,
 .diagram-within text { fill: var(--lavender) !important; }
 
-.diagram-within-list { margin-top: 16px; }
-.diagram-within-list h4 {
-  margin: 0 0 8px;
-  color: var(--muted);
-  font: 600 12px var(--font-sans), sans-serif;
-  letter-spacing: 0.04em;
-}
-.diagram-within-list ul { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.diagram-within-list button {
-  padding: 5px 11px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--paper);
-  color: var(--ink);
-  font: 500 13px var(--font-serif), serif;
-  cursor: pointer;
-}
-.diagram-within-list button:hover { border-color: var(--lavender); color: var(--lavender); }
 
 .diagram-prompt { color: var(--muted) !important; }
 .diagram-beyond {

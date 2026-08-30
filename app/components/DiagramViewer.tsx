@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowRight, Maximize2, Minus, Plus, RotateCcw, X } from "lucide-react";
+import {
+  ArrowRight, ChevronLeft, ChevronRight, Hand, Maximize2, Minus, Plus, RotateCcw, X,
+} from "lucide-react";
 import type { OrganId } from "../lib/anatomy-data";
 import type { DiagramLabel } from "../i18n/school/diagrams";
 import { asset } from "../lib/asset";
@@ -17,7 +19,16 @@ type Copy = {
   beyond: string;
   loading: string;
   contains: string;
+  belongsTo: string;
+  tryIt: string;
+  related: string;
+  position: string;
+  prev: string;
+  next: string;
 };
+
+const fill = (template: string, values: Record<string, string | number>) =>
+  template.replace(/\{(\w+)\}/g, (whole, key) => String(values[key] ?? whole));
 
 /** A box in the SVG's own coordinates; panning and zooming move this, not the
  *  element, so a click lands where the reader thinks it did. */
@@ -167,6 +178,21 @@ export function DiagramViewer({
     svg.querySelectorAll('[id$="BlueBar"]').forEach((bar) => {
       bar.classList.add("diagram-group-bar");
     });
+
+    // Two of the four drawings paint their own white page behind the artwork.
+    // On a cream card that reads as a photograph pasted on rather than a
+    // picture belonging to the page, and it is the only thing making the four
+    // look like different things. Matched by covering the whole canvas rather
+    // than by id, since neither file names it the same way.
+    const box = parseViewBox(svg);
+    svg.querySelectorAll<SVGRectElement>("rect").forEach((rect) => {
+      const wide = Math.abs(rect.width.baseVal.value - box.w) < 2;
+      const tall = Math.abs(rect.height.baseVal.value - box.h) < 2;
+      const white = /^(#fff(fff)?|white|rgb\(255,\s*255,\s*255\))$/i.test(
+        rect.style.fill || rect.getAttribute("fill") || "",
+      );
+      if (wide && tall && white) rect.style.fill = "transparent";
+    });
     return () => cleanups.forEach((fn) => fn());
   }, [mounted, labels, alt]);
 
@@ -241,13 +267,39 @@ export function DiagramViewer({
     drag.current = null;
   };
 
+  // Reading the labels in order. Hunting for the next one in the drawing is
+  // the hard part — 자뼈 and 노뼈 are thirteen units apart — so the panel also
+  // walks the list. It stops at both ends rather than wrapping: "28개 중
+  // 28번째" with a dead 다음 button is how a reader knows they saw everything.
+  const at = picked ? labels.findIndex((l) => l.id === picked.id) : -1;
+  const step = useCallback(
+    (delta: -1 | 1) => {
+      if (!labels.length) return;
+      const next = at < 0 ? (delta > 0 ? 0 : labels.length - 1) : at + delta;
+      if (next < 0 || next >= labels.length) return;
+      setPicked(labels[next]);
+    },
+    [at, labels],
+  );
+
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
+      // Let the arrows do their usual job inside a control.
+      const target = event.target as HTMLElement | null;
+      if (target && ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)) return;
+      if (event.key === "ArrowRight") { event.preventDefault(); step(1); }
+      if (event.key === "ArrowLeft") { event.preventDefault(); step(-1); }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [onClose, step]);
+
+  const parent = picked ? labels.find((l) => l.children?.includes(picked.id)) : undefined;
+  const jump = (id: string) => {
+    const found = labels.find((l) => l.id === id);
+    if (found) setPicked(found);
+  };
 
   return (
     <div className="modal-backdrop diagram-backdrop" role="presentation" onMouseDown={onClose}>
@@ -279,42 +331,91 @@ export function DiagramViewer({
           />
           {!markup && <p className="diagram-loading">{failed ? alt : copy.loading}</p>}
 
-          <aside className="diagram-panel" aria-live="polite">
-            {picked ? (
-              <>
-                <h3>{picked.name}</h3>
-                {picked.beyond && <em className="diagram-beyond">{copy.beyond}</em>}
-                <p>{picked.desc}</p>
-                {picked.children?.length ? (
-                  <div className="diagram-within-list">
-                    <h4>{copy.contains}</h4>
-                    <ul>
-                      {picked.children.map((id) => {
-                        const child = labels.find((l) => l.id === id);
-                        return child ? (
-                          <li key={id}>
-                            <button type="button" onClick={() => setPicked(child)}>
-                              {child.name}
-                            </button>
-                          </li>
-                        ) : null;
-                      })}
-                    </ul>
-                  </div>
-                ) : null}
-                {picked.organId && (
-                  <button
-                    type="button"
-                    className="diagram-detail"
-                    onClick={() => onOpenOrgan(picked.organId as OrganId)}
-                  >
-                    {copy.detail} <ArrowRight size={15} />
-                  </button>
-                )}
-              </>
-            ) : (
-              <p className="diagram-prompt">{copy.hint}</p>
-            )}
+          <aside className="diagram-panel">
+            <div className="diagram-read" aria-live="polite">
+              {picked ? (
+                <>
+                  <h3>{picked.name}</h3>
+                  {(parent || picked.beyond) && (
+                    <p className="diagram-badges">
+                      {parent && (
+                        <span className="diagram-badge diagram-badge-parent">
+                          {fill(copy.belongsTo, { name: parent.name })}
+                        </span>
+                      )}
+                      {picked.beyond && (
+                        <span className="diagram-badge diagram-badge-beyond">{copy.beyond}</span>
+                      )}
+                    </p>
+                  )}
+                  <p className="diagram-desc">{picked.desc}</p>
+
+                  {picked.tryIt && (
+                    <div className="diagram-try">
+                      <h4><Hand size={14} aria-hidden /> {copy.tryIt}</h4>
+                      <p>{picked.tryIt}</p>
+                    </div>
+                  )}
+
+                  {[
+                    { key: "within", head: copy.contains, ids: picked.children },
+                    { key: "near", head: copy.related, ids: picked.related },
+                  ].map(({ key, head, ids }) =>
+                    ids?.length ? (
+                      <div key={key} className={`diagram-jump diagram-jump-${key}`}>
+                        <h4>{head}</h4>
+                        <ul>
+                          {ids.map((id) => {
+                            const other = labels.find((l) => l.id === id);
+                            return other ? (
+                              <li key={id}>
+                                <button type="button" onClick={() => jump(id)}>{other.name}</button>
+                              </li>
+                            ) : null;
+                          })}
+                        </ul>
+                      </div>
+                    ) : null,
+                  )}
+
+                  {picked.organId && (
+                    <button
+                      type="button"
+                      className="diagram-detail"
+                      onClick={() => onOpenOrgan(picked.organId as OrganId)}
+                    >
+                      {copy.detail} <ArrowRight size={15} />
+                    </button>
+                  )}
+                </>
+              ) : (
+                <p className="diagram-prompt">{copy.hint}</p>
+              )}
+            </div>
+
+            <nav className="diagram-step">
+              <button
+                type="button"
+                onClick={() => step(-1)}
+                disabled={at <= 0}
+                aria-label={copy.prev}
+              >
+                <ChevronLeft size={16} /> {copy.prev}
+              </button>
+              <span>
+                {at >= 0
+                  ? fill(copy.position, { total: labels.length, n: at + 1 })
+                  : fill(copy.position, { total: labels.length, n: 0 })}
+              </span>
+              <button
+                type="button"
+                onClick={() => step(1)}
+                disabled={at >= labels.length - 1}
+                aria-label={copy.next}
+              >
+                {copy.next} <ChevronRight size={16} />
+              </button>
+            </nav>
           </aside>
         </div>
       </section>

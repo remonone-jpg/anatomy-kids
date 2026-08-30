@@ -24,4 +24,13 @@ export type DiagramLabel = {
    * like it is naming eight separate bones where it means three.
    */
   children?: string[];
+  /**
+   * Something to try on your own body — feel for the bone, find the pulse.
+   * Kept apart from `desc` rather than mixed into it: a sentence asking the
+   * reader to do something reads differently from one telling them a fact, and
+   * buried mid-paragraph it goes unnoticed.
+   */
+  tryIt?: string;
+  /** Labels worth reading next, by id. Neighbours, not parts. */
+  related?: string[];
 };
