@@ -1980,6 +1980,10 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
      height inside an auto row never resolves — the drawing then kept its own
      height and ran off the bottom of the card. */
   grid-template-rows: minmax(0, 1fr);
+  /* The panel is as tall as what it has to say. Stretched to the full row it
+     left a field of empty paper under short notes — most of them are short —
+     with the pager stranded at the bottom of it. */
+  align-items: start;
   gap: 18px; padding: 0 20px 20px;
 }
 
@@ -1987,6 +1991,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
    most of a wide screen. */
 .diagram-stage {
   min-width: 0; min-height: 0;
+  align-self: stretch;          /* the drawing still gets the whole row */
   display: grid; place-items: center;
   overflow: hidden; touch-action: none; cursor: grab;
   border: 1px solid var(--line); border-radius: 26px;
@@ -2017,7 +2022,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 .diagram-panel {
   display: flex; flex-direction: column;
-  min-height: 0;
+  min-height: 0; max-height: 100%;
   padding: 26px 24px 18px;
   border: 1px solid var(--line); border-radius: 26px;
   background: #fffaf2;
@@ -2100,14 +2105,14 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 /* A label that names a group, marked before anything is clicked so the reader
    can see 머리뼈 holds 머리덮개뼈 and 아래턱뼈 without hunting for it. The pale
    halo reads as a background behind the letters without a box to align. */
+/* Weight only. A pale halo behind the letters was the obvious way to mark
+   these, and it cannot be done here: 척추뼈 clears 목뼈 by a single pixel, and
+   척추뼈 is drawn last, so any opaque backing it carries lands on top of the
+   label below and takes the tops off the letters. Narrowing the halo until it
+   fits leaves it too faint to see, so it is gone. The bar beside each group
+   and the badge in the panel carry the rest of the signal. */
 .diagram-parent,
-.diagram-parent text {
-  paint-order: stroke !important;
-  stroke: var(--canvas) !important;
-  stroke-width: 5px !important;
-  stroke-linejoin: round !important;
-  font-weight: 700 !important;
-}
+.diagram-parent text { font-weight: 700 !important; }
 
 /* The bar the original draws beside each group, at #dff3f4 — so faint on a
    cream page that it reads as nothing. */
