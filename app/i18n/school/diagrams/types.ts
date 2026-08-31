@@ -39,4 +39,13 @@ export type DiagramLabel = {
    * without it the reader arrives with nothing chosen.
    */
   crossSystem?: { systemId: string; labelId?: string; reason: string };
+  /**
+   * The same thing said plainly, for the easy reading. Optional on purpose:
+   * these are being written a diagram at a time, and a label without one falls
+   * back to `desc` rather than going blank. The panel says so when it does, so
+   * a reader who chose the easy reading is not left wondering why the writing
+   * did not change.
+   */
+  descEasy?: string;
+  tryItEasy?: string;
 };

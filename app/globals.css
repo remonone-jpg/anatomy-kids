@@ -2031,6 +2031,16 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .diagram-panel h3 { margin: 0 0 10px; font: 500 19px var(--font-serif), serif; }
 .diagram-panel p { margin: 0; color: #6e655f; font: 500 15px/1.75 var(--font-serif), serif; }
 
+/* Says why the writing did not change when the easy reading is chosen and this
+   passage has no plain rewrite yet. Quiet on purpose — it is a note about the
+   state of the text, not part of it — and it disappears the moment the
+   rewrite lands. */
+.diagram-fallback {
+  margin: 6px 0 0 !important;
+  color: var(--muted) !important;
+  font: 500 11px var(--font-sans), sans-serif !important;
+}
+
 .diagram-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px !important; }
 .diagram-badge {
   padding: 3px 9px;

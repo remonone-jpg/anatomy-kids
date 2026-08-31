@@ -1,22 +1,27 @@
 /**
- * Which of the three readings the app is showing.
+ * Which of the two readings the app is showing.
  *
- * This was a boolean — kids on, kids off — and "kids off" was read as "adult"
- * in twenty-one places. A third mode breaks that reading silently: everything
- * guarded by `!kidsOn` would spill into it, including the eighty conditions
- * and the clinical notes, which have no business on a primary-schooler's
- * screen. The derivation lives here so the next mode added does not have to
- * rediscover that.
+ * The three modes this replaces each showed a *different set of things*: kids
+ * had the extra facts and its own quiz, school had the organ systems, adult had
+ * the deep dives and the clinical notes. Choosing a mode meant choosing what
+ * you were allowed to see, which is the wrong axis — a five-year-old and a
+ * grown-up are interested in the same organs.
  *
- * Read through `useSyncExternalStore`, like the kids flag and the child's
- * name, so nothing touches storage during a render.
+ * These two differ only in how the writing reads. Everything is present in
+ * both; `easy` prefers the plain rewrite of a passage where one exists and
+ * falls back to the full text where it does not.
+ *
+ * Read through `useSyncExternalStore`, like the child's name, so nothing
+ * touches storage during a render.
  */
 
-export type Mode = "kids" | "school" | "adult";
+export type Mode = "easy" | "detailed";
 
-const KEY = "anatomy:mode";
-/** What the two-state switch used before. Still read, never written. */
-const LEGACY_KEY = "anatomy:kids-mode";
+const KEY = "anatomy:reading";
+/** The three-way key. Still read, never written. */
+const LEGACY_MODE = "anatomy:mode";
+/** The two-state flag from before that. Still read, never written. */
+const LEGACY_KIDS = "anatomy:kids-mode";
 
 const listeners = new Set<() => void>();
 
@@ -29,21 +34,26 @@ export function subscribeMode(listener: () => void) {
 
 export function readMode(): Mode {
   const stored = window.localStorage.getItem(KEY);
-  if (stored === "kids" || stored === "school" || stored === "adult") return stored;
-  // Someone who was already using the app keeps the mode they were in. Without
-  // this a child reading in kids mode lands in the adult one on the next
-  // deploy, which is the one thing a version bump must not do.
-  return window.localStorage.getItem(LEGACY_KEY) === "0" ? "adult" : "kids";
+  if (stored === "easy" || stored === "detailed") return stored;
+  // Whoever was reading in kids mode was reading the plain writing and keeps
+  // it. School and adult were both reading the full text, so both land on
+  // `detailed`. A version bump must never move a child onto the harder copy.
+  const old = window.localStorage.getItem(LEGACY_MODE);
+  if (old === "kids") return "easy";
+  if (old === "school" || old === "adult") return "detailed";
+  // Older still: the boolean that predates the three-way switch.
+  return window.localStorage.getItem(LEGACY_KIDS) === "0" ? "detailed" : "easy";
 }
 
-/** Kids mode is the default this build exists for, and matches the old flag. */
+/** What the server renders before storage can be read. */
 export function serverMode(): Mode {
-  return "kids";
+  return "easy";
 }
 
 export function writeMode(next: Mode) {
   window.localStorage.setItem(KEY, next);
-  // Kept in step so a rollback to the two-state build finds the same answer.
-  window.localStorage.setItem(LEGACY_KEY, next === "adult" ? "0" : "1");
+  // Kept in step so rolling back to an older build finds the same answer.
+  window.localStorage.setItem(LEGACY_MODE, next === "easy" ? "kids" : "adult");
+  window.localStorage.setItem(LEGACY_KIDS, next === "easy" ? "1" : "0");
   listeners.forEach((listener) => listener());
 }

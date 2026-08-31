@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import gsap from "gsap";
 import {
   ArrowRight,
-  Baby,
   BookOpen,
   Bookmark,
   BrainCircuit,
@@ -46,7 +45,7 @@ import type { LocaleConfig } from "../i18n/config";
 import { locales } from "../i18n/config";
 import { buildOrgans, indexOrgans, type Organ } from "../i18n/merge";
 import { format, type Dictionary, type UiDictionary } from "../i18n/types";
-import { applyKids, getBodySense, getKidsUi, getMoreFacts, kidsAvailable, KIDS_ORGAN_IDS } from "../i18n/kids";
+import { applyKids, getBodySense, getKidsUi, getMoreFacts, kidsAvailable } from "../i18n/kids";
 import { getAllQuiz, getKidsQuiz, getOrganQuiz, kidsQuizAvailable, quizAvailable } from "../i18n/quiz";
 import { conditionsAvailable, getConditions } from "../i18n/conditions";
 import { getSystems, schoolAvailable } from "../i18n/school";
@@ -160,10 +159,10 @@ function ModeSwitch({
   onChange,
 }: {
   mode: Mode;
-  labels: { kids: string; school: string; adult: string; aria: string };
+  labels: { easy: string; detailed: string; aria: string };
   onChange: (next: Mode) => void;
 }) {
-  const options: Mode[] = ["kids", "school", "adult"];
+  const options: Mode[] = ["easy", "detailed"];
   return (
     <div className="mode-switch" role="group" aria-label={labels.aria}>
       {options.map((option) => (
@@ -174,7 +173,6 @@ function ModeSwitch({
           aria-pressed={mode === option}
           onClick={() => onChange(option)}
         >
-          {option === "kids" && <Baby size={15} aria-hidden />}
           {labels[option]}
         </button>
       ))}
@@ -195,9 +193,13 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // `adultOn` is. Everything only the grown-up view should carry hangs off
   // that instead, so school mode inherits the reading layout and none of the
   // clinical material.
-  const kidsOn = mode === "kids" && kidsAvailable(locale.code);
-  const schoolOn = mode === "school" && schoolAvailable(locale.code);
-  const adultOn = !kidsOn && !schoolOn;
+  // The plain rewrite, where the locale has one. `detailedOn` is its opposite
+  // and nothing else — the two readings show the same things.
+  const kidsOn = mode === "easy" && kidsAvailable(locale.code);
+  // The organ systems are no longer a mode of their own; both readings get
+  // them wherever the locale has them.
+  const schoolOn = schoolAvailable(locale.code);
+  const adultOn = !kidsOn;
 
   // BCP-47 for speech synthesis; `intl` is stored in the underscore form.
   const speechLang = locale.intl.replace("_", "-");
@@ -252,8 +254,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
 
   // Kids mode shows the five organs a child can point to on their own body.
   const listedOrgans = useMemo(
-    () => (kidsOn ? KIDS_ORGAN_IDS.map((id) => organById[id]) : organs),
-    [kidsOn, organs, organById],
+    () => organs,
+    [organs],
   );
   const filteredOrgans = useMemo(
     () =>
@@ -313,9 +315,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     // Kids mode has no clinical card at all, so it must not inherit its modal.
     setConditionView(null);
     setWalking(false);
-    // The short list may not contain whatever adult organ was on screen, which
-    // would leave the viewer showing something the library cannot select.
-    if (next === "kids" && !KIDS_ORGAN_IDS.includes(organId)) setOrganId("heart");
   };
 
   const selectOrgan = (id: OrganId) => {
@@ -376,7 +375,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         {kidsCopy && (
           <ModeSwitch
             mode={mode}
-            labels={{ kids: kidsCopy.modeKids, school: kidsCopy.modeSchool, adult: kidsCopy.modeAdult, aria: kidsCopy.modeLabel }}
+            labels={{ easy: kidsCopy.modeEasy, detailed: kidsCopy.modeDetailed, aria: kidsCopy.modeLabel }}
             onChange={changeMode}
           />
         )}
@@ -509,7 +508,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
 
         <aside className="info-panel" ref={contentRef}>
           {schoolOn && kidsCopy && (
-            <div className="school-tabs" role="tablist" aria-label={kidsCopy.modeSchool}>
+            <div className="school-tabs" role="tablist" aria-label={kidsCopy.schoolSystems}>
               <button
                 type="button"
                 role="tab"
@@ -823,9 +822,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           title={activeSystem.name}
           labels={getDiagramLabels(locale.code, activeSystem.id)}
           relatedHeading={getRelatedHeading(locale.code, activeSystem.id)}
+          easy={mode === "easy"}
           initialLabel={diagramLabel ?? undefined}
           systemNames={Object.fromEntries(getSystems(locale.code).map((s) => [s.id, s.name]))}
-          copy={kidsCopy.diagram}
+          copy={{ ...kidsCopy.diagram, readingFallback: kidsCopy.readingFallback }}
           onOpenSystem={(id, labelId) => {
             setSystemId(id);
             setDiagramLabel(labelId ?? null);

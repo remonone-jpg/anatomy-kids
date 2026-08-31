@@ -86,9 +86,10 @@ export type KidsUiCopy = {
   nameSkip: string;
   nameChange: string;
   /** The three-way mode switch, and the school layer it opens. */
-  modeKids: string;
-  modeSchool: string;
-  modeAdult: string;
+  modeEasy: string;
+  modeDetailed: string;
+  /** Shown under a passage that has no plain rewrite yet. */
+  readingFallback: string;
   schoolSystems: string;
   schoolOrgans: string;
   system: {

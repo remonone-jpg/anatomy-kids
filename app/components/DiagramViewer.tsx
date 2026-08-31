@@ -26,6 +26,7 @@ type Copy = {
   prev: string;
   next: string;
   crossSystem: string;
+  readingFallback: string;
 };
 
 /**
@@ -81,6 +82,7 @@ export function DiagramViewer({
   title,
   labels,
   relatedHeading,
+  easy,
   initialLabel,
   systemNames,
   copy,
@@ -95,6 +97,8 @@ export function DiagramViewer({
   labels: DiagramLabel[];
   /** Overrides the generic heading for the nearby-labels list. */
   relatedHeading?: string;
+  /** True when the reader has chosen the plain writing. */
+  easy?: boolean;
   /** Opened on arrival when the reader came here from another diagram. */
   initialLabel?: string;
   /** System id to its name, for naming where a cross-system link leads. */
@@ -473,12 +477,17 @@ export function DiagramViewer({
                       )}
                     </p>
                   )}
-                  <p className="diagram-desc">{picked.desc}</p>
+                  <p className="diagram-desc">
+                    {easy && picked.descEasy ? picked.descEasy : picked.desc}
+                  </p>
+                  {easy && !picked.descEasy && (
+                    <p className="diagram-fallback">{copy.readingFallback}</p>
+                  )}
 
                   {picked.tryIt && (
                     <div className="diagram-try">
                       <h4><Hand size={14} aria-hidden /> {copy.tryIt}</h4>
-                      <p>{picked.tryIt}</p>
+                      <p>{easy && picked.tryItEasy ? picked.tryItEasy : picked.tryIt}</p>
                     </div>
                   )}
 
