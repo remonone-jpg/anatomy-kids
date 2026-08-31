@@ -67,6 +67,7 @@ export const digestionLabels: DiagramLabel[] = [
   { id: "salivary-glands", label: "침샘", name: "침샘",
     children: ["parotid", "submandibular", "sublingual"],
     related: ["oral-cavity", "tongue"],
+    crossSystem: { systemId: "respiration", labelId: "oral-cavity", reason: "침샘이 침을 내보내는 입안은 공기 길이기도 해요. 코가 막혀 입으로 숨 쉬면 입안이 말라 침이 줄어듭니다." },
     desc: "침을 만들어 입안으로 내보내는 곳이에요. 큰 침샘이 세 쌍, 작은 것까지 합치면 수백 개가 입안 곳곳에 흩어져 있습니다. 하루에 만드는 침이 우유갑 하나 반쯤 돼요. 침은 음식을 미끄럽게 해 삼키기 쉽게 하고, 녹말을 분해하기 시작하며, 입안을 씻어 세균이 자라는 것도 막습니다. 음식을 보거나 냄새만 맡아도 침이 나오는 것은 뇌가 미리 준비 신호를 보내기 때문이에요." },
 
   { id: "parotid", label: "귀밑샘", name: "귀밑샘", beyond: true,

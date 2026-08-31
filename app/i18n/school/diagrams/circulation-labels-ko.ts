@@ -57,6 +57,7 @@ export const circulationLabels: DiagramLabel[] = [
 
  { id: "internal-carotid", label: "속목동맥", name: "속목동맥", beyond: true,
     related: ["common-carotid", "basilar"],
+    crossSystem: { systemId: "movement", labelId: "cranium", reason: "머리뼈 바닥의 구멍을 뚫고 들어가 뇌에 피를 댑니다. 뼈가 감싼 안쪽으로 들어가는 유일한 통로예요." },
     desc: "머리뼈 안으로 들어가 뇌에 피를 대는 동맥이에요. 뇌는 몸무게의 2퍼센트인데 피의 15퍼센트를 씁니다. 그만큼 중요해서, 이 동맥은 머리뼈 안에서 척추동맥과 이어져 고리를 만들어요. 한쪽이 막혀도 다른 쪽에서 피가 돌아 들어올 수 있는 우회로입니다. 뇌만큼은 예비 통로를 만들어 둔 셈이에요." },
 
   { id: "external-carotid", label: "바깥목동맥", name: "바깥목동맥", beyond: true,
@@ -146,6 +147,7 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "splenic", label: "지라동맥·정맥", name: "지라동맥과 지라정맥", beyond: true,
     related: ["celiac", "portal-vein"],
+    crossSystem: { systemId: "digestion", labelId: "pancreas", reason: "이 혈관이 이자 뒤를 구불구불 지나갑니다. 곧게 가지 않는 것은 이자가 움직일 여유를 주기 위한 것으로 봐요." },
     desc: "지라에 피를 대고 받는 혈관이에요. 지라는 왼쪽 갈비뼈 아래에 있는 주먹만 한 장기로, 낡은 적혈구를 걸러 내고 면역을 돕습니다. 이 혈관은 이자 뒤를 구불구불 지나가는데, 곧게 가지 않고 굽이치는 것은 이자가 움직일 여유를 주기 위한 것으로 봅니다. 지라정맥은 간문맥으로 합류해요." },
 
   { id: "renal", label: "콩팥동맥·정맥", name: "콩팥동맥과 콩팥정맥", organId: "kidneys", beyond: true,
@@ -155,6 +157,7 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "hepatic-vein", label: "간정맥", name: "간정맥", organId: "liver", beyond: true,
     related: ["ivc", "portal-vein"],
+    crossSystem: { systemId: "digestion", labelId: "gallbladder", reason: "간에서 나오는 이 정맥과 쓸개는 이웃해 있어요. 낡은 적혈구가 분해되며 나온 색소가 쓸개즙의 재료가 됩니다." },
     desc: "간에서 일을 마친 피가 아래대정맥으로 빠져나가는 정맥이에요. 간을 통과한 피는 여기를 거쳐 심장으로 돌아갑니다. 간에는 두 곳에서 피가 들어오지만 나가는 길은 이곳 하나뿐이에요. 아래대정맥이 간 뒤쪽에 딱 붙어 지나가서, 짧게 이어지고 곧바로 합류합니다." },
 
   { id: "portal-vein", label: "간문맥", name: "간문맥", organId: "liver", beyond: true,
@@ -209,6 +212,7 @@ export const circulationLabels: DiagramLabel[] = [
 
  { id: "fibular", label: "종아리동맥·정맥", name: "종아리동맥과 정맥", beyond: true,
     related: ["posterior-tibial", "anterior-tibial"],
+    crossSystem: { systemId: "movement", labelId: "fibula", reason: "종아리뼈를 따라 나란히 내려가서 같은 이름이 붙었어요. 뼈와 혈관이 짝을 이루는 경우가 많습니다." },
     desc: "종아리 바깥쪽 뼈를 따라 내려가는 혈관이에요. 뒤정강혈관과 짝을 이루어 종아리 근육에 피를 댑니다. 종아리뼈 바로 옆을 붙어 내려가서, 뼈와 혈관이 같은 이름을 쓰게 됐어요. 다른 혈관이 막혔을 때 우회로가 되어 주기도 합니다." },
 
   { id: "great-saphenous", label: "큰두렁정맥", name: "큰두렁정맥", beyond: true,

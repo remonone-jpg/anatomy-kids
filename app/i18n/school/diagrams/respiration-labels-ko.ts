@@ -24,6 +24,7 @@ export const respirationLabels: DiagramLabel[] = [
     desc: "콧구멍 바로 안쪽이에요. 여기부터가 코안인데, 다른 부분과 달리 피부에 가까운 조직으로 덮여 있고 코털이 나 있습니다. 코털이 큰 먼지를 1차로 걸러 내요. 그 안쪽으로 들어가면 점액과 섬모가 더 작은 입자를 붙잡습니다. 걸러 내는 일이 단계별로 나뉘어 있는 셈이에요." },
 
   { id: "paranasal-sinuses", label: "코곁굴", name: "코곁굴", related: ["frontal-sinus", "sphenoid-sinus", "nasal-cavity"],
+    crossSystem: { systemId: "movement", labelId: "skull", reason: "이 빈 공간들은 머리뼈 속에 있어요. 뼈가 꽉 차 있지 않고 굴이 뚫려 있어서 머리가 가벼워집니다." },
     desc: "머리뼈 속에 빈 공간으로 있는 굴이에요. 이마·위턱·벌집·나비 네 종류가 좌우로 있습니다. 무거운 머리뼈를 가볍게 하고, 목소리를 울려 주고, 부딪혔을 때 충격을 흡수하는 역할을 해요. 모두 코안과 작은 구멍으로 이어져 있어서, 안에서 만들어진 점액이 그 구멍으로 흘러 나옵니다. 감기로 구멍이 막히면 점액이 갇혀 머리가 무겁고 아파요." },
 
   { id: "frontal-sinus", label: "이마굴", name: "이마굴", related: ["paranasal-sinuses", "sphenoid-sinus"],
