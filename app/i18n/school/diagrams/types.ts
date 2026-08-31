@@ -38,7 +38,13 @@ export type DiagramLabel = {
    * so it leads to the respiratory system. `labelId` names what to open there;
    * without it the reader arrives with nothing chosen.
    */
-  crossSystem?: { systemId: string; labelId?: string; reason: string };
+  crossSystem?: {
+    systemId: string;
+    labelId?: string;
+    reason: string;
+    /** The same reason said plainly. Falls back to `reason` when absent. */
+    reasonEasy?: string;
+  };
   /**
    * The same thing said plainly, for the easy reading. Optional on purpose:
    * these are being written a diagram at a time, and a label without one falls

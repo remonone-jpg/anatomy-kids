@@ -521,7 +521,11 @@ export function DiagramViewer({
                   {picked.crossSystem && (
                     <div className="diagram-jump diagram-jump-cross">
                       <h4>{copy.crossSystem}</h4>
-                      <p className="diagram-cross-reason">{picked.crossSystem.reason}</p>
+                      <p className="diagram-cross-reason">
+                        {easy && picked.crossSystem.reasonEasy
+                          ? picked.crossSystem.reasonEasy
+                          : picked.crossSystem.reason}
+                      </p>
                       <ul>
                         <li>
                           <button
