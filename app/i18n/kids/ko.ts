@@ -80,6 +80,7 @@ export const kids: KidsCopy = {
       position: "{total}개 중 {n}번째",
       prev: "이전",
       next: "다음",
+      crossSystem: "다른 기관과도 이어져요",
     },
     systemQuiz: {
       title: "기관계 문제",

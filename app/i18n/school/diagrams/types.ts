@@ -33,4 +33,10 @@ export type DiagramLabel = {
   tryIt?: string;
   /** Labels worth reading next, by id. Neighbours, not parts. */
   related?: string[];
+  /**
+   * A thread out of this diagram into another one — 갈비뼈 protects the lungs,
+   * so it leads to the respiratory system. `labelId` names what to open there;
+   * without it the reader arrives with nothing chosen.
+   */
+  crossSystem?: { systemId: string; labelId?: string; reason: string };
 };

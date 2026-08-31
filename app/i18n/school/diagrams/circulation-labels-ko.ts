@@ -13,6 +13,7 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "heart", label: "심장", name: "심장", organId: "heart",
     related: ["aorta", "svc", "ivc", "pulmonary", "coronary"],
+    crossSystem: { systemId: "movement", labelId: "sternum", reason: "복장뼈와 갈비뼈가 만든 새장 안에 심장이 들어 있어요. 뼈가 없으면 심장이 바깥 충격에 그대로 노출됩니다." },
     desc: "온몸으로 피를 밀어 보내는 펌프예요. 이 그림의 모든 혈관이 심장에서 시작해 심장으로 돌아옵니다. 방이 네 개로 나뉘어 있는데, 오른쪽 둘은 온몸에서 돌아온 피를 폐로 보내고 왼쪽 둘은 폐에서 온 피를 온몸으로 보내요. 두 길이 완전히 갈라져 있어서 산소가 많은 피와 적은 피가 섞이지 않습니다. 심장 자체도 근육이라 피가 필요한데, 겉을 왕관처럼 두른 전용 혈관이 그 일을 맡아요." },
 
   { id: "aorta", label: "대동맥", name: "대동맥", beyond: true,
@@ -25,6 +26,7 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "descending-aorta", label: "내림대동맥", name: "내림대동맥", beyond: true,
     related: ["aorta", "celiac", "renal", "common-iliac"],
+    crossSystem: { systemId: "movement", labelId: "spine", reason: "척추 바로 앞을 따라 내려갑니다. 뼈 기둥이 뒤에서 받쳐 주어 몸에서 가장 잘 보호받는 혈관이에요." },
     desc: "대동맥이 활을 그린 뒤 등을 따라 아래로 내려가는 부분이에요. 척추 바로 앞을 지나갑니다. 가슴을 지날 때는 갈비뼈 사이로, 배를 지날 때는 위·간·창자·콩팥으로 가지를 뻗어요. 배꼽 아래쯤에서 좌우 둘로 갈라져 다리로 향합니다. 척추가 뒤에서 받쳐 주는 자리라 몸에서 가장 안전하게 보호받는 혈관 중 하나예요." },
 
   { id: "svc", label: "위대정맥", name: "위대정맥", beyond: true,
@@ -37,16 +39,19 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "pulmonary", label: "허파동맥·정맥", name: "허파동맥과 허파정맥", organId: "lungs", beyond: true,
     related: ["heart"],
+    crossSystem: { systemId: "respiration", labelId: "alveoli", reason: "이 혈관이 심장과 허파를 잇습니다. 허파꽈리에서 산소를 싣고 이산화탄소를 내려놓아요." },
     desc: "심장과 폐를 잇는 혈관이에요. 특이한 점이 있습니다. 허파동맥에는 산소가 적은 피가, 허파정맥에는 산소가 많은 피가 흘러요. 동맥과 정맥은 산소가 아니라 흐르는 방향으로 나누기 때문입니다 — 심장에서 나가면 동맥, 들어오면 정맥이에요. 몸의 다른 동맥보다 압력이 훨씬 낮은데, 폐가 바로 옆이라 멀리 보낼 필요가 없어서입니다." },
 
   { id: "coronary", label: "심장동맥·정맥", name: "심장동맥과 심장정맥", organId: "heart", beyond: true,
     related: ["heart", "aorta"],
+    crossSystem: { systemId: "movement", labelId: "sternum", reason: "심장 겉을 두른 이 혈관은 복장뼈 바로 뒤에 있습니다. 심폐소생술에서 가슴을 누르는 것도 이 자리예요." },
     desc: "심장 자신에게 피를 대는 혈관이에요. 심장 겉을 왕관처럼 두르고 있어서 관상동맥이라고도 합니다. 심장도 근육이라 스스로 산소를 받아야 뛸 수 있어요. 특이하게도 심장이 오므라들 때가 아니라 늘어날 때 이 혈관에 피가 흐릅니다. 수축하는 동안에는 근육이 혈관을 눌러 막기 때문이에요. 심장이 너무 빨리 뛰면 쉬는 시간이 짧아져 오히려 자기 피가 부족해집니다." },
 
   // ─── 머리와 목 ───
 
   { id: "common-carotid", label: "온목동맥", name: "온목동맥", beyond: true,
   related: ["aorta", "internal-carotid", "external-carotid"],
+  crossSystem: { systemId: "movement", labelId: "cervical", reason: "목뼈 옆을 지나 머리로 올라갑니다. 목 옆에 손가락을 대면 맥박이 잡히는 자리예요." },
   desc: "머리로 피를 보내는 굵은 동맥이에요. 목 옆에 손가락을 대면 맥박이 잡히는 그 자리입니다. 위로 올라가다 속목동맥과 바깥목동맥으로 갈라져요. 갈라지는 지점이 살짝 부풀어 있는데, 그 벽에 혈압을 감지하는 센서가 있습니다. 혈압이 오르면 여기서 뇌에 신호를 보내 심장을 늦추게 해요.",
   tryIt: "목 옆에 손가락 두 개를 살짝 대 보세요. 맥박이 잡혀요." },
 
@@ -60,6 +65,7 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "vertebral", label: "척추동맥", name: "척추동맥", beyond: true,
     related: ["subclavian", "basilar"],
+    crossSystem: { systemId: "movement", labelId: "cervical", reason: "목뼈마다 옆으로 뚫린 구멍이 이어져 터널을 이루고, 이 동맥이 그 안을 지나갑니다. 뼈가 혈관을 감싸 보호하는 셈이에요." },
     desc: "목뼈 속의 구멍을 따라 올라가 뇌 뒤쪽에 피를 대는 동맥이에요. 목뼈마다 옆으로 뚫린 구멍이 이어져 터널을 이루고, 그 안을 지나갑니다. 뼈 속을 통과하기 때문에 아주 잘 보호돼요. 다만 목을 심하게 젖히거나 돌리면 눌릴 수 있어, 목을 갑자기 크게 꺾는 동작을 조심하라는 이유가 됩니다." },
 
   { id: "basilar", label: "뇌바닥동맥", name: "뇌바닥동맥", beyond: true,
@@ -82,23 +88,28 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "subclavian", label: "빗장밑동맥·정맥", name: "빗장밑동맥과 빗장밑정맥", beyond: true,
     related: ["aorta", "axillary", "svc"],
+    crossSystem: { systemId: "movement", labelId: "clavicle", reason: "빗장뼈 아래를 지나서 붙은 이름이에요. 빗장뼈와 첫 번째 갈비뼈 사이 좁은 틈을 통과합니다." },
     desc: "빗장뼈 아래를 지나 팔로 가는 혈관이에요. 이름 그대로 빗장뼈 밑을 통과합니다. 여기서부터 팔의 혈관이 시작돼요. 첫 번째 갈비뼈와 빗장뼈 사이의 좁은 틈을 지나기 때문에, 그 틈이 좁아지면 팔이 저리거나 힘이 빠지는 일이 생깁니다. 무거운 가방을 어깨에 오래 메면 팔이 저린 것도 비슷한 이유예요." },
 
   { id: "axillary", label: "겨드랑동맥·정맥", name: "겨드랑동맥과 겨드랑정맥", beyond: true,
     related: ["subclavian", "brachial"],
+    crossSystem: { systemId: "movement", labelId: "scapula", reason: "어깨뼈가 만드는 겨드랑이 공간을 지나갑니다. 팔을 오래 눌러 저린 것도 여기가 눌렸기 때문이에요." },
     desc: "겨드랑이를 지나는 혈관이에요. 빗장밑혈관이 겨드랑이에 들어서면서 이름이 바뀝니다. 혈관은 지나는 자리에 따라 이름이 달라져요 — 같은 물줄기인데 구간마다 다른 이름이 붙는 셈입니다. 이 자리에는 혈관과 함께 팔로 가는 신경 다발도 지나가서, 팔을 오래 눌러 저린 것이 여기가 눌렸기 때문인 경우가 많아요." },
 
   { id: "brachial", label: "위팔동맥·정맥", name: "위팔동맥과 위팔정맥", beyond: true,
     related: ["axillary", "radial", "ulnar"],
+    crossSystem: { systemId: "movement", labelId: "humerus", reason: "위팔뼈 안쪽을 따라 내려갑니다. 혈압을 잴 때 팔에 감는 띠가 누르는 것이 이 혈관이에요." },
     desc: "위팔 안쪽을 지나는 혈관이에요. 혈압을 잴 때 팔에 감는 띠가 누르는 것이 바로 이 동맥입니다. 띠를 조여 피를 완전히 막았다가 조금씩 풀면서, 피가 다시 흐르기 시작하는 압력과 완전히 자유로워지는 압력을 재는 것이 혈압 측정이에요. 팔꿈치 안쪽에서 노동맥과 자동맥으로 갈라집니다." },
 
   { id: "radial", label: "노동맥", name: "노동맥", beyond: true,
   related: ["brachial", "ulnar", "digital-artery"],
+  crossSystem: { systemId: "movement", labelId: "radius", reason: "노뼈를 따라 내려와 손목에서 맥박이 잡힙니다. 뼈 바로 위를 얕게 지나가서 손가락으로 누르기 좋아요." },
   desc: "아래팔의 엄지손가락 쪽을 지나는 동맥이에요. 손목 안쪽에서 맥박을 짚을 때 만져지는 그 혈관입니다. 여기서 맥박을 재는 이유는 뼈 바로 위를 얕게 지나가서 손가락으로 누르기 좋기 때문이에요. '노'는 아래팔 바깥쪽 뼈의 이름이고, 혈관이 그 뼈를 따라 내려가서 같은 이름이 붙었습니다.",
   tryIt: "손목 안쪽 엄지 쪽에 손가락을 대 보세요. 맥박이 느껴집니다." },
 
  { id: "ulnar", label: "자동맥", name: "자동맥", beyond: true,
     related: ["brachial", "radial", "digital-artery"],
+    crossSystem: { systemId: "movement", labelId: "ulna", reason: "자뼈를 따라 내려갑니다. 뼈와 혈관이 같은 이름을 쓰는 것도 나란히 붙어 있기 때문이에요." },
     desc: "아래팔의 새끼손가락 쪽을 지나는 동맥이에요. 노동맥과 짝을 이루어 손에 피를 댑니다. 두 동맥이 손바닥에서 다시 만나 고리를 이루기 때문에, 하나가 막혀도 손에 피가 계속 갈 수 있어요. 손처럼 섬세하게 써야 하는 부위에는 이런 우회로가 마련되어 있습니다." },
 
   { id: "cephalic", label: "노쪽피부정맥", name: "노쪽피부정맥", beyond: true,
@@ -125,10 +136,12 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "celiac", label: "복강동맥", name: "복강동맥", beyond: true,
     related: ["descending-aorta", "splenic"],
+    crossSystem: { systemId: "digestion", labelId: "stomach", reason: "위·간·지라에 피를 대는 혈관이에요. 밥을 먹으면 이 길로 가는 피가 크게 늘어납니다." },
     desc: "대동맥에서 갈라져 나와 위·간·지라에 피를 대는 짧고 굵은 동맥이에요. 길이가 2센티미터도 안 되는데 곧바로 세 갈래로 갈라집니다. 배 위쪽 장기들이 전부 여기서 피를 받아요. 밥을 먹으면 소화 기관으로 가는 피가 크게 늘어나는데, 그 통로 중 하나가 이 혈관입니다." },
 
   { id: "superior-mesenteric", label: "위창자간막동맥·정맥", name: "위창자간막동맥과 정맥", organId: "intestine", beyond: true,
     related: ["descending-aorta", "portal-vein"],
+    crossSystem: { systemId: "digestion", labelId: "ileum", reason: "작은창자와 큰창자 앞부분에 피를 댑니다. 흡수한 영양분을 실어 나르는 것도 이 혈관이에요." },
     desc: "작은창자와 큰창자의 앞부분에 피를 대는 혈관이에요. 창자를 감싼 막 속을 부챗살처럼 뻗어 갑니다. 창자가 배 속에서 구불구불 접혀 있어도 어느 부분에나 피가 닿도록, 가지끼리 서로 이어져 그물을 이뤄요. 밥을 먹으면 여기로 가는 피가 두 배 가까이 늘어납니다. 식후에 졸린 것도 피가 소화 기관으로 몰리기 때문이에요." },
 
   { id: "splenic", label: "지라동맥·정맥", name: "지라동맥과 지라정맥", beyond: true,
@@ -137,6 +150,7 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "renal", label: "콩팥동맥·정맥", name: "콩팥동맥과 콩팥정맥", organId: "kidneys", beyond: true,
     related: ["descending-aorta", "ivc"],
+    crossSystem: { systemId: "excretion", labelId: "kidney", reason: "콩팥으로 피를 보내고 받아 옵니다. 심장이 내보내는 피의 5분의 1이 넘게 이 길로 가요." },
     desc: "콩팥으로 피를 보내고 받아 오는 혈관이에요. 심장이 내보내는 피의 5분의 1이 넘게 이 길로 갑니다. 몸무게로 치면 콩팥은 아주 작은데 피는 이만큼 받아요 — 피를 거르는 일 자체가 목적이라 많이 필요한 겁니다. 대동맥에서 거의 직각으로 갈라져 나가고, 짧아서 압력이 거의 그대로 전해집니다." },
 
   { id: "hepatic-vein", label: "간정맥", name: "간정맥", organId: "liver", beyond: true,
@@ -145,6 +159,7 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "portal-vein", label: "간문맥", name: "간문맥", organId: "liver", beyond: true,
     related: ["superior-mesenteric", "splenic", "hepatic-vein"],
+    crossSystem: { systemId: "digestion", labelId: "liver", reason: "장에서 영양분을 흡수한 피를 간으로 실어 나릅니다. 먹은 것이 무엇이든 간의 검사를 먼저 받게 하는 구조예요." },
     desc: "장에서 영양분을 흡수한 피를 간으로 실어 나르는 특별한 정맥이에요. 보통 정맥은 심장으로 가는데 이것만은 간으로 갑니다. 먹은 것이 무엇이든 간의 검사를 먼저 받게 하는 구조예요. 위·창자·지라·이자에서 나온 정맥이 모두 여기 모입니다. 간이 굳어 이 통로가 막히면 피가 다른 길로 돌아가는데, 그 우회로가 식도 주변의 가는 혈관이라 문제가 될 수 있어요." },
 
   { id: "gonadal", label: "생식샘동맥·정맥", name: "생식샘동맥과 정맥", beyond: true,
@@ -179,6 +194,7 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "popliteal", label: "오금동맥·정맥", name: "오금동맥과 오금정맥", beyond: true,
     related: ["femoral", "anterior-tibial", "posterior-tibial"],
+    crossSystem: { systemId: "movement", labelId: "patella", reason: "무릎 뒤 오목한 곳을 지나갑니다. 무릎을 오래 굽히면 이 혈관이 눌려 다리가 저려요." },
     desc: "무릎 뒤 오목한 곳을 지나는 혈관이에요. 오금은 무릎 뒤쪽을 뜻하는 순우리말입니다. 여기서 종아리로 가는 가지들이 갈라져요. 무릎을 굽히면 이 혈관이 접히면서 눌리는데, 오래 쪼그려 앉으면 다리가 저린 것이 그 때문입니다. 뼈와 힘줄 사이 좁은 곳을 지나 잘 보호되지만, 그만큼 다치면 다루기 어려운 자리예요." },
 
   { id: "anterior-tibial", label: "앞정강동맥·정맥", name: "앞정강동맥과 정맥", beyond: true,
@@ -187,6 +203,7 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "posterior-tibial", label: "뒤정강동맥·정맥", name: "뒤정강동맥과 정맥", beyond: true,
   related: ["popliteal", "fibular"],
+  crossSystem: { systemId: "movement", labelId: "tibia", reason: "정강뼈 뒤쪽을 따라 내려가 안쪽 복사뼈 뒤에서 맥박이 잡힙니다. 손목 말고도 맥박을 짚을 수 있는 자리예요." },
   desc: "종아리 뒤쪽을 따라 내려가는 혈관이에요. 안쪽 복사뼈 뒤에서 맥박을 짚을 수 있습니다. 손목 말고도 맥박을 잡을 수 있는 자리라, 다리로 피가 잘 가는지 확인할 때 여기를 만져 봐요. 종아리 근육 사이를 지나기 때문에, 걸을 때 근육이 짜 주는 힘의 도움을 받습니다.",
   tryIt: "안쪽 복사뼈 뒤를 살짝 만져 보세요. 여기서도 맥박이 잡혀요." },
 
@@ -204,6 +221,7 @@ export const circulationLabels: DiagramLabel[] = [
 
   { id: "dorsal-venous-arch", label: "발등정맥활", name: "발등정맥활", beyond: true,
     related: ["great-saphenous", "small-saphenous", "dorsal-digital-vein"],
+    crossSystem: { systemId: "movement", labelId: "metatarsals", reason: "발등 뼈 위로 활 모양으로 지나갑니다. 발등에 파르스름하게 비쳐 보이는 줄이 이것이에요." },
     desc: "발등에서 활 모양으로 휘어진 정맥이에요. 발가락에서 온 피가 여기 모여 다리 위쪽으로 올라갑니다. 발등에 파르스름하게 비쳐 보이는 줄이 이것이에요. 발을 아래로 늘어뜨리면 도드라지고 위로 들면 가라앉는데, 중력에 따라 피가 고였다 빠지기 때문입니다. 여기서 큰두렁정맥과 작은두렁정맥이 각각 시작돼요." },
 
   { id: "dorsal-digital-artery", label: "발등쪽발가락동맥", name: "발등쪽발가락동맥", beyond: true,

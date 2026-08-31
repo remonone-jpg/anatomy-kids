@@ -237,6 +237,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const [systemQuiz, setSystemQuiz] = useState<"paper" | "mixed" | null>(null);
   const [revealExam, setRevealExam] = useState<string | null>(null);
   const [diagramOpen, setDiagramOpen] = useState(false);
+  // Which label to open on arrival, when a diagram sends the reader to
+  // another system. Cleared as soon as that diagram is closed.
+  const [diagramLabel, setDiagramLabel] = useState<string | null>(null);
   // Set by the viewer; lets a step turn the model without a re-render.
   const focusRef = useRef<(id: string | null) => void>(() => {});
   const [revealCategory, setRevealCategory] = useState<KnowledgeQuizItem["category"] | null>(null);
@@ -820,7 +823,13 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           title={activeSystem.name}
           labels={getDiagramLabels(locale.code, activeSystem.id)}
           relatedHeading={getRelatedHeading(locale.code, activeSystem.id)}
+          initialLabel={diagramLabel ?? undefined}
+          systemNames={Object.fromEntries(getSystems(locale.code).map((s) => [s.id, s.name]))}
           copy={kidsCopy.diagram}
+          onOpenSystem={(id, labelId) => {
+            setSystemId(id);
+            setDiagramLabel(labelId ?? null);
+          }}
           onOpenOrgan={(id) => {
             setDiagramOpen(false);
             setSystemId(null);
@@ -828,7 +837,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             setRevealExam(null);
             selectOrgan(id);
           }}
-          onClose={() => setDiagramOpen(false)}
+          onClose={() => {
+            setDiagramOpen(false);
+            setDiagramLabel(null);
+          }}
         />
       )}
       {mobileLibrary && <button className="drawer-backdrop" aria-label={t.library.close} onClick={() => setMobileLibrary(false)} />}

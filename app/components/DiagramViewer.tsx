@@ -25,6 +25,7 @@ type Copy = {
   position: string;
   prev: string;
   next: string;
+  crossSystem: string;
 };
 
 /**
@@ -80,8 +81,11 @@ export function DiagramViewer({
   title,
   labels,
   relatedHeading,
+  initialLabel,
+  systemNames,
   copy,
   onOpenOrgan,
+  onOpenSystem,
   onClose,
 }: {
   src: string;
@@ -91,8 +95,13 @@ export function DiagramViewer({
   labels: DiagramLabel[];
   /** Overrides the generic heading for the nearby-labels list. */
   relatedHeading?: string;
+  /** Opened on arrival when the reader came here from another diagram. */
+  initialLabel?: string;
+  /** System id to its name, for naming where a cross-system link leads. */
+  systemNames: Record<string, string>;
   copy: Copy;
   onOpenOrgan: (id: OrganId) => void;
+  onOpenSystem: (systemId: string, labelId?: string) => void;
   onClose: () => void;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -100,11 +109,14 @@ export function DiagramViewer({
   const homeRef = useRef<Box | null>(null);
   const [markup, setMarkup] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
-  // Held as an id, not as the label object. A diagram change swaps `labels`
-  // out from under it, and an id that is not in the new list simply resolves
-  // to nothing — the note closes on its own, with no reset to remember.
-  const [pickedId, setPickedId] = useState<string | null>(null);
+  // What the reader has chosen, tagged with the drawing it was chosen in. A
+  // pick made in another diagram is simply not this diagram's, so switching
+  // systems clears the note without anything having to remember to reset it —
+  // and leaves `initialLabel` free to say what should be open on arrival.
+  const [pick, setPick] = useState<{ src: string; id: string } | null>(null);
+  const pickedId = pick?.src === src ? pick.id : initialLabel ?? null;
   const picked = labels.find((l) => l.id === pickedId) ?? null;
+  const choosePick = useCallback((id: string) => setPick({ src, id }), [src]);
 
   useEffect(() => {
     let live = true;
@@ -183,7 +195,7 @@ export function DiagramViewer({
       node.setAttribute("tabindex", "0");
       node.setAttribute("role", "button");
       node.setAttribute("aria-label", entry.name);
-      const choose = () => setPickedId(entry.id);
+      const choose = () => choosePick(entry.id);
       const key = (event: KeyboardEvent) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
@@ -307,7 +319,7 @@ export function DiagramViewer({
       if (wide && tall && white) rect.style.fill = "transparent";
     });
     return () => cleanups.forEach((fn) => fn());
-  }, [mounted, labels, alt, src]);
+  }, [mounted, labels, alt, src, choosePick]);
 
   // Light the chosen label, and anything it contains along with it: reading
   // 척추뼈 should show which five labels are the parts being talked about.
@@ -390,9 +402,9 @@ export function DiagramViewer({
       if (!labels.length) return;
       const next = at < 0 ? (delta > 0 ? 0 : labels.length - 1) : at + delta;
       if (next < 0 || next >= labels.length) return;
-      setPickedId(labels[next].id);
+      choosePick(labels[next].id);
     },
-    [at, labels],
+    [at, labels, choosePick],
   );
 
   useEffect(() => {
@@ -411,7 +423,7 @@ export function DiagramViewer({
   const parent = picked ? labels.find((l) => l.children?.includes(picked.id)) : undefined;
   const jump = (id: string) => {
     const found = labels.find((l) => l.id === id);
-    if (found) setPickedId(found.id);
+    if (found) choosePick(found.id);
   };
 
   return (
@@ -495,6 +507,29 @@ export function DiagramViewer({
                         </ul>
                       </div>
                     ) : null,
+                  )}
+
+                  {picked.crossSystem && (
+                    <div className="diagram-jump diagram-jump-cross">
+                      <h4>{copy.crossSystem}</h4>
+                      <p className="diagram-cross-reason">{picked.crossSystem.reason}</p>
+                      <ul>
+                        <li>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              onOpenSystem(
+                                picked.crossSystem!.systemId,
+                                picked.crossSystem!.labelId,
+                              )
+                            }
+                          >
+                            {systemNames[picked.crossSystem.systemId] ?? picked.crossSystem.systemId}
+                            <ArrowRight size={13} />
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
                   )}
 
                   {picked.organId && (

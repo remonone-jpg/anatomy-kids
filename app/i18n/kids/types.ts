@@ -110,6 +110,8 @@ export type KidsUiCopy = {
     position: string;
     prev: string;
     next: string;
+    /** Heads the link out of this diagram into another system. */
+    crossSystem: string;
   };
   systemQuiz: {
     title: string; paper: string; mixed: string; passage: string;

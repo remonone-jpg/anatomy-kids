@@ -2077,6 +2077,21 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 }
 .diagram-jump button:hover { border-color: var(--lavender); color: var(--lavender); }
 
+/* A link out of this diagram into another system. Set apart from the two lists
+   above it, which stay inside the drawing the reader is looking at. */
+.diagram-jump-cross { padding-top: 14px; border-top: 1px solid var(--line); }
+.diagram-cross-reason {
+  margin: 0 0 8px !important;
+  color: var(--ink) !important;
+  font-size: 14px !important;
+}
+.diagram-jump-cross button {
+  display: inline-flex; align-items: center; gap: 5px;
+  border-color: rgba(235, 124, 107, 0.4);
+  color: var(--coral);
+}
+.diagram-jump-cross button:hover { border-color: var(--coral); color: var(--coral); }
+
 .diagram-step {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   margin-top: auto; padding-top: 14px;

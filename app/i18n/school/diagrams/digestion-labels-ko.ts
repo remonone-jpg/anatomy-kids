@@ -13,45 +13,55 @@ export const digestionLabels: DiagramLabel[] = [
 
   { id: "oral-cavity", label: "입안", name: "입",
     related: ["tongue", "salivary-glands", "pharynx"],
+    crossSystem: { systemId: "respiration", labelId: "pharynx", reason: "입안 뒤쪽에서 공기 길과 음식 길이 만납니다. 급하게 먹다 사레들리는 것이 이 갈림길에서 음식이 잘못 들어갔을 때예요." },
     desc: "이로 잘게 씹고 침과 섞는 곳이에요. 소화가 시작되는 자리입니다. 씹는 일은 그저 잘게 부수는 게 아니라 표면적을 넓히는 작업이에요. 덩어리를 잘게 나눌수록 소화액이 닿는 면이 넓어져 분해가 빨라집니다. 침에는 녹말을 분해하는 물질이 들어 있어서, 밥을 오래 씹으면 단맛이 나요. 잘 씹어 보내면 위와 창자가 할 일이 그만큼 줄어듭니다." },
 
   { id: "esophagus", label: "식도", name: "식도",
     related: ["pharynx", "stomach"],
+    crossSystem: { systemId: "respiration", labelId: "cartilage-rings", reason: "식도는 기관 바로 뒤에 붙어 있습니다. 기관의 연골 고리가 뒤쪽만 트인 C자인 것도, 음식이 지날 때 식도가 부풀 자리를 주기 위해서예요." },
     desc: "입에서 위까지 음식을 내려보내는 통로예요. 길이는 25센티미터쯤이고, 평소에는 납작하게 눌려 있다가 음식이 지날 때만 벌어집니다. 음식이 중력으로 떨어지는 게 아니라 근육이 물결처럼 오므라들며 밀어 내려요. 그래서 물구나무를 서서 먹어도 음식은 위로 갑니다. 위와 만나는 자리에는 조임근이 있어 위산이 거꾸로 올라오지 못하게 막아 줘요." },
 
   { id: "stomach", label: "위", name: "위", organId: "stomach",
     related: ["esophagus", "duodenum"],
+    crossSystem: { systemId: "circulation", labelId: "celiac", reason: "복강동맥이 위에 피를 댑니다. 밥을 먹으면 이 길로 가는 피가 크게 늘어나고, 그만큼 다른 곳으로 갈 피가 줄어 식곤증이 와요." },
     desc: "음식을 잠시 저장하고 위액과 섞어 죽처럼 만드는 주머니예요. 빈 위는 주먹만 하지만 식후에는 1리터 넘게 늘어납니다. 근육이 세 겹으로 얽혀 있어서 여러 방향으로 비틀며 짓이길 수 있어요. 위액은 레몬즙보다 강한 산성이라 단백질을 분해하고 세균도 없앱니다. 그런데 위 자신도 단백질인데 녹지 않는 것은, 벽을 덮은 끈끈한 점액이 방패 역할을 하고 그 점액층이 며칠마다 새것으로 갈리기 때문이에요." },
 
   { id: "ileum", label: "돌창자", name: "작은창자", organId: "intestine",
     related: ["duodenum", "cecum", "colon"],
+    crossSystem: { systemId: "circulation", labelId: "superior-mesenteric", reason: "작은창자가 흡수한 영양분은 위창자간막정맥에 실려 나갑니다. 흡수와 배달이 바로 이어지는 지점이에요." },
     desc: "작은창자의 마지막 부분이에요. 작은창자 전체는 6~7미터로 소화 기관 중 가장 길고, 영양분 흡수의 대부분이 여기서 일어납니다. 안쪽 벽이 그냥 매끈한 관이 아니라 주름이 잡혀 있고, 그 위에 융모라는 손가락 모양 돌기가 빽빽하고, 융모 표면 세포마다 더 작은 돌기가 또 돋아 있어요. 접고 또 접어 흡수할 면을 세 단계로 늘린 구조입니다." },
 
   { id: "colon", label: "잘록창자", name: "큰창자", organId: "intestine",
     children: ["transverse-colon", "ascending-colon", "descending-colon"],
     related: ["ileum", "cecum", "rectum"],
+    crossSystem: { systemId: "excretion", labelId: "kidney", reason: "큰창자는 물을 회수하고 콩팥은 물을 조절합니다. 설사로 물을 많이 잃으면 콩팥이 오줌을 줄여 균형을 맞춰요." },
     desc: "큰창자의 가장 긴 부분이에요. 작은창자를 지나온 것에서 물과 전해질을 회수합니다. 여기 도착할 때는 죽처럼 묽었던 것이 지나가는 동안 점점 단단해져요. 큰창자에는 사람이 소화하지 못하는 식이섬유를 분해하는 미생물이 수십조 마리 살고 있습니다. 그들이 섬유를 발효시켜 만드는 물질이 큰창자 세포의 주된 연료가 돼요. 방귀는 이 발효 과정에서 나오는 가스입니다." },
 
   { id: "anus", label: "항문", name: "항문",
     related: ["rectum"],
+    crossSystem: { systemId: "excretion", labelId: "urethra", reason: "항문과 요도는 조임근이 두 겹이라는 구조가 같습니다. 하나는 저절로 닫히고 하나는 마음대로 조절할 수 있어요." },
     desc: "소화되지 않은 것을 몸 밖으로 내보내는 곳이에요. 조임근이 두 겹 있습니다. 안쪽 것은 우리 뜻과 상관없이 저절로 닫혀 있고, 바깥쪽 것은 마음대로 조였다 풀 수 있어요. 요도와 같은 구조입니다. 이 두 겹 덕분에 신호가 와도 적당한 때까지 참을 수 있어요. 아기가 처음에 못 가리는 것은 바깥쪽 조임근을 조절하는 법을 아직 배우지 못했기 때문입니다." },
 
   { id: "liver", label: "간", name: "간", organId: "liver",
     related: ["gallbladder", "bile-duct"],
+    crossSystem: { systemId: "circulation", labelId: "portal-vein", reason: "장에서 흡수한 영양분은 심장으로 곧장 가지 않고 간문맥을 타고 간부터 들릅니다. 먹은 것이 무엇이든 간의 검사를 먼저 받는 구조예요." },
     desc: "소화를 돕는 쓸개즙을 만들고, 흡수한 영양분을 저장하는 기관이에요. 몸속 장기 중 가장 무겁고 하는 일이 500가지가 넘습니다. 장에서 흡수한 피는 심장으로 곧장 가지 않고 문맥이라는 전용 혈관을 타고 간부터 들러요. 몸에 들어온 것은 무엇이든 간의 검사를 먼저 받는 구조입니다. 넘치는 것은 저장하고, 부족하면 꺼내 쓰고, 해로운 것은 처리한 뒤 나머지를 온몸으로 내보내요." },
 
   { id: "gallbladder", label: "쓸개", name: "쓸개",
     related: ["liver", "bile-duct"],
+    crossSystem: { systemId: "circulation", labelId: "hepatic-vein", reason: "쓸개즙의 재료 중 하나는 낡은 적혈구가 분해되며 나온 색소입니다. 피가 수명을 다한 흔적이 소화액이 되는 셈이에요." },
     desc: "간이 만든 쓸개즙을 모아 두었다가 필요할 때 내보내는 주머니예요. 간은 쓸개즙을 쉬지 않고 만드는데 음식은 하루 몇 번만 들어오니, 그동안 만든 것을 여기 저장합니다. 저장하면서 물을 빨아들여 다섯 배에서 열 배까지 농축해요. 기름진 음식이 샘창자에 닿으면 신호를 받고 오므라들어 짜냅니다. 쓸개즙 성분이 뭉쳐 굳으면 돌이 되는데, 그 돌이 출구를 막으면 심한 통증이 옵니다." },
 
   { id: "pancreas", label: "이자", name: "이자", organId: "pancreas",
     related: ["pancreatic-duct", "duodenum"],
+    crossSystem: { systemId: "circulation", labelId: "splenic", reason: "지라동맥이 이자 뒤를 구불구불 지나갑니다. 이자가 만드는 인슐린도 관이 아니라 혈관을 타고 온몸으로 나가요." },
     desc: "소화를 돕는 이자액을 만들어 작은창자로 보내는 기관이에요. 위 뒤에 가로로 누워 있습니다. 하는 일이 둘로 나뉘어요. 조직의 대부분은 소화 효소를 만들어 관으로 내보내고, 그 사이에 흩어진 이자섬이라는 세포 무리는 인슐린 같은 호르몬을 만들어 혈관으로 보냅니다. 이자섬은 전체의 2퍼센트뿐이지만 온몸 세포의 연료 공급을 조절해요." },
 
   // ─── 새로 쓴 17개 ───
 
   { id: "tongue", label: "혀", name: "혀",
     related: ["oral-cavity", "pharynx"],
+    crossSystem: { systemId: "respiration", labelId: "epiglottis", reason: "혀뿌리가 뒤로 밀리면 후두덮개가 눌려 닫힙니다. 혀가 음식을 넘기는 동작이 곧 기도를 막는 신호가 되는 거예요." },
     desc: "음식을 이 사이로 밀어 넣고 침과 골고루 섞어 주는 근육 덩어리예요. 여덟 개의 근육이 여러 방향으로 얽혀 있어서, 뼈에 붙지 않고도 자유롭게 모양을 바꿉니다. 맛을 느끼는 것뿐 아니라 다 씹은 음식을 뭉쳐 목구멍으로 넘기는 일도 해요. 이 넘기는 동작이 시작되면 그다음부터는 우리 뜻대로 멈출 수 없습니다. 말을 할 때 소리를 다듬는 것도 혀의 일이에요." },
 
   { id: "salivary-glands", label: "침샘", name: "침샘",
@@ -73,10 +83,12 @@ export const digestionLabels: DiagramLabel[] = [
 
   { id: "pharynx", label: "인두", name: "인두", beyond: true,
     related: ["oral-cavity", "esophagus"],
+    crossSystem: { systemId: "respiration", labelId: "larynx", reason: "인두에서 공기는 후두로, 음식은 식도로 갈라집니다. 소화 기관과 호흡 기관이 통로를 나눠 쓰는 유일한 자리예요." },
     desc: "입과 코의 뒤쪽에서 만나는 목구멍이에요. 여기서 공기는 후두로, 음식은 식도로 갈라집니다. 한 통로를 두 가지가 나눠 쓰는 셈이라, 삼킬 때마다 정교한 순서가 필요해요. 음식이 넘어가는 순간 후두 입구의 뚜껑이 덮이고 숨이 잠깐 멈춥니다. 이 타이밍이 어긋나면 음식이 기관 쪽으로 들어가 사레가 들려요. 급하게 먹거나 웃으면서 먹을 때 그런 일이 잘 생깁니다." },
 
   { id: "duodenum", label: "샘창자", name: "샘창자", beyond: true,
     related: ["stomach", "bile-duct", "pancreatic-duct", "ileum"],
+    crossSystem: { systemId: "circulation", labelId: "celiac", reason: "샘창자 주변으로 복강동맥의 가지들이 지나갑니다. 소화액이 합류하는 자리라 피도 많이 필요해요." },
     desc: "작은창자가 시작되는 첫 부분이에요. 손가락 열두 개를 옆으로 늘어놓은 만큼 길다고 해서 십이지장이라고도 부릅니다. 위에서 내려온 죽 같은 음식이 여기서 쓸개즙과 이자액을 만나 본격적으로 분해돼요. 그전에 먼저 할 일이 있습니다 — 위에서 온 것이 강한 산성이라 그대로 두면 장이 상하기 때문에, 이자액에 든 알칼리 성분이 재빨리 중화합니다. 분해보다 먼저 판을 안전하게 까는 셈이에요." },
 
   { id: "bile-duct", label: "온쓸개관", name: "온쓸개관", beyond: true,
@@ -101,6 +113,7 @@ export const digestionLabels: DiagramLabel[] = [
 
   { id: "cecum", label: "막창자", name: "막창자", beyond: true,
     related: ["ileum", "appendix", "ascending-colon"],
+    crossSystem: { systemId: "circulation", labelId: "superior-mesenteric", reason: "막창자와 큰창자 앞부분에 위창자간막동맥이 피를 댑니다. 창자가 구불구불해도 어디에나 피가 닿도록 가지들이 그물을 이뤄요." },
     desc: "작은창자가 끝나고 큰창자가 시작되는 자리에 있는 주머니예요. 오른쪽 아랫배에 있습니다. 작은창자에서 넘어온 것이 잠시 머무는 곳이에요. 작은창자와 만나는 입구에는 판막이 있어서, 큰창자로 넘어간 내용물이 다시 작은창자로 돌아가지 못하게 막습니다. 큰창자에는 미생물이 훨씬 많은데, 그들이 작은창자로 거슬러 올라가는 것도 이 판막이 막아 줘요." },
 
   { id: "appendix", label: "막창자꼬리", name: "막창자꼬리", beyond: true,
@@ -109,6 +122,7 @@ export const digestionLabels: DiagramLabel[] = [
 
   { id: "rectum", label: "곧창자", name: "곧창자", beyond: true,
     related: ["descending-colon", "anus"],
+    crossSystem: { systemId: "excretion", labelId: "bladder", reason: "곧창자와 방광은 골반 안에서 이웃해 있습니다. 둘 다 '차오르면 신호를 보내고 뇌가 답하는' 같은 방식으로 조절돼요." },
     desc: "큰창자의 마지막 부분으로, 항문 바로 앞이에요. 평소에는 비어 있다가 내용물이 내려오면 벽이 늘어나고, 그 신호가 뇌로 전해져 화장실에 가고 싶어집니다. 방광과 마찬가지로 뇌가 '아직 안 돼'라고 답하면 신호가 잠시 잦아들어요. 밥을 먹으면 응가가 마려운 것은, 위에 음식이 들어왔다는 신호가 큰창자 전체를 한꺼번에 밀어내는 반사를 일으키기 때문입니다." },
 
   { id: "small-intestine-note", label: "(작은창자)", name: "작은창자", organId: "intestine",
