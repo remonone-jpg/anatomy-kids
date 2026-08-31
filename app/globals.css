@@ -40,15 +40,30 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   overflow: hidden;
 }
 
+/* A row, not a fixed set of slots. It was a five-column grid, which meant the
+   header silently wrapped onto a second row whenever it carried a sixth child
+   — and `.app-shell` clips its overflow, so the extra row was cut in half
+   rather than shown. That was true of every mode at every width; giving the
+   two readings the same set of controls simply made it a third row and put
+   the mode switch itself in the clipped part.
+
+   Laying it out as a single flex line means any number of children stay on one
+   row and shrink instead of wrapping. The brand and the search box take the
+   slack, as the two `1fr` tracks used to. */
 .topbar {
   height: 68px;
-  display: grid;
-  grid-template-columns: minmax(260px, 1fr) auto minmax(200px, 1fr) auto auto;
+  display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 18px;
   max-width: 1720px;
   margin: 0 auto;
 }
+
+.topbar > * { flex: 0 0 auto; min-width: 0; }
+.topbar > .brand { flex: 1 1 260px; }
+.topbar > .search-box { flex: 1 1 200px; }
+.topbar > .main-nav { flex: 0 1 auto; overflow: hidden; }
 
 .brand {
   display: flex;
@@ -485,14 +500,13 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 @media (max-width: 1350px) {
   .app-shell { padding: 16px; }
-  .topbar { grid-template-columns: 1fr auto auto auto; gap: 12px; }
+  .topbar { gap: 12px; }
   .search-box { display: none; }
   .workspace { grid-template-columns: 250px minmax(500px,1fr) 300px; height: min(700px, calc(100vh - 105px)); }
   .learning-cards { grid-template-columns: repeat(3, 1fr); --art-max: 300px; }
 }
 
 @media (max-width: 1040px) {
-  .topbar { grid-template-columns: 1fr auto auto auto; }
   .main-nav button span { display: none; }
   .main-nav button { padding: 10px; }
   .workspace { grid-template-columns: 210px minmax(450px,1fr); height: 690px; }
@@ -506,7 +520,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 @media (max-width: 760px) {
   .app-shell { padding: 10px; overflow: hidden; }
-  .topbar { height: 58px; grid-template-columns: 1fr auto auto auto; }
+  .topbar { height: 58px; }
   .brand strong { font-size: 29px; }
   .main-nav { display: none; }
   .profile span { width: 34px; height: 34px; }
@@ -841,9 +855,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   background: color-mix(in srgb, var(--sage), transparent 88%);
   border-color: color-mix(in srgb, var(--sage), transparent 58%);
 }
-
-/* Brand, language, mode — the nav, search and profile are gone. */
-.kids .topbar { grid-template-columns: 1fr auto auto; }
 
 /* Five organs instead of nine, so each row can afford to be much larger. */
 .kids .organ-list { gap: 8px; }
