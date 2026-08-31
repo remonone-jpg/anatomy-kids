@@ -2126,6 +2126,9 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .diagram-chip-drop { fill: transparent !important; }
 .diagram-chip-keep { fill: #fffaf2 !important; }
 
+/* A leftover guide line, drawn but pointing at nothing. See STRAYS. */
+.diagram-stray { display: none !important; }
+
 .diagram-active,
 .diagram-active text { fill: var(--coral) !important; }
 

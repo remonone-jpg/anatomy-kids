@@ -27,6 +27,16 @@ type Copy = {
   next: string;
 };
 
+/**
+ * Lines a diagram's author left behind — drawn, but pointing at nothing.
+ * Keyed by file so no other drawing is even examined, and matched by where the
+ * line starts, since these carry no id and look exactly like the guides that
+ * do have a job.
+ */
+const STRAYS: Record<string, Array<[number, number]>> = {
+  "respiration.svg": [[119, 491]],
+};
+
 const fill = (template: string, values: Record<string, string | number>) =>
   template.replace(/\{(\w+)\}/g, (whole, key) => String(values[key] ?? whole));
 
@@ -241,6 +251,35 @@ export function DiagramViewer({
       }
     }
 
+    // Each card is drawn just after the box it sits in, so it paints over that
+    // box's border and leaves the group looking open on one side. Moving the
+    // cards in front of the first box puts them under all of them. They stay
+    // above the artwork, which ends well before the boxes begin, so they go on
+    // holding the drawing off the letters.
+    const boxes = Array.from(svg.querySelectorAll<SVGGraphicsElement>(".diagram-frame"));
+    const cards = Array.from(
+      svg.querySelectorAll<SVGGraphicsElement>(".diagram-chip-keep, .diagram-chip-drop"),
+    );
+    if (boxes[0] && cards.length) {
+      const first = boxes[0];
+      for (const card of cards) {
+        if (card.parentNode === first.parentNode) first.parentNode?.insertBefore(card, first);
+      }
+    }
+
+    // A line the author left behind: it starts in the middle of the left lung,
+    // points at nothing and joins nothing. The two guides that actually lead to
+    // the alveolar inset are the same grey and the same weight, so it can only
+    // be told apart by where it begins — which makes this a fact about one
+    // file, and it is applied to that file alone.
+    for (const [x, y] of STRAYS[src.split("/").pop() ?? ""] ?? []) {
+      for (const node of svg.querySelectorAll<SVGPathElement>("path")) {
+        if (typeof node.getTotalLength !== "function" || !node.getTotalLength()) continue;
+        const start = node.getPointAtLength(0);
+        if (Math.hypot(start.x - x, start.y - y) < 3) node.classList.add("diagram-stray");
+      }
+    }
+
     // Two of the four drawings paint their own white page behind the artwork.
     // On a cream card that reads as a photograph pasted on rather than a
     // picture belonging to the page, and it is the only thing making the four
@@ -256,7 +295,7 @@ export function DiagramViewer({
       if (wide && tall && white) rect.style.fill = "transparent";
     });
     return () => cleanups.forEach((fn) => fn());
-  }, [mounted, labels, alt]);
+  }, [mounted, labels, alt, src]);
 
   // Light the chosen label, and anything it contains along with it: reading
   // 척추뼈 should show which five labels are the parts being talked about.
