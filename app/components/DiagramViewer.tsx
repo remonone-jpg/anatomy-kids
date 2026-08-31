@@ -34,7 +34,15 @@ type Copy = {
  * do have a job.
  */
 const STRAYS: Record<string, Array<[number, number]>> = {
-  "respiration.svg": [[119, 491]],
+  // Four in this one. The inset is connected to the drawing by a single black
+  // line ending in an arrowhead; these four are grey, carry no arrow, begin and
+  // end on nothing, and three of them cut across labels on the way.
+  "respiration.svg": [
+    [119, 491],   // out of the left lung, up towards nothing
+    [559, 49],    // near the inset's corner, down past its edge into the lungs
+    [348, 38],    // top of the sheet down to…
+    [310, 246],   // …here, and on to a point beside the arrow but not touching it
+  ],
 };
 
 const fill = (template: string, values: Record<string, string | number>) =>
