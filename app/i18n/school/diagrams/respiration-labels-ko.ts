@@ -10,9 +10,10 @@ import type { DiagramLabel } from "./types";
  */
 export const respirationLabels: DiagramLabel[] = [
   { id: "nose", label: "코", name: "코", related: ["nasal-cavity", "nasal-vestibule", "paranasal-sinuses"],
-    crossSystem: { systemId: "digestion", labelId: "oral-cavity", reason: "코가 막히면 입으로 숨을 쉬게 됩니다. 그러면 입안이 말라 침이 줄고, 소화의 첫 단계도 영향을 받아요." },
+    crossSystem: { systemId: "digestion", labelId: "oral-cavity", reason: "코가 막히면 입으로 숨을 쉬게 됩니다. 그러면 입안이 말라 침이 줄고, 소화의 첫 단계도 영향을 받아요.", reasonEasy: "코가 막히면 입으로 숨 쉬게 돼요. 그러면 입안이 말라 침이 줄어요." },
     descEasy: "공기가 드나드는 입구예요. 들어온 공기를 따뜻하게 데우고 촉촉하게 만들고, 먼지도 걸러 줘요. 코로 숨 쉬면 목이 덜 칼칼한 게 그 때문이에요.",
     desc: "공기가 드나드는 입구예요. 그냥 통로가 아니라 공기를 다듬는 곳입니다. 들어온 공기를 몸 온도에 가깝게 데우고, 습기를 더해 촉촉하게 만들고, 먼지와 세균을 걸러 냅니다. 이 세 가지가 다 되어야 폐가 상하지 않아요. 그리고 양쪽 콧구멍이 늘 똑같이 일하는 게 아니라, 몇 시간마다 번갈아 한쪽이 더 열리고 다른 쪽은 쉽니다. 점막이 마르지 않게 하려는 것으로 봅니다.",
+    tryItEasy: "한쪽 코를 막고 숨을 쉬어 보세요. 양쪽이 번갈아 잘 통해요.",
     tryIt: "한쪽 콧구멍을 막고 숨을 쉬어 보세요. 양쪽이 번갈아 잘 통하는 걸 느낄 수 있어요." },
 
   { id: "nasal-cavity", label: "코안", name: "코안", related: ["nose", "nasal-conchae", "pharynx"],
@@ -28,7 +29,7 @@ export const respirationLabels: DiagramLabel[] = [
     desc: "콧구멍 바로 안쪽이에요. 여기부터가 코안인데, 다른 부분과 달리 피부에 가까운 조직으로 덮여 있고 코털이 나 있습니다. 코털이 큰 먼지를 1차로 걸러 내요. 그 안쪽으로 들어가면 점액과 섬모가 더 작은 입자를 붙잡습니다. 걸러 내는 일이 단계별로 나뉘어 있는 셈이에요." },
 
   { id: "paranasal-sinuses", label: "코곁굴", name: "코곁굴", related: ["frontal-sinus", "sphenoid-sinus", "nasal-cavity"],
-    crossSystem: { systemId: "movement", labelId: "skull", reason: "이 빈 공간들은 머리뼈 속에 있어요. 뼈가 꽉 차 있지 않고 굴이 뚫려 있어서 머리가 가벼워집니다." },
+    crossSystem: { systemId: "movement", labelId: "skull", reason: "이 빈 공간들은 머리뼈 속에 있어요. 뼈가 꽉 차 있지 않고 굴이 뚫려 있어서 머리가 가벼워집니다.", reasonEasy: "이 빈 공간들은 머리뼈 속에 있어요. 뼈가 꽉 차 있지 않아서 머리가 가벼워요." },
     descEasy: "머리뼈 속에 빈 공간으로 있는 굴이에요. 머리를 가볍게 하고 목소리를 울리게 해 줘요. 감기에 걸리면 여기에 콧물이 차서 머리가 무거워져요.",
     desc: "머리뼈 속에 빈 공간으로 있는 굴이에요. 이마·위턱·벌집·나비 네 종류가 좌우로 있습니다. 무거운 머리뼈를 가볍게 하고, 목소리를 울려 주고, 부딪혔을 때 충격을 흡수하는 역할을 해요. 모두 코안과 작은 구멍으로 이어져 있어서, 안에서 만들어진 점액이 그 구멍으로 흘러 나옵니다. 감기로 구멍이 막히면 점액이 갇혀 머리가 무겁고 아파요." },
 
@@ -41,23 +42,24 @@ export const respirationLabels: DiagramLabel[] = [
     desc: "머리뼈 한가운데 깊숙이, 나비 모양 뼈 속에 있는 굴이에요. 코곁굴 중 가장 안쪽에 있습니다. 바로 위에 뇌의 호르몬 조절 기관이 얹혀 있어서, 그 부분을 수술할 때 코를 통해 이 굴을 지나가는 방법을 쓰기도 해요. 머리를 열지 않고 접근할 수 있는 통로인 셈입니다." },
 
   { id: "pharynx", label: "인두", name: "인두", related: ["nasal-cavity", "oral-cavity", "larynx", "esophagus"],
-    crossSystem: { systemId: "digestion", labelId: "esophagus", reason: "인두에서 음식은 식도로, 공기는 후두로 갈라집니다. 두 기관계가 통로를 나눠 쓰는 유일한 자리예요." },
+    crossSystem: { systemId: "digestion", labelId: "esophagus", reason: "인두에서 음식은 식도로, 공기는 후두로 갈라집니다. 두 기관계가 통로를 나눠 쓰는 유일한 자리예요.", reasonEasy: "여기서 음식은 식도로, 공기는 후두로 갈라져요." },
     descEasy: "코와 입 뒤쪽에서 만나는 목구멍이에요. 여기서 공기는 후두로, 음식은 식도로 갈라져요. 사레들리는 건 이 갈림길에서 잘못 들어갔을 때예요.",
     desc: "코와 입 뒤쪽에서 만나는 목구멍이에요. 위에서부터 코 뒤·입 뒤·후두 뒤 세 구간으로 나뉩니다. 공기와 음식이 한 통로를 나눠 쓰는 자리라, 삼킬 때마다 정교한 순서가 필요해요. 음식이 넘어가는 순간 후두 뚜껑이 덮이고 숨이 잠깐 멈춥니다. 이 타이밍이 어긋나면 사레가 들려요. 코 뒤쪽에는 귀와 이어지는 관도 열려 있어서, 높은 곳에서 침을 삼키면 귀가 뚫리는 것이 그 때문입니다." },
 
   { id: "larynx", label: "후두", name: "후두", related: ["pharynx", "epiglottis", "vocal-folds", "trachea"],
-    crossSystem: { systemId: "movement", labelId: "cervical", reason: "후두는 목뼈 앞에 놓여 있습니다. 목 앞을 만지면 딱딱한 연골이 잡히고, 그 뒤로 목뼈가 있어요." },
+    crossSystem: { systemId: "movement", labelId: "cervical", reason: "후두는 목뼈 앞에 놓여 있습니다. 목 앞을 만지면 딱딱한 연골이 잡히고, 그 뒤로 목뼈가 있어요.", reasonEasy: "후두는 목뼈 앞에 있어요. 목 앞을 만지면 딱딱한 게 잡혀요." },
     descEasy: "목 앞쪽에 있는 공기 통로예요. 안에 성대가 있어서 소리를 내요. 목 앞에 튀어나온 부분이 이 기관이에요.",
     desc: "목 앞쪽에 있는 공기 통로예요. 연골 여러 개가 모여 상자 모양을 이루고, 그 안에 성대가 들어 있습니다. 하는 일이 둘이에요 — 소리를 내는 것, 그리고 음식이 기관으로 들어가지 못하게 막는 것입니다. 사춘기에 남성의 후두가 크게 자라면서 성대도 길어지고 두꺼워져 목소리가 낮아져요. 앞으로 튀어나온 부분이 그때 도드라집니다." },
 
   { id: "epiglottis", label: "후두덮개", name: "후두덮개", related: ["larynx", "pharynx", "esophagus"],
-    crossSystem: { systemId: "digestion", labelId: "tongue", reason: "혀뿌리가 뒤로 밀리면 이 뚜껑이 눌려 닫힙니다. 삼키는 동작 하나가 기도를 막는 일까지 함께 해내는 거예요." },
+    crossSystem: { systemId: "digestion", labelId: "tongue", reason: "혀뿌리가 뒤로 밀리면 이 뚜껑이 눌려 닫힙니다. 삼키는 동작 하나가 기도를 막는 일까지 함께 해내는 거예요.", reasonEasy: "혀뿌리가 뒤로 밀리면 이 뚜껑이 닫혀요. 삼키는 동작 하나가 두 가지 일을 해내요." },
     descEasy: "후두 입구에 달린 뚜껑이에요. 음식을 삼킬 때 저절로 닫혀서 공기 길로 들어가는 걸 막아 줘요. 이게 늦게 닫히면 사레가 들려요.",
     desc: "후두 입구에 달린 나뭇잎 모양 뚜껑이에요. 평소에는 위로 서 있어 공기가 지나가고, 음식을 삼킬 때만 뒤로 젖혀져 후두를 덮습니다. 자기가 알아서 움직이는 게 아니라, 혀뿌리가 뒤로 밀리면서 눌려 넘어가는 구조예요. 그래서 삼키는 동작이 시작되면 저절로 닫힙니다. 웃거나 말하면서 먹으면 이 순서가 흐트러져 사레가 들려요." },
 
   { id: "thyroid-cartilage", label: "방패연골", name: "방패연골", related: ["larynx", "cricoid-cartilage", "vocal-folds"],
     descEasy: "후두 앞을 방패처럼 감싼 연골이에요. 목 앞으로 튀어나온 부분이 이것이에요.",
     desc: "후두 앞을 방패처럼 감싼 가장 큰 연골이에요. 판 두 개가 앞에서 만나 각을 이루는데, 그 각이 좁을수록 앞으로 더 튀어나옵니다. 사춘기 이후 남성에게서 각이 좁아져 도드라지는 것이 이 때문이에요. 성대가 이 연골 안쪽에 붙어 있어서, 연골이 커지면 성대도 길어지고 소리가 낮아집니다.",
+    tryItEasy: "목 앞 가운데를 만지면서 침을 삼켜 보세요. 딱딱한 게 위아래로 움직여요.",
     tryIt: "목 앞 가운데를 만지며 침을 삼켜 보세요. 딱딱한 것이 위아래로 움직여요." },
 
   { id: "cricoid-cartilage", label: "반지연골", name: "반지연골", related: ["larynx", "thyroid-cartilage", "trachea"],
@@ -69,17 +71,17 @@ export const respirationLabels: DiagramLabel[] = [
     desc: "후두 안에 좌우로 마주 보고 있는 두 겹의 주름이에요. 숨 쉴 때는 벌어져 공기가 지나가고, 소리를 낼 때는 가까이 모여 그 틈으로 공기가 빠져나가며 떨립니다. 팽팽하게 당기면 빠르게 떨려 높은 소리, 느슨하면 천천히 떨려 낮은 소리가 나요. 목이 쉬는 것은 이 주름이 부어 제대로 붙지 못하기 때문입니다. 소리를 내려면 숨을 내쉬어야 해서, 들이쉬면서는 말할 수 없어요." },
 
   { id: "oral-cavity", label: "입안", name: "입안", related: ["pharynx", "nasal-cavity"],
-    crossSystem: { systemId: "digestion", labelId: "salivary-glands", reason: "입은 공기 길이자 음식 길입니다. 침샘이 만든 침이 여기 모여 소화를 시작해요." },
+    crossSystem: { systemId: "digestion", labelId: "salivary-glands", reason: "입은 공기 길이자 음식 길입니다. 침샘이 만든 침이 여기 모여 소화를 시작해요.", reasonEasy: "입은 공기 길이자 음식 길이에요. 침이 여기 모여 소화를 시작해요." },
     descEasy: "코가 막혔을 때 공기가 드나드는 곳이에요. 코와 달리 먼지를 거르거나 공기를 데워 주지 못해요.",
     desc: "코가 막혔을 때 공기가 드나드는 곳이에요. 다만 코와 달리 먼지를 거르거나 공기를 데우고 적시지 못합니다. 그래서 입으로 오래 숨 쉬면 목이 마르고 칼칼해져요. 운동할 때는 공기가 많이 필요해 입으로도 쉬게 되는데, 겨울에 찬 공기가 그대로 들어와 목이 아픈 것이 그 때문입니다." },
 
   { id: "esophagus", label: "식도", name: "식도", related: ["pharynx", "trachea"],
-    crossSystem: { systemId: "digestion", labelId: "stomach", reason: "이 통로를 따라 음식이 위로 내려갑니다. 호흡 기관 그림에 나오는 것은 기관 바로 뒤에 붙어 있기 때문이에요." },
+    crossSystem: { systemId: "digestion", labelId: "stomach", reason: "이 통로를 따라 음식이 위로 내려갑니다. 호흡 기관 그림에 나오는 것은 기관 바로 뒤에 붙어 있기 때문이에요.", reasonEasy: "이 길을 따라 음식이 위로 내려가요. 공기 길 바로 뒤에 있어서 이 그림에 나와요." },
     descEasy: "음식이 위로 내려가는 통로예요. 공기 길은 아니지만 목에서 나란히 갈라지기 때문에 이 그림에 함께 나와요. 기관 바로 뒤에 있어요.",
     desc: "음식이 위로 내려가는 통로예요. 호흡 기관은 아니지만 인두에서 기관과 나란히 갈라지기 때문에 이 그림에 함께 나옵니다. 기관 바로 뒤에 있고, 평소에는 납작하게 눌려 있어요. 기관의 연골 고리가 뒤쪽만 트인 C자인 것도 이 때문입니다 — 음식이 지날 때 식도가 부풀 자리를 내주기 위해서예요." },
 
   { id: "trachea", label: "기관", name: "기관", related: ["larynx", "carina", "main-bronchi", "cartilage-rings"],
-    crossSystem: { systemId: "movement", labelId: "cervical", reason: "기관이 목뼈 바로 앞을 지나갑니다. 목 앞의 오돌토돌한 고리가 기관이고, 뒤쪽 딱딱한 것이 목뼈예요." },
+    crossSystem: { systemId: "movement", labelId: "cervical", reason: "기관이 목뼈 바로 앞을 지나갑니다. 목 앞의 오돌토돌한 고리가 기관이고, 뒤쪽 딱딱한 것이 목뼈예요.", reasonEasy: "공기 길이 목뼈 바로 앞을 지나가요." },
     descEasy: "목에서 가슴으로 내려가는 굵은 공기 길이에요. 하나뿐이에요. 안쪽에 작은 털이 있어서 먼지를 목구멍 쪽으로 밀어 올려요.",
     desc: "목에서 가슴으로 내려가는 굵은 공기 길이에요. 길이 10센티미터쯤, 굵기는 엄지손가락만 합니다. 안쪽은 섬모라는 미세한 털로 덮여 있고 그 위에 점액층이 떠 있어요. 섬모가 목구멍 쪽으로 초당 여러 번 물결치며 먼지를 붙잡은 점액을 밀어 올립니다. 이 컨베이어 덕에 폐가 깨끗하게 유지돼요. 담배 연기는 이 섬모를 마비시켜 청소를 멈추게 합니다." },
 
@@ -112,18 +114,19 @@ export const respirationLabels: DiagramLabel[] = [
     desc: "왼폐의 혀처럼 늘어진 부분으로 들어가는 기관지예요. 오른폐의 중간엽에 해당하는 자리입니다. 왼폐는 심장 때문에 엽이 둘뿐이지만, 이 부분이 사실상 중간엽 노릇을 해요. 위엽에서 갈라져 나오는 가지라는 점이 오른쪽과 다릅니다." },
 
   { id: "cartilage-rings", label: "기관·기관지 연골고리", name: "기관·기관지 연골고리", related: ["trachea", "main-bronchi"],
-    crossSystem: { systemId: "digestion", labelId: "esophagus", reason: "C자 고리의 트인 쪽이 뒤를 향한 이유가 여기 있어요. 바로 뒤 식도가 음식이 지날 때 부풀 자리를 주기 위해서입니다." },
+    crossSystem: { systemId: "digestion", labelId: "esophagus", reason: "C자 고리의 트인 쪽이 뒤를 향한 이유가 여기 있어요. 바로 뒤 식도가 음식이 지날 때 부풀 자리를 주기 위해서입니다.", reasonEasy: "고리의 트인 쪽이 뒤인 이유가 여기 있어요. 바로 뒤 식도에 자리를 주려는 거예요." },
     descEasy: "기관과 기관지를 감싼 C자 모양 연골이에요. 이게 있어서 숨을 세게 들이쉬어도 관이 찌그러지지 않아요. 뒤쪽이 트인 건 바로 뒤 식도에 자리를 주기 위해서예요.",
     desc: "기관과 기관지를 감싼 C자 모양 연골이에요. 기관에만 열여섯에서 스무 개쯤 있습니다. 이 고리가 있어서 숨을 세게 들이쉴 때 관 안의 압력이 낮아져도 찌그러지지 않아요. 뒤쪽이 트인 C자인 이유는 바로 뒤 식도가 음식이 지날 때 부풀 자리를 주기 위해서입니다. 트인 부분은 근육이 메우고 있어, 기침할 때 그 근육이 조여 공기 속도를 높입니다.",
+    tryItEasy: "목 앞을 살살 만져 보세요. 오돌토돌한 고리가 하나씩 잡혀요.",
     tryIt: "목 앞 기관을 살살 만져 보세요. 오돌토돌한 고리가 하나씩 잡힙니다." },
 
   { id: "right-lung", label: "오른허파", name: "오른허파", related: ["left-lung", "right-superior-lobe", "right-middle-lobe", "right-inferior-lobe"],
-    crossSystem: { systemId: "movement", labelId: "ribs", reason: "갈비뼈가 새장처럼 허파를 감싸 보호합니다. 그러면서 숨 쉴 때는 벌어졌다 좁아지며 호흡을 도와요." },
+    crossSystem: { systemId: "movement", labelId: "ribs", reason: "갈비뼈가 새장처럼 허파를 감싸 보호합니다. 그러면서 숨 쉴 때는 벌어졌다 좁아지며 호흡을 도와요.", reasonEasy: "갈비뼈가 새장처럼 허파를 감싸 지켜 줘요." },
     descEasy: "오른쪽 가슴의 폐예요. 덩어리가 세 개라 왼폐보다 크고 무거워요.",
     desc: "오른쪽 가슴의 폐예요. 엽이 세 개라 왼폐보다 크고 무겁습니다. 아래에 간이 있어 왼쪽보다 조금 짧지만, 심장에 자리를 내주지 않아도 되니 전체 부피는 더 커요. 폐는 스스로 움직이지 못하고, 가슴막이라는 두 겹 막 사이의 얇은 액체 덕에 가슴 안쪽에서 미끄러지듯 늘었다 줄었다 합니다." },
 
   { id: "left-lung", label: "왼허파", name: "왼허파", related: ["right-lung", "left-superior-lobe", "left-inferior-lobe", "cardiac-notch"],
-    crossSystem: { systemId: "circulation", labelId: "heart", reason: "왼허파가 오른쪽보다 작은 것은 심장에 자리를 양보했기 때문이에요. 앞쪽이 심장 모양만큼 움푹 파여 있습니다." },
+    crossSystem: { systemId: "circulation", labelId: "heart", reason: "왼허파가 오른쪽보다 작은 것은 심장에 자리를 양보했기 때문이에요. 앞쪽이 심장 모양만큼 움푹 파여 있습니다.", reasonEasy: "왼허파가 작은 건 심장에 자리를 양보했기 때문이에요." },
     descEasy: "왼쪽 가슴의 폐예요. 심장이 왼쪽에 있어서 자리를 양보하느라 덩어리가 두 개뿐이고 오른쪽보다 작아요.",
     desc: "왼쪽 가슴의 폐예요. 심장이 왼쪽으로 치우쳐 있어서 자리를 양보하느라 엽이 두 개뿐이고 오른쪽보다 작습니다. 앞쪽 아래가 움푹 파여 있고, 그 아래로 혀 모양 부분이 늘어져 있어요. 폐 하나만으로도 살 수 있지만 운동할 때 숨이 더 쉽게 찹니다." },
 
@@ -160,7 +163,7 @@ export const respirationLabels: DiagramLabel[] = [
     desc: "왼폐를 위엽과 아래엽으로 가르는 비스듬한 틈이에요. 왼폐에는 이 틈 하나뿐입니다. 오른쪽 빗틈새와 방향이 거의 같아서, 좌우 폐가 이 선을 기준으로 대칭에 가깝게 나뉘어요." },
 
   { id: "cardiac-notch", label: "심장패임", name: "심장패임", related: ["left-lung", "lingula"],
-    crossSystem: { systemId: "circulation", labelId: "heart", reason: "이 패임 덕분에 심장 앞쪽 일부가 허파에 덮이지 않고 가슴벽에 바로 닿아요. 청진기로 심장 소리를 듣는 자리입니다." },
+    crossSystem: { systemId: "circulation", labelId: "heart", reason: "이 패임 덕분에 심장 앞쪽 일부가 허파에 덮이지 않고 가슴벽에 바로 닿아요. 청진기로 심장 소리를 듣는 자리입니다.", reasonEasy: "이 파인 곳 덕분에 심장이 가슴벽에 바로 닿아요. 청진기로 심장 소리를 듣는 자리예요." },
     descEasy: "왼폐 앞쪽이 심장 자리만큼 움푹 파인 곳이에요. 심장이 왼쪽에 있어서 폐가 자리를 비켜 준 흔적이에요.",
     desc: "왼폐 앞쪽이 심장 자리만큼 움푹 파인 곳이에요. 심장이 왼쪽으로 치우쳐 있어서 폐가 자리를 비켜 준 흔적입니다. 이 패임 덕분에 심장 앞쪽 일부가 폐에 덮이지 않고 가슴벽에 바로 닿아요. 청진기로 심장 소리를 들을 때 이 자리를 찾는 것이 그 때문입니다." },
 
@@ -173,13 +176,14 @@ export const respirationLabels: DiagramLabel[] = [
     desc: "폐의 맨 위 끝이에요. 빗장뼈보다 2~3센티미터 위까지 올라가 있어서, 목 아래쪽까지 폐가 뻗어 있는 셈입니다. 가슴 안이 아니라 목 아래에 있는 셈이라, 이 부위를 다치면 공기가 새어 폐가 쪼그라들 수 있어요. 서 있을 때는 중력 때문에 이곳으로 가는 피가 적어 기체 교환이 상대적으로 덜 일어납니다." },
 
   { id: "diaphragm", label: "가로막", name: "가로막", related: ["right-lung", "left-lung"],
-    crossSystem: { systemId: "movement", labelId: "ribs", reason: "가로막이 내려가고 갈비뼈가 올라가면서 가슴 공간이 넓어집니다. 근육 하나가 아니라 둘이 함께 숨을 만들어요." },
+    crossSystem: { systemId: "movement", labelId: "ribs", reason: "가로막이 내려가고 갈비뼈가 올라가면서 가슴 공간이 넓어집니다. 근육 하나가 아니라 둘이 함께 숨을 만들어요.", reasonEasy: "가로막이 내려가고 갈비뼈가 올라가면서 가슴이 넓어져요. 둘이 함께 숨을 만들어요." },
     descEasy: "폐 아래에 있는 넓은 근육이에요. 이 근육이 내려가면 가슴 속이 넓어져 공기가 들어오고, 올라가면 나가요. 폐는 스스로 못 움직이고 이 근육이 숨을 쉬게 해 줘요. 딸꾹질은 이 근육이 깜짝 놀란 거예요.",
     desc: "폐 아래에 있는 넓은 돔 모양 근육이에요. 가슴과 배를 나누는 경계이기도 합니다. 이 근육이 오므라들면 돔이 평평해지면서 가슴 속 공간이 넓어지고, 기압 차이로 공기가 저절로 밀려 들어와요. 폐는 스스로 움직이지 못하고 이 근육이 숨을 쉬게 합니다. 조용히 숨 쉴 때 들어오는 공기의 3분의 2 이상을 이 근육 하나가 만들어요. 딸꾹질은 이 근육이 갑자기 경련하는 것입니다.",
+    tryItEasy: "한 손은 가슴에, 한 손은 배에 얹고 크게 숨 쉬어 보세요. 배가 나오면 이 근육이 내려간 거예요.",
     tryIt: "한 손은 가슴에, 다른 손은 배에 얹고 깊게 숨을 쉬어 보세요. 배가 나오는 게 가로막이 내려가는 신호예요." },
 
   { id: "alveoli", label: "허파꽈리", name: "허파꽈리", related: ["alveolar-sacs", "alveolar-duct", "capillary-beds", "alveolar-atrium"],
-    crossSystem: { systemId: "circulation", labelId: "pulmonary", reason: "허파꽈리에서 산소가 피로 건너가고 이산화탄소가 나옵니다. 호흡과 순환이 실제로 만나는 지점이에요." },
+    crossSystem: { systemId: "circulation", labelId: "pulmonary", reason: "허파꽈리에서 산소가 피로 건너가고 이산화탄소가 나옵니다. 호흡과 순환이 실제로 만나는 지점이에요.", reasonEasy: "여기서 산소가 피로 건너가요. 숨쉬기와 피돌기가 실제로 만나는 곳이에요." },
     descEasy: "기관지 끝에 포도송이처럼 달린 작은 공기주머니예요. 양쪽 폐에 수억 개나 있어요. 여기서 산소가 피로 건너가고 이산화탄소가 나와요.",
     desc: "기관지 끝에 포도송이처럼 달린 작은 공기주머니예요. 양쪽 폐에 3억에서 5억 개가 있고, 하나의 지름은 머리카락 굵기의 몇 배쯤 됩니다. 여기서 산소가 피로 건너가고 이산화탄소가 나와요. 방을 많이 나눌수록 공기와 닿는 면이 넓어지는데, 전부 펼치면 배드민턴 코트만 한 넓이가 됩니다. 안쪽 벽에는 계면활성제가 발려 있어, 숨을 내쉴 때 작은 방들이 쪼그라들어 붙어 버리는 것을 막아 줘요." },
 
@@ -196,17 +200,17 @@ export const respirationLabels: DiagramLabel[] = [
     desc: "허파꽈리관과 허파꽈리주머니 사이의 작은 공간이에요. 여러 주머니로 갈라지기 직전의 대기실 같은 자리입니다. 이름이 심장의 심방과 같지만 전혀 다른 것으로, 여기서는 허파꽈리 구조의 일부예요. 라틴어로 '앞뜰'이라는 뜻이라 두 곳에 같은 이름이 붙었습니다." },
 
   { id: "capillary-beds", label: "모세혈관그물", name: "모세혈관그물", related: ["alveoli", "pulmonary-artery", "pulmonary-vein"],
-    crossSystem: { systemId: "circulation", labelId: "pulmonary", reason: "허파꽈리를 감싼 이 그물이 허파동맥과 허파정맥을 잇습니다. 산소를 실은 피가 여기서 심장 쪽으로 방향을 바꿔요." },
+    crossSystem: { systemId: "circulation", labelId: "pulmonary", reason: "허파꽈리를 감싼 이 그물이 허파동맥과 허파정맥을 잇습니다. 산소를 실은 피가 여기서 심장 쪽으로 방향을 바꿔요.", reasonEasy: "이 그물이 폐로 가는 혈관과 돌아오는 혈관을 이어 줘요." },
     descEasy: "허파꽈리를 그물처럼 감싼 아주 가는 혈관이에요. 벽이 한 겹뿐이라 산소와 이산화탄소가 쉽게 오가요.",
     desc: "허파꽈리를 그물처럼 감싼 아주 가는 혈관이에요. 굵기가 적혈구 하나가 겨우 지나갈 정도라, 적혈구가 한 줄로 늘어서서 통과합니다. 그래서 모든 적혈구가 벽에 바짝 붙어 지나가고 산소를 놓치지 않아요. 허파꽈리와 혈관 사이 벽의 두께는 1마이크로미터가 되지 않습니다. 적혈구 하나가 이 구간을 지나는 데 1초도 안 걸리는데, 그 사이에 산소를 다 싣습니다." },
 
   { id: "pulmonary-artery", label: "허파동맥", name: "허파동맥", related: ["capillary-beds", "pulmonary-vein", "alveoli"],
-    crossSystem: { systemId: "circulation", labelId: "heart", reason: "심장 오른쪽에서 나와 허파로 오는 혈관이에요. 동맥인데 산소가 적은 피가 흐르는 것이 이 때문입니다." },
+    crossSystem: { systemId: "circulation", labelId: "heart", reason: "심장 오른쪽에서 나와 허파로 오는 혈관이에요. 동맥인데 산소가 적은 피가 흐르는 것이 이 때문입니다.", reasonEasy: "심장 오른쪽에서 나와 허파로 오는 혈관이에요." },
     descEasy: "심장에서 폐로 피를 보내는 혈관이에요. 신기하게도 산소가 적은 피가 흘러요. 동맥과 정맥은 산소가 아니라 흐르는 방향으로 나누기 때문이에요.",
     desc: "심장에서 폐로 피를 보내는 혈관이에요. 특이하게 산소가 적은 피가 흐릅니다. 동맥과 정맥은 산소가 아니라 흐르는 방향으로 나누기 때문이에요 — 심장에서 나가면 동맥입니다. 몸의 다른 동맥보다 압력이 훨씬 낮은데, 폐가 바로 옆이라 멀리 보낼 필요가 없기 때문이에요. 그래서 벽도 상대적으로 얇습니다." },
 
   { id: "pulmonary-vein", label: "허파정맥", name: "허파정맥", related: ["capillary-beds", "pulmonary-artery", "alveoli"],
-    crossSystem: { systemId: "circulation", labelId: "heart", reason: "허파에서 산소를 실은 피가 심장 왼쪽으로 돌아갑니다. 그 피가 곧바로 온몸으로 나가요." },
+    crossSystem: { systemId: "circulation", labelId: "heart", reason: "허파에서 산소를 실은 피가 심장 왼쪽으로 돌아갑니다. 그 피가 곧바로 온몸으로 나가요.", reasonEasy: "허파에서 산소를 실은 피가 심장 왼쪽으로 돌아가요." },
     descEasy: "폐에서 산소를 실은 피가 심장으로 돌아가는 혈관이에요. 정맥인데 산소가 많은 피가 흐르는 하나뿐인 경우예요.",
     desc: "폐에서 산소를 실은 피가 심장으로 돌아가는 혈관이에요. 정맥인데 산소가 많은 피가 흐르는 유일한 경우입니다. 좌우 폐에서 각각 두 개씩, 모두 네 개가 심장 왼쪽으로 들어가요. 이 피가 곧바로 온몸으로 나가기 때문에, 폐에서 산소를 제대로 싣지 못하면 온몸이 영향을 받습니다." },
 
