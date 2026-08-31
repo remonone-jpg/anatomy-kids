@@ -100,7 +100,11 @@ export function DiagramViewer({
   const homeRef = useRef<Box | null>(null);
   const [markup, setMarkup] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
-  const [picked, setPicked] = useState<DiagramLabel | null>(null);
+  // Held as an id, not as the label object. A diagram change swaps `labels`
+  // out from under it, and an id that is not in the new list simply resolves
+  // to nothing — the note closes on its own, with no reset to remember.
+  const [pickedId, setPickedId] = useState<string | null>(null);
+  const picked = labels.find((l) => l.id === pickedId) ?? null;
 
   useEffect(() => {
     let live = true;
@@ -179,7 +183,7 @@ export function DiagramViewer({
       node.setAttribute("tabindex", "0");
       node.setAttribute("role", "button");
       node.setAttribute("aria-label", entry.name);
-      const choose = () => setPicked(entry);
+      const choose = () => setPickedId(entry.id);
       const key = (event: KeyboardEvent) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
@@ -386,7 +390,7 @@ export function DiagramViewer({
       if (!labels.length) return;
       const next = at < 0 ? (delta > 0 ? 0 : labels.length - 1) : at + delta;
       if (next < 0 || next >= labels.length) return;
-      setPicked(labels[next]);
+      setPickedId(labels[next].id);
     },
     [at, labels],
   );
@@ -407,7 +411,7 @@ export function DiagramViewer({
   const parent = picked ? labels.find((l) => l.children?.includes(picked.id)) : undefined;
   const jump = (id: string) => {
     const found = labels.find((l) => l.id === id);
-    if (found) setPicked(found);
+    if (found) setPickedId(found.id);
   };
 
   return (
@@ -517,11 +521,9 @@ export function DiagramViewer({
               >
                 <ChevronLeft size={16} /> {copy.prev}
               </button>
-              <span>
-                {at >= 0
-                  ? fill(copy.position, { total: labels.length, n: at + 1 })
-                  : fill(copy.position, { total: labels.length, n: 0 })}
-              </span>
+              {/* Nothing chosen yet has no position; "0번째" would be a lie
+                  about where the reader is. 다음 still starts at the first. */}
+              <span>{at >= 0 ? fill(copy.position, { total: labels.length, n: at + 1 }) : ""}</span>
               <button
                 type="button"
                 onClick={() => step(1)}
