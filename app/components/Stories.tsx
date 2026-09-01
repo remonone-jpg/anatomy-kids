@@ -8,23 +8,29 @@ import { speak } from "../lib/speech";
 export function Stories({
   entries,
   speechLang,
+  easy,
 }: {
-  entries: { title: string; body: string }[];
+  entries: { title: string; body: string; bodyEasy?: string }[];
   speechLang: string;
+  /** The easy reading. Titles have no plain twin; only the body changes. */
+  easy?: boolean;
 }) {
   if (entries.length === 0) return null;
   return (
     <section className="stories" aria-label="이야기">
       <h2><BookOpen size={16} aria-hidden /> 이야기</h2>
-      {entries.map((entry) => (
+      {entries.map((entry) => {
+        const passage = easy && entry.bodyEasy ? entry.bodyEasy : entry.body;
+        return (
         <article key={entry.title}>
           <h3>{entry.title}</h3>
-          <p>{entry.body}</p>
-          <button type="button" onClick={() => speak(`${entry.title}. ${entry.body}`, speechLang)}>
+          <p>{passage}</p>
+          <button type="button" onClick={() => speak(`${entry.title}. ${passage}`, speechLang)}>
             <Volume2 size={15} /> 들어보기
           </button>
         </article>
-      ))}
+        );
+      })}
     </section>
   );
 }

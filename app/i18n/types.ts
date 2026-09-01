@@ -23,7 +23,14 @@ export type OrganContent = {
    * their own. Optional because a locale may carry the short copy without
    * having had these written yet.
    */
-  stories?: { title: string; body: string }[];
+  stories?: {
+    title: string;
+    body: string;
+    /** The same read said plainly. Falls back to `body` when absent. The
+     *  titles have no easy twin — thirteen characters apiece, and they are
+     *  names rather than sentences. */
+    bodyEasy?: string;
+  }[];
   /**
    * The layer below the stories, folded away until asked for. Grouping by
    * category is what keeps eight paragraphs from reading as one long wall.
@@ -41,7 +48,21 @@ export type DeepDiveCategory =
   | "microscope" | "evolution" | "space" | "weather"
   | "etymology" | "culture" | "research" | "senses";
 
-export type DeepDive = { category: DeepDiveCategory; title: string; body: string };
+export type DeepDive = {
+  category: DeepDiveCategory;
+  /**
+   * Also the entry's identity, not just its heading: the panel keys its list
+   * on this string and remembers which entry is open by it, and the quiz
+   * reopens a passage by finding it. Rewording a title moves the furniture
+   * out from under both — so the easy reading gets `titleEasy` beside it and
+   * this stays exactly as it is.
+   */
+  title: string;
+  titleEasy?: string;
+  body: string;
+  /** Falls back to `body` where the plain version has not been written. */
+  bodyEasy?: string;
+};
 
 /** One entry of the clinical encyclopedia.
  *

@@ -686,11 +686,12 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               onClose={() => setKnowledgeQuiz(false)}
             />
           )}
-          {organ.stories && <Stories entries={organ.stories} speechLang={speechLang} />}
+          {organ.stories && <Stories entries={organ.stories} speechLang={speechLang} easy={mode === "easy"} />}
           {organ.deepDive && (
             <DeepDive
               entries={organ.deepDive}
               speechLang={speechLang}
+              easy={mode === "easy"}
               // Questions drawn from the long reads have no deep-dive entry to
               // open, and the quiz already hides the button for them.
               reveal={revealCategory === "stories" ? null : revealCategory}

@@ -63,10 +63,13 @@ const META: Record<DeepDiveCategory, { label: string; Icon: typeof Boxes }> = {
 export function DeepDive({
   entries,
   speechLang,
+  easy,
   reveal,
 }: {
   entries: DeepDiveEntry[];
   speechLang: string;
+  /** The easy reading. Falls back per entry where no plain version exists. */
+  easy?: boolean;
   /** A category the quiz asked to show. Opens its group and its entry. */
   reveal?: DeepDiveEntry["category"] | null;
 }) {
@@ -133,7 +136,12 @@ export function DeepDive({
               <div className="deep-dive-items">
                 {group.items.map((entry) => {
                   const { label, Icon } = META[entry.category];
+                  // `entry.title` stays the identity — the key, the open-state
+                  // marker, and what the quiz reopens by. Only what is drawn
+                  // switches wording.
                   const isOpen = openEntry === entry.title;
+                  const heading = easy && entry.titleEasy ? entry.titleEasy : entry.title;
+                  const passage = easy && entry.bodyEasy ? entry.bodyEasy : entry.body;
                   return (
                     <article key={entry.title} data-deep-dive={entry.category} className={isOpen ? "open" : ""}>
                       <h4>
@@ -144,17 +152,17 @@ export function DeepDive({
                         >
                           <Icon size={16} aria-hidden />
                           <span className="deep-dive-label">{label}</span>
-                          <span className="deep-dive-title">{entry.title}</span>
+                          <span className="deep-dive-title">{heading}</span>
                           <ChevronDown size={16} aria-hidden className="deep-dive-chevron" />
                         </button>
                       </h4>
                       {isOpen && (
                         <div className="deep-dive-body">
-                          <p>{entry.body}</p>
+                          <p>{passage}</p>
                           <button
                             type="button"
                             className="deep-dive-listen"
-                            onClick={() => speak(`${entry.title}. ${entry.body}`, speechLang)}
+                            onClick={() => speak(`${heading}. ${passage}`, speechLang)}
                           >
                             <Volume2 size={15} /> 들어보기
                           </button>
