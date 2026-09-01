@@ -10,13 +10,10 @@ export const ui: UiDictionary = {
     imageAlt: "받침대 위에 떠 있는 해부학적 심장 표본과 Anatomy Atelier 로고",
   },
   brand: { tagline: "예술가처럼 배우는 해부학", home: "Anatomy Atelier 홈" },
-  nav: { aria: "주요 메뉴", explore: "탐색", systems: "계통", lessons: "수업", library: "라이브러리", notes: "노트" },
   search: { placeholder: "장기나 주제 검색…" },
-  profile: { open: "학습자 프로필 열기" },
   language: { label: "언어", choose: "언어 선택" },
   library: {
-    title: "장기 라이브러리", open: "장기 라이브러리 열기", close: "라이브러리 닫기",
-    saved: "저장한 장기", viewAll: "모든 장기 보기",
+    title: "장기 라이브러리", open: "장기 라이브러리 열기", close: "라이브러리 닫기", viewAll: "모든 장기 보기",
     quoteLine1: "배움은", quoteLine2: "궁금해하는 데서 시작됩니다.", quoteSign: "계속 탐색해 보세요!",
   },
   tools: {

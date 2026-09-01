@@ -10,13 +10,10 @@ export const ui: UiDictionary = {
     imageAlt: "Ein anatomisches Herzpräparat über einem Sockel, daneben der Schriftzug Anatomy Atelier",
   },
   brand: { tagline: "Anatomie lernen wie ein Künstler", home: "Startseite von Anatomy Atelier" },
-  nav: { aria: "Primary navigation", explore: "Entdecken", systems: "Systeme", lessons: "Lektionen", library: "Bibliothek", notes: "Notizen" },
   search: { placeholder: "Organe, Themen suchen…" },
-  profile: { open: "Lernprofil öffnen" },
   language: { label: "Sprache", choose: "Sprache wählen" },
   library: {
-    title: "Organbibliothek", open: "Organbibliothek öffnen", close: "Bibliothek schließen",
-    saved: "Gespeicherte Organe", viewAll: "Alle Organe anzeigen",
+    title: "Organbibliothek", open: "Organbibliothek öffnen", close: "Bibliothek schließen", viewAll: "Alle Organe anzeigen",
     quoteLine1: "Lernen ist", quoteLine2: "ein Akt der Neugier.", quoteSign: "Weiter entdecken!",
   },
   tools: {

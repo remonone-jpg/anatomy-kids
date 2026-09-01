@@ -146,12 +146,10 @@ export type OrganContentDictionary = Record<OrganId, OrganContent>;
 export type UiDictionary = {
   meta: { title: string; description: string; ogTitle: string; ogDescription: string; imageAlt: string };
   brand: { tagline: string; home: string };
-  nav: { aria: string; explore: string; systems: string; lessons: string; library: string; notes: string };
   search: { placeholder: string };
-  profile: { open: string };
   language: { label: string; choose: string };
   library: {
-    title: string; open: string; close: string; saved: string; viewAll: string;
+    title: string; open: string; close: string; viewAll: string;
     quoteLine1: string; quoteLine2: string; quoteSign: string;
   };
   tools: { label: string; rotate: string; zoom: string; isolate: string; section: string; layers: string; compare: string; reset: string };

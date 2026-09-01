@@ -62,8 +62,10 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 
 .topbar > * { flex: 0 0 auto; min-width: 0; }
 .topbar > .brand { flex: 1 1 260px; }
-.topbar > .search-box { flex: 1 1 200px; }
-.topbar > .main-nav { flex: 0 1 auto; overflow: hidden; }
+/* The search box stops growing at its own 280px. It used to take the slack
+   alongside the brand because the nav sat between them; with the nav gone it
+   would stretch to twice its intended width. */
+.topbar > .search-box { flex: 0 1 280px; }
 
 .brand {
   display: flex;
@@ -91,26 +93,6 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 }
 .brand em { font-size: 12px; white-space: nowrap; }
 
-.main-nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-}
-
-.main-nav button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: 0;
-  padding: 12px 15px;
-  border-radius: 999px;
-  background: transparent;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.main-nav button.active { background: rgba(238, 124, 106, .075); box-shadow: inset 0 0 0 1px rgba(215, 112, 91, .12); }
-
 .search-box {
   justify-self: end;
   width: min(100%, 280px);
@@ -127,27 +109,14 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 .search-box input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 12px; }
 .search-box input::placeholder { color: #a49b93; }
 
-.profile, .mobile-library-trigger {
-  display: flex;
+.mobile-library-trigger {
+  display: none;
   align-items: center;
   gap: 7px;
   border: 0;
   background: transparent;
   cursor: pointer;
 }
-.profile span {
-  width: 38px;
-  height: 38px;
-  border: 1px solid rgba(82,64,50,.5);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(140deg, #c46854, #efb59c);
-  color: white;
-  font: 600 11px var(--font-serif), serif;
-  box-shadow: inset 0 0 0 3px #f7eee5;
-}
-.mobile-library-trigger { display: none; }
 
 .workspace {
   max-width: 1720px;
@@ -507,8 +476,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 }
 
 @media (max-width: 1040px) {
-  .main-nav button span { display: none; }
-  .main-nav button { padding: 10px; }
   .workspace { grid-template-columns: 210px minmax(450px,1fr); height: 690px; }
   .info-panel { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px 22px; max-height: none; }
   .info-panel .description, .info-panel .rule, .info-panel h2, .key-facts, .medical-note, .listen-button, .body-sense { grid-column: 2; }
@@ -520,10 +487,19 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 @media (max-width: 760px) {
   .app-shell { padding: 10px; overflow: hidden; }
-  .topbar { height: 58px; }
+  /* Two rows on a phone: the logo owns the first, the controls share the
+     second. One row cannot hold them — the logo alone is 187px of a 370px
+     line — and forcing it made the logo paint outside its own box and land
+     on top of the language pill. `height` becomes a floor rather than a
+     fixed value; the page scrolls vertically, so the extra row costs
+     nothing below. */
+  .topbar { height: auto; min-height: 58px; flex-wrap: wrap; column-gap: 8px; row-gap: 7px; padding-block: 6px; }
+  .topbar > .brand { flex: 1 0 100%; }
+  .topbar > .language-switcher { margin-inline-start: auto; }
   .brand strong { font-size: 29px; }
-  .main-nav { display: none; }
-  .profile span { width: 34px; height: 34px; }
+  /* Globe and chevron only. The language's own name is the widest part of
+     the pill and the flag-less globe already says what the control is. */
+  .language-switcher .language-current { display: none; }
   .mobile-library-trigger { display: flex; }
   .workspace { display: block; margin-top: 8px; }
   .viewer-shell { height: 68vh; min-height: 520px; border-radius: 22px; }
@@ -1577,17 +1553,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .walk-body p { font-size: 13px; }
 }
 
-/* Chrome that was never wired up. Marked disabled so it leaves the tab order
-   and stops being offered as something to press — but it is scenery, not a
-   temporarily unavailable action, so it keeps its normal weight rather than
-   greying out and implying "try again later". */
-.main-nav button:disabled,
-.profile:disabled,
-.library-panel button:disabled {
-  cursor: default;
-  opacity: 1;
-}
-
 /* ── Child's name ────────────────────────────────────────────────────── */
 
 .child-name-backdrop { align-items: center; }
@@ -1650,6 +1615,16 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .mode-switch button.on {
   background: var(--paper); color: var(--ink);
   box-shadow: 0 1px 3px rgba(60,45,30,.14);
+}
+
+/* Both of these sit on the phone header's second row, which has 370px for
+   four controls. Trimming the padding is what keeps the library button from
+   being pushed onto a third row of its own. It has to live here rather than
+   in the 760px block further up: same specificity, and that block is written
+   before these rules, so it would lose. */
+@media (max-width: 760px) {
+  .mode-switch button { padding: 0 6px; }
+  .child-name-change { padding: 5px 9px; }
 }
 
 /* ── School: systems layer ───────────────────────────────────────────── */

@@ -10,13 +10,10 @@ export const ui: UiDictionary = {
     imageAlt: "Un cœur anatomique flottant au-dessus d'un socle, à côté du logotype Anatomy Atelier",
   },
   brand: { tagline: "Apprendre l'anatomie comme un artiste", home: "Accueil d'Anatomy Atelier" },
-  nav: { aria: "Primary navigation", explore: "Explorer", systems: "Systèmes", lessons: "Leçons", library: "Bibliothèque", notes: "Notes" },
   search: { placeholder: "Rechercher un organe, un thème…" },
-  profile: { open: "Ouvrir le profil de l'apprenant" },
   language: { label: "Langue", choose: "Choisir une langue" },
   library: {
-    title: "Bibliothèque d'organes", open: "Ouvrir la bibliothèque d'organes", close: "Fermer la bibliothèque",
-    saved: "Organes enregistrés", viewAll: "Voir tous les organes",
+    title: "Bibliothèque d'organes", open: "Ouvrir la bibliothèque d'organes", close: "Fermer la bibliothèque", viewAll: "Voir tous les organes",
     quoteLine1: "Apprendre est", quoteLine2: "un acte de curiosité.", quoteSign: "Continuez à explorer !",
   },
   tools: {

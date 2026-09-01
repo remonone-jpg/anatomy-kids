@@ -10,13 +10,10 @@ export const ui: UiDictionary = {
     imageAlt: "Spesimen jantung anatomis melayang di atas alas, di samping logo Anatomy Atelier",
   },
   brand: { tagline: "Belajar anatomi seperti seorang seniman", home: "Beranda Anatomy Atelier" },
-  nav: { aria: "Primary navigation", explore: "Jelajahi", systems: "Sistem", lessons: "Pelajaran", library: "Pustaka", notes: "Catatan" },
   search: { placeholder: "Cari organ atau topik…" },
-  profile: { open: "Buka profil pembelajar" },
   language: { label: "Bahasa", choose: "Pilih bahasa" },
   library: {
-    title: "Pustaka organ", open: "Buka pustaka organ", close: "Tutup pustaka",
-    saved: "Organ tersimpan", viewAll: "Lihat semua organ",
+    title: "Pustaka organ", open: "Buka pustaka organ", close: "Tutup pustaka", viewAll: "Lihat semua organ",
     quoteLine1: "Belajar adalah", quoteLine2: "sebuah tindakan rasa ingin tahu.", quoteSign: "Teruslah menjelajah!",
   },
   tools: {

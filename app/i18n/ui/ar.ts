@@ -10,13 +10,10 @@ export const ui: UiDictionary = {
     imageAlt: "عيّنة قلب تشريحية تطفو فوق قاعدة، إلى جانب شعار Anatomy Atelier",
   },
   brand: { tagline: "تعلَّم التشريح كما يفعل الفنان", home: "الصفحة الرئيسية لـ Anatomy Atelier" },
-  nav: { aria: "Primary navigation", explore: "استكشاف", systems: "الأجهزة", lessons: "الدروس", library: "المكتبة", notes: "الملاحظات" },
   search: { placeholder: "ابحث عن عضو أو موضوع…" },
-  profile: { open: "فتح ملف المتعلّم" },
   language: { label: "اللغة", choose: "اختر لغة" },
   library: {
-    title: "مكتبة الأعضاء", open: "فتح مكتبة الأعضاء", close: "إغلاق المكتبة",
-    saved: "الأعضاء المحفوظة", viewAll: "عرض كل الأعضاء",
+    title: "مكتبة الأعضاء", open: "فتح مكتبة الأعضاء", close: "إغلاق المكتبة", viewAll: "عرض كل الأعضاء",
     quoteLine1: "التعلّم", quoteLine2: "فعلٌ من أفعال الفضول.", quoteSign: "واصل الاستكشاف!",
   },
   tools: {

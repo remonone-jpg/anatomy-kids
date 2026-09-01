@@ -10,13 +10,10 @@ export const ui: UiDictionary = {
     imageAlt: "एक चौकी पर तैरता शारीरिक हृदय, Anatomy Atelier के नाम-चिह्न के साथ",
   },
   brand: { tagline: "शरीर रचना, एक कलाकार की तरह", home: "Anatomy Atelier मुखपृष्ठ" },
-  nav: { aria: "Primary navigation", explore: "अन्वेषण", systems: "तंत्र", lessons: "पाठ", library: "संग्रह", notes: "टिप्पणियाँ" },
   search: { placeholder: "अंग या विषय खोजें…" },
-  profile: { open: "शिक्षार्थी प्रोफ़ाइल खोलें" },
   language: { label: "भाषा", choose: "भाषा चुनें" },
   library: {
-    title: "अंग संग्रह", open: "अंग संग्रह खोलें", close: "संग्रह बंद करें",
-    saved: "सहेजे गए अंग", viewAll: "सभी अंग देखें",
+    title: "अंग संग्रह", open: "अंग संग्रह खोलें", close: "संग्रह बंद करें", viewAll: "सभी अंग देखें",
     quoteLine1: "सीखना", quoteLine2: "जिज्ञासा का कार्य है।", quoteSign: "खोजते रहिए!",
   },
   tools: {

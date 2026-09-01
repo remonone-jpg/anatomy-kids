@@ -4,19 +4,15 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import gsap from "gsap";
 import {
   ArrowRight,
-  BookOpen,
-  Bookmark,
   BrainCircuit,
   ChevronDown,
   CircleHelp,
-  Compass,
   Crosshair,
   FileText,
   Globe,
   Heart,
   LibraryBig,
   Microscope,
-  NotebookPen,
   Play,
   Search,
   Share2,
@@ -348,16 +344,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <strong>Anatomy Atelier<sup>✦</sup></strong>
           <em>{t.brand.tagline}</em>
         </button>
-        <nav className="main-nav" aria-label={t.nav.aria}>
-          {/* Chrome from the original design. None of these five are wired
-              to anything, so they are marked disabled rather than left as
-              buttons that silently do nothing when pressed. */}
-          <button className="active" disabled><Compass size={17} /> {t.nav.explore}</button>
-          <button disabled><BrainCircuit size={17} /> {t.nav.systems}</button>
-          <button disabled><BookOpen size={17} /> {t.nav.lessons}</button>
-          <button disabled><LibraryBig size={17} /> {t.nav.library}</button>
-          <button disabled><NotebookPen size={17} /> {t.nav.notes}</button>
-        </nav>
+        {/* The five nav buttons, the profile avatar and the bookmark button
+            were chrome from the original design, wired to nothing. Disabling
+            them only made the header say the app has features it does not. */}
         <label className="search-box">
           <Search size={17} />
           <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t.search.placeholder} />
@@ -375,7 +364,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             {kidsCopy.nameChange}
           </button>
         )}
-        <button className="profile" aria-label={t.profile.open} disabled><span>MA</span><ChevronDown size={15} /></button>
         <button className="mobile-library-trigger" onClick={() => setMobileLibrary(true)} aria-label={t.library.open}><LibraryBig size={20} /></button>
       </header>
 
@@ -384,7 +372,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <div className="panel-heading">
             <span>{panelView === "body" && kidsCopy ? kidsCopy.viewBody : t.library.title}</span>
             <button aria-label={t.library.close} className="mobile-close" onClick={() => setMobileLibrary(false)}><X size={17} /></button>
-            <button aria-label={t.library.saved} disabled><Bookmark size={17} /></button>
           </div>
           {kidsCopy && (
             <div className="library-tabs" role="tablist">

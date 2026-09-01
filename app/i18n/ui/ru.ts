@@ -10,13 +10,10 @@ export const ui: UiDictionary = {
     imageAlt: "Анатомический препарат сердца, парящий над подставкой, рядом с логотипом Anatomy Atelier",
   },
   brand: { tagline: "Учить анатомию как художник", home: "Главная страница Anatomy Atelier" },
-  nav: { aria: "Primary navigation", explore: "Обзор", systems: "Системы", lessons: "Уроки", library: "Библиотека", notes: "Заметки" },
   search: { placeholder: "Поиск органов и тем…" },
-  profile: { open: "Открыть профиль учащегося" },
   language: { label: "Язык", choose: "Выберите язык" },
   library: {
-    title: "Библиотека органов", open: "Открыть библиотеку органов", close: "Закрыть библиотеку",
-    saved: "Сохранённые органы", viewAll: "Показать все органы",
+    title: "Библиотека органов", open: "Открыть библиотеку органов", close: "Закрыть библиотеку", viewAll: "Показать все органы",
     quoteLine1: "Учение —", quoteLine2: "это акт любопытства.", quoteSign: "Продолжайте исследовать!",
   },
   tools: {

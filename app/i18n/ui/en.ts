@@ -10,12 +10,10 @@ export const ui: UiDictionary = {
     imageAlt: "An anatomical heart specimen floating above a plinth, beside the Anatomy Atelier wordmark",
   },
   brand: { tagline: "Learn anatomy like an artist", home: "Anatomy Atelier home" },
-  nav: { aria: "Primary navigation", explore: "Explore", systems: "Systems", lessons: "Lessons", library: "Library", notes: "Notes" },
   search: { placeholder: "Search organs, topics…" },
-  profile: { open: "Open learner profile" },
   language: { label: "Language", choose: "Choose a language" },
   library: {
-    title: "Organ library", open: "Open organ library", close: "Close library", saved: "Saved organs",
+    title: "Organ library", open: "Open organ library", close: "Close library",
     viewAll: "View all organs",
     quoteLine1: "Learning is", quoteLine2: "an act of curiosity.", quoteSign: "Keep exploring!",
   },
