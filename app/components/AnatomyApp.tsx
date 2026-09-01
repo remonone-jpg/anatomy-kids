@@ -289,23 +289,28 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     speak(lines.filter(Boolean).join(" "), speechLang);
   };
 
+  /**
+   * Switching between the two readings keeps the screen exactly as it is.
+   *
+   * That is the whole point of the switch: the same item, said two ways. A
+   * reader compares them by flipping back and forth, and every panel this
+   * used to close was a panel they had to find again to finish comparing.
+   *
+   * It once closed all of them for a reason that no longer holds. When there
+   * were three modes, the systems layer belonged to some of them and not
+   * others, so a switch could leave the viewer on a screen the new mode did
+   * not have. `schoolOn` no longer looks at the mode — both readings carry
+   * the systems layer, the diagrams, the clinical card and the rest — so
+   * there is nothing to be stranded on.
+   */
   const changeMode = (next: Mode) => {
     writeMode(next);
-    setSystemId(null);
-    setSystemQuiz(null);
-    setRevealExam(null);
-    setDiagramOpen(false);
+    // The voice is mid-sentence in wording that is about to be replaced.
     stopSpeaking();
-    setQuery("");
-    setCompare(false);
-    setQuizActive(false);
-    // Each mode has its own quiz; leaving one open across the switch would
-    // show a panel the other mode is not supposed to have.
+    // The one panel that still belongs to a single reading: it renders as
+    // `kidsQuiz && kidsOn`, so left open it would vanish on the way to the
+    // detailed reading and reappear on the way back.
     setKidsQuiz(false);
-    setKnowledgeQuiz(false);
-    // Kids mode has no clinical card at all, so it must not inherit its modal.
-    setConditionView(null);
-    setWalking(false);
   };
 
   const selectOrgan = (id: OrganId) => {
