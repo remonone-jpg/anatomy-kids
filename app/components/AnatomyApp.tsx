@@ -15,7 +15,6 @@ import {
   Microscope,
   Play,
   Search,
-  Share2,
   PersonStanding,
   Scan,
   Sparkles,
@@ -42,7 +41,7 @@ import { locales } from "../i18n/config";
 import { buildOrgans, indexOrgans, type Organ } from "../i18n/merge";
 import { format, type Dictionary, type UiDictionary } from "../i18n/types";
 import { applyKids, getBodySense, getKidsUi, getMoreFacts, kidsAvailable } from "../i18n/kids";
-import { getAllQuiz, getKidsQuiz, getOrganQuiz, kidsQuizAvailable, quizAvailable } from "../i18n/quiz";
+import { getAllQuiz, getKidsQuiz, getOrganQuiz } from "../i18n/quiz";
 import { conditionsAvailable, getConditions } from "../i18n/conditions";
 import { getSystems, schoolAvailable } from "../i18n/school";
 import { getAllSystemQuiz, getSystemQuiz, systemQuizAvailable } from "../i18n/quiz";
@@ -62,6 +61,15 @@ import {
 import { asset } from "../lib/asset";
 
 type Modal = "lesson" | "animation" | "system" | null;
+
+/**
+ * How many questions the knowledge quiz draws from its bank in one sitting —
+ * five about the organ on screen, ten when the whole body is. Named because
+ * the quiz card prints the number, and a card promising a different count
+ * from the one the quiz deals out is worse than no card.
+ */
+const KNOWLEDGE_QUIZ_SIZE = 5;
+const BODY_QUIZ_SIZE = 10;
 
 /**
  * Renders an organ illustration, or its accent glyph for organs that ship as a
@@ -292,6 +300,30 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const moreFacts = getMoreFacts(locale.code, organId, named);
   // Only school mode can have one open; the organ panel takes over when null.
   const activeSystem = schoolOn && systemId ? getSystems(locale.code).find((s) => s.id === systemId) : undefined;
+
+  /**
+   * What the quiz card says, or `null` where there is no quiz to offer.
+   *
+   * The headline counts what pressing the button actually gives, not how big
+   * the collection is: the easy quiz asks this organ's whole set, the
+   * detailed one draws a handful from a larger bank. Promising two hundred
+   * questions and handing over five would be a small lie printed in the
+   * biggest type on the card, so the bank size goes in the line underneath.
+   */
+  const quizCard = useMemo(() => {
+    const copy = t.cards;
+    if (!copy.quizLabel || !copy.quizFormat || !copy.quizBank || !copy.quizStart) return null;
+    const pool = kidsOn ? getKidsQuiz(locale.code, organId, childName) : getOrganQuiz(locale.code, organId);
+    if (pool.length === 0) return null;
+    const asked = kidsOn ? pool.length : Math.min(KNOWLEDGE_QUIZ_SIZE, pool.length);
+    const choices = pool[0].options.length;
+    return {
+      label: copy.quizLabel,
+      format: format(copy.quizFormat, { count: String(asked), choices: String(choices) }),
+      note: format(copy.quizBank, { organ: organ.name, total: String(pool.length) }),
+      start: copy.quizStart,
+    };
+  }, [t.cards, kidsOn, locale.code, organId, childName, organ.name]);
 
   /** Everything a child would want read out for the organ on screen. */
   const readAloud = (target: Organ) => {
@@ -648,7 +680,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             <KnowledgeQuiz
               key={`${organId}-${stage}`}
               pool={stage === "body" ? getAllQuiz(locale.code) : getOrganQuiz(locale.code, organId)}
-              size={stage === "body" ? 10 : 5}
+              size={stage === "body" ? BODY_QUIZ_SIZE : KNOWLEDGE_QUIZ_SIZE}
               speechLang={speechLang}
               onOpenPassage={setRevealCategory}
               onClose={() => setKnowledgeQuiz(false)}
@@ -664,32 +696,11 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               reveal={revealCategory === "stories" ? null : revealCategory}
             />
           )}
-          <button className="lesson-button" data-reveal onClick={() => setModal("lesson")}>{t.info.viewLesson} <ArrowRight size={16} /></button>
-          <div className="action-grid" data-reveal>
-            <button onClick={() => (walkable ? setWalking(true) : setModal("animation"))}><Play size={15} /> {t.info.animate}</button>
-            <button onClick={() => { setQuizActive(true); setModal(null); setKnowledgeQuiz(false); }}>
-              <Crosshair size={15} /> {t.info.quiz}
-            </button>
-            {/* The two organ quizzes are the one place the readings genuinely
-                differ in what they show, not just how it is worded: a
-                two-option question written for a five-year-old and a
-                three-option one drawn from the long reads are different
-                material, not the same thing said twice. So each reading
-                offers its own and only its own. The systems paper — four
-                options, drawn from the exam points — belongs to both and
-                lives on the systems screen. */}
-            {!kidsOn && quizAvailable(locale.code) && (
-              <button onClick={() => { setKnowledgeQuiz(true); setQuizActive(false); setRevealCategory(null); }}>
-                <CircleHelp size={15} /> 지식 퀴즈
-              </button>
-            )}
-            {kidsOn && kidsCopy && kidsQuizAvailable(locale.code) && (
-              <button onClick={() => { setKidsQuiz(true); setQuizActive(false); }}>
-                <Sparkles size={15} /> {kidsCopy.kidsQuizButton}
-              </button>
-            )}
-            <button onClick={() => setCompare(!compare)} className={compare ? "active" : ""}><Share2 size={15} /> {t.info.compare}</button>
-          </div>
+          {/* The row of buttons that used to sit here — 조직 살펴보기, 과정
+              보기, 찾기 놀이, the two quizzes and 비교 — is gone. Every one of
+              them had a card below saying the same thing, and the two sets
+              overlapped on screen. The cards won: they can show what they
+              lead to, which a row of six identical pills cannot. */}
           </>
           )}
         </aside>
@@ -715,11 +726,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <button onClick={() => setModal("lesson")}>{t.cards.exploreTissue} <ArrowRight size={14} /></button>
         </article>
         <article>
-          <header><div><em>{t.cards.compareOrgans}</em><h3>{organ.comparison}</h3></div><Share2 size={17} /></header>
-          <div className="comparison-visual organ-card-image"><OrganArt organ={organ} kind="compare" alt="" /></div>
-          <button onClick={() => setCompare(true)}>{t.cards.openComparison} <ArrowRight size={14} /></button>
-        </article>
-        <article>
           <header><div><em>{t.cards.functionAnimation}</em><h3>{organ.function}</h3></div><Play size={17} /></header>
           {/* The artwork itself is the control, so the play badge inside it is
               decorative rather than a nested button. */}
@@ -735,6 +741,33 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           </button>
           <button onClick={() => (walkable ? setWalking(true) : setModal("animation"))}>{t.cards.playAnimation} <ArrowRight size={14} /></button>
         </article>
+        {/* Two ways of being asked, on one card because both are guessing:
+            find the part on the model, or answer questions about it. There is
+            no artwork — the count and the shape of the questions is what a
+            reader wants to know before starting, and a picture of the organ
+            would say nothing the card above it has not already said.
+            Korean-only, like the question banks themselves. */}
+        {quizCard && (
+          <article className="quiz-card">
+            <header><div><em>{quizCard.label}</em><h3>{quizCard.format}</h3></div><CircleHelp size={17} /></header>
+            <p className="quiz-card-note">{quizCard.note}</p>
+            <div className="quiz-card-actions">
+              <button onClick={() => { setQuizActive(true); setModal(null); setKnowledgeQuiz(false); setKidsQuiz(false); }}>
+                <Crosshair size={14} /> {t.info.quiz}
+              </button>
+              <button
+                className="primary"
+                onClick={() => {
+                  setQuizActive(false);
+                  if (kidsOn) setKidsQuiz(true);
+                  else { setKnowledgeQuiz(true); setRevealCategory(null); }
+                }}
+              >
+                {quizCard.start} <ArrowRight size={14} />
+              </button>
+            </div>
+          </article>
+        )}
         {/* A list of the eight ways an organ can fail is the last thing a child
             should meet — and disease is outside the school syllabus too, so
             only the grown-up view carries this card. */}

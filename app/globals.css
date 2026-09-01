@@ -347,11 +347,6 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 .medical-note b, .fun-note b { display: block; margin-bottom: 2px; color: var(--ink); }
 .medical-note svg, .fun-note svg { flex: none; }
 .lesson-button { width: 100%; min-height: 42px; margin-top: 14px; padding: 0 16px; display: flex; justify-content: space-between; align-items: center; border: 0; border-radius: 10px; background: linear-gradient(110deg, #ed8a72, #e87868); color: white; cursor: pointer; box-shadow: 0 9px 20px rgba(208,90,70,.16); font-size: 11px; }
-.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 9px; }
-.action-grid button { min-height: 36px; border: 1px solid #c9b3df; border-radius: 9px; background: rgba(255,255,255,.18); display: flex; gap: 8px; align-items: center; justify-content: center; color: #8062b6; cursor: pointer; font-size: 10px; }
-.action-grid button:nth-child(2) { border-color: #bdcfaa; color: #789067; }
-.action-grid button:last-child { grid-column: 1/-1; border-color: #b9c6e3; color: #6e88bd; }
-.action-grid button.active { background: rgba(111,137,192,.1); box-shadow: inset 0 0 0 1px #8ca2d0; }
 
 .learning-cards {
   /* Cap on the artwork box. The source illustrations are square, so this is
@@ -373,6 +368,36 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 .learning-cards em { display: block; text-transform: uppercase; font-size: 10px; }
 .learning-cards h3 { margin: 3px 0 0; font: 500 13px/1.2 var(--font-serif), serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .learning-cards article > button:not(.organ-card-image) { margin-top: auto; width: 100%; min-height: 30px; }
+/* The quiz card carries no artwork, so the count does the work the picture
+   does on its neighbours: it is the one thing a reader wants to know before
+   starting. Hence the size, and hence `white-space: normal` — the shared card
+   rule clips headings to one line, which is right for an organ's name and
+   wrong for a number that has to be read. */
+.quiz-card h3 {
+  margin-top: 5px;
+  font: 500 20px/1.15 var(--font-serif), serif;
+  white-space: normal;
+}
+.quiz-card-note { margin: 8px 0 0; color: var(--muted); font-size: 11px; }
+.quiz-card-actions { margin-top: auto; padding-top: 12px; display: flex; gap: 8px; }
+.quiz-card-actions button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(255,255,255,.24);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.quiz-card-actions .primary { border-color: #d9a08f; background: rgba(237,138,114,.12); color: #b4614b; }
+
 .curiosity-card { justify-content: center; padding-inline-start: 28px !important; background: linear-gradient(145deg, rgba(255,247,234,.7), rgba(247,231,210,.86)) !important; }
 .curiosity-card span { color: #c8a0b8; font-size: 28px; }
 .curiosity-card p { margin: 5px 0 10px; font: 500 16px/1.4 var(--font-serif), serif; }
@@ -409,7 +434,6 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
    and stays square to avoid becoming an ellipse. */
 .microscope-visual { width: min(var(--art-max), 100%); max-height: none; border-radius: 50%; box-shadow: inset 0 0 0 5px rgba(255,255,255,.38), 0 6px 18px rgba(121,72,73,.08); }
 .microscope-visual img { border-radius: 50%; object-fit: cover; }
-.comparison-visual { border-radius: 12px; }
 /* No footer button on this card, so the artwork centres in the leftover space. */
 /* Reset for the two artwork boxes that are themselves buttons. */
 button.organ-card-image { border: 0; padding: 0; background: transparent; cursor: pointer; font: inherit; }
@@ -867,9 +891,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 /* Two actions rather than three, so the spanning rule for the third would
    otherwise leave the first button stranded in a half-width column. */
-.kids .action-grid { gap: 10px; }
-.kids .action-grid button { min-height: 54px; border-width: 2px; border-radius: 16px; font-size: 15px; }
-.kids .action-grid button:last-child { grid-column: auto; }
 
 .kids .tool-button { height: 68px; font-size: 11px; }
 .kids .tip-note p { font-size: 16px; line-height: 1.6; }
@@ -886,7 +907,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   /* Thumbs, not fingertips, and a much narrower column to spend. */
   .kids .organ-item b { font-size: 19px; }
   .kids .listen-button { min-height: 60px; font-size: 18px; }
-  .kids .action-grid button { min-height: 58px; }
 }
 
 /* Try-it-on-yourself prompt, weighted like the fun note it sits beside. */
