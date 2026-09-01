@@ -268,18 +268,28 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     );
   }, [organId]);
 
-  const bodySense = getBodySense(locale.code, organId, childName);
+  /**
+   * Both readings show these, but only the easy one calls the reader by name.
+   *
+   * Several of these lines are written as "{child}가 자는 동안 뇌는…", and
+   * passing the name through in the detailed reading had it addressing one
+   * particular five-year-old in the middle of the grown-up text. Passing
+   * `null` is not a loss: every one of those lines already carries a neutral
+   * wording for readers who never entered a name ("우리가 자는 동안…").
+   */
+  const named = kidsOn ? childName : null;
+  const bodySense = getBodySense(locale.code, organId, named);
   // The tissue view and the walkthrough are built from deepDive entries, so
-  // they exist exactly where that content does — adult mode, Korean.
+  // they exist exactly where that content does — Korean.
   const microscope = organ.deepDive?.find((entry) => entry.category === "microscope");
   const mechanism = organ.deepDive?.find((entry) => entry.category === "mechanism");
   const walkable = Boolean(mechanism && t.walk);
 
-  // Adult mode only, and only where the encyclopedia has been written.
+  // Only where the encyclopedia has been written.
   const conditionCopy = t.conditions;
   const conditionDetails =
     conditionCopy && conditionsAvailable(locale.code) ? getConditions(locale.code, organId) : [];
-  const moreFacts = getMoreFacts(locale.code, organId, childName);
+  const moreFacts = getMoreFacts(locale.code, organId, named);
   // Only school mode can have one open; the organ panel takes over when null.
   const activeSystem = schoolOn && systemId ? getSystems(locale.code).find((s) => s.id === systemId) : undefined;
 
@@ -307,10 +317,11 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     writeMode(next);
     // The voice is mid-sentence in wording that is about to be replaced.
     stopSpeaking();
-    // The one panel that still belongs to a single reading: it renders as
-    // `kidsQuiz && kidsOn`, so left open it would vanish on the way to the
-    // detailed reading and reappear on the way back.
+    // The two organ quizzes are the panels that still belong to one reading
+    // each. Left open, either would vanish on the way across and reappear on
+    // the way back. Everything else on screen is carried by both.
     setKidsQuiz(false);
+    setKnowledgeQuiz(false);
   };
 
   const selectOrgan = (id: OrganId) => {
@@ -633,7 +644,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               onClose={() => setKidsQuiz(false)}
             />
           )}
-          {knowledgeQuiz && (
+          {knowledgeQuiz && !kidsOn && (
             <KnowledgeQuiz
               key={`${organId}-${stage}`}
               pool={stage === "body" ? getAllQuiz(locale.code) : getOrganQuiz(locale.code, organId)}
@@ -659,12 +670,20 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             <button onClick={() => { setQuizActive(true); setModal(null); setKnowledgeQuiz(false); }}>
               <Crosshair size={15} /> {t.info.quiz}
             </button>
-            {quizAvailable(locale.code) && (
+            {/* The two organ quizzes are the one place the readings genuinely
+                differ in what they show, not just how it is worded: a
+                two-option question written for a five-year-old and a
+                three-option one drawn from the long reads are different
+                material, not the same thing said twice. So each reading
+                offers its own and only its own. The systems paper — four
+                options, drawn from the exam points — belongs to both and
+                lives on the systems screen. */}
+            {!kidsOn && quizAvailable(locale.code) && (
               <button onClick={() => { setKnowledgeQuiz(true); setQuizActive(false); setRevealCategory(null); }}>
                 <CircleHelp size={15} /> 지식 퀴즈
               </button>
             )}
-            {kidsCopy && kidsQuizAvailable(locale.code) && (
+            {kidsOn && kidsCopy && kidsQuizAvailable(locale.code) && (
               <button onClick={() => { setKidsQuiz(true); setQuizActive(false); }}>
                 <Sparkles size={15} /> {kidsCopy.kidsQuizButton}
               </button>
