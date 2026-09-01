@@ -13,6 +13,7 @@ export function ConditionsModal({
   names,
   details,
   copy,
+  easy,
   closeLabel,
   initial,
   onClose,
@@ -22,6 +23,9 @@ export function ConditionsModal({
   names: string[];
   details: ConditionDetail[];
   copy: Copy;
+  /** The easy reading. Every field falls back to its full version when the
+   *  plain one has not been written, so a half-filled entry still reads. */
+  easy?: boolean;
   closeLabel: string;
   /** Opens straight into one condition when the card item was clicked. */
   initial: string | null;
@@ -45,6 +49,7 @@ export function ConditionsModal({
           <ConditionBody
             detail={detail}
             copy={copy}
+            easy={easy}
             onBack={initial ? null : () => setSelected(null)}
           />
         ) : (
@@ -69,7 +74,7 @@ export function ConditionsModal({
                       <span>
                         <b>{name}</b>
                         {entry.urgent && <em className="urgent-badge small"><AlertTriangle size={11} /> {copy.urgent}</em>}
-                        <small>{entry.oneLine}</small>
+                        <small>{easy && entry.oneLineEasy ? entry.oneLineEasy : entry.oneLine}</small>
                       </span>
                       <ArrowRight size={15} />
                     </button>
@@ -89,12 +94,16 @@ export function ConditionsModal({
 function ConditionBody({
   detail,
   copy,
+  easy,
   onBack,
 }: {
   detail: ConditionDetail;
   copy: Copy;
+  easy?: boolean;
   onBack: (() => void) | null;
 }) {
+  const symptoms = easy && detail.symptomsEasy ? detail.symptomsEasy : detail.symptoms;
+  const note = easy && detail.noteEasy ? detail.noteEasy : detail.note;
   return (
     <>
       {onBack && (
@@ -108,23 +117,23 @@ function ConditionBody({
       )}
 
       <h2 id="conditions-title">{detail.name}</h2>
-      <p className="condition-oneline">{detail.oneLine}</p>
+      <p className="condition-oneline">{easy && detail.oneLineEasy ? detail.oneLineEasy : detail.oneLine}</p>
 
       <section className="condition-section">
         <h3>{copy.what}</h3>
-        <p>{detail.what}</p>
+        <p>{easy && detail.whatEasy ? detail.whatEasy : detail.what}</p>
       </section>
 
       <section className="condition-section">
         <h3>{copy.symptoms}</h3>
         <ul className="condition-symptoms">
-          {detail.symptoms.map((symptom) => <li key={symptom}>{symptom}</li>)}
+          {symptoms.map((symptom) => <li key={symptom}>{symptom}</li>)}
         </ul>
       </section>
 
       <section className="condition-section">
         <h3>{copy.causes}</h3>
-        <p>{detail.causes}</p>
+        <p>{easy && detail.causesEasy ? detail.causesEasy : detail.causes}</p>
       </section>
 
       {/* Two columns, same border, same background, same type. The moment the
@@ -144,16 +153,20 @@ function ConditionBody({
         </div>
       </section>
 
-      {/* The one block that has to be seen if nothing else is. */}
+      {/* The one block that has to be seen if nothing else is. It reads the
+          same in both settings: no entry carries a `seeDoctorEasy`, because
+          shortening a list of warning signs means dropping one of them. The
+          fallback is here so a plain version that loses nothing can be added
+          later without touching this file. */}
       <section className="condition-section see-doctor">
         <h3><Stethoscope size={15} /> {copy.seeDoctor}</h3>
-        <p>{detail.seeDoctor}</p>
+        <p>{easy && detail.seeDoctorEasy ? detail.seeDoctorEasy : detail.seeDoctor}</p>
       </section>
 
-      {detail.note && (
+      {note && (
         <section className="condition-section condition-note">
           <h3>{copy.note}</h3>
-          <p>{detail.note}</p>
+          <p>{note}</p>
         </section>
       )}
     </>

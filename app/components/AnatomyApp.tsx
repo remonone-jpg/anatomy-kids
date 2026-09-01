@@ -788,6 +788,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           names={organ.conditions}
           details={conditionDetails}
           copy={conditionCopy}
+          easy={mode === "easy"}
           closeLabel={t.modal.close}
           initial={conditionView === "" ? null : conditionView}
           onClose={() => setConditionView(null)}

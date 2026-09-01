@@ -66,6 +66,22 @@ export type ConditionDetail = {
   seeDoctor: string;
   urgent?: boolean;
   note?: string;
+  /**
+   * The same entry said plainly, for the easy reading. Each falls back to its
+   * full version when absent, so a half-written entry still reads.
+   *
+   * `seeDoctorEasy` exists but is deliberately left empty: that passage tells
+   * someone when to call for help, and shortening it would mean dropping one
+   * of the signs. Both readings get the full wording until there is a plain
+   * version that loses nothing. `fixedFactors` and `modifiableFactors` are
+   * single words already and have no easy form.
+   */
+  oneLineEasy?: string;
+  whatEasy?: string;
+  symptomsEasy?: string[];
+  causesEasy?: string;
+  seeDoctorEasy?: string;
+  noteEasy?: string;
 };
 
 /**
