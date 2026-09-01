@@ -60,6 +60,7 @@ function Listen({ text, label, lang }: { text: string; label: string; lang: stri
 export function SystemView({
   system,
   copy,
+  easy,
   speechLang,
   onOpenOrgan,
   revealExam,
@@ -68,6 +69,9 @@ export function SystemView({
 }: {
   system: SystemContent;
   copy: Copy;
+  /** The easy reading. Every passage falls back to its full version where no
+   *  plain one has been written, so a partly-filled system still reads. */
+  easy?: boolean;
   speechLang: string;
   onOpenOrgan: (id: OrganId) => void;
   /** An `exam` point to scroll to, sent by the quiz's "본문에서 보기". */
@@ -79,6 +83,15 @@ export function SystemView({
   const [openWhy, setOpenWhy] = useState<number | null>(null);
   const [checked, setChecked] = useState<Set<number>>(new Set());
   const examRef = useRef<HTMLElement>(null);
+
+  /** The easy wording when the reader asked for it and it exists, the full one
+   *  otherwise. Every passage below goes through this. */
+  const say = (full: string, plain?: string) => (easy && plain ? plain : full);
+  const intro = say(system.intro, system.introEasy);
+  const connection = say(system.connection, system.connectionEasy);
+  // Whole or nothing — see the note on `summaryEasy`. A per-line fallback
+  // would misalign the moment one system is written and another is not.
+  const summary = easy && system.summaryEasy ? system.summaryEasy : system.summary;
 
   // Scrolling is not state, so an effect is the right place for it. A point
   // the quiz could not resolve simply brings the exam box into view, which is
@@ -100,8 +113,8 @@ export function SystemView({
       <p className="system-curriculum"><GraduationCap size={13} aria-hidden /> {system.curriculum}</p>
       <h2>{system.name}</h2>
       <p className="system-oneline">{system.oneLine}</p>
-      <p className="system-intro">{system.intro}</p>
-      <Listen text={system.intro} label={copy.listen} lang={speechLang} />
+      <p className="system-intro">{intro}</p>
+      <Listen text={intro} label={copy.listen} lang={speechLang} />
 
       {/* The diagram sits above the parts list: the list names what the
           picture shows, and the picture answers "where is that". */}
@@ -121,7 +134,7 @@ export function SystemView({
             const body = (
               <>
                 <b>{organ.name}</b>
-                <small>{organ.role}</small>
+                <small>{say(organ.role, organ.roleEasy)}</small>
               </>
             );
             // Only the organs this site already has a page for are links; the
@@ -152,7 +165,7 @@ export function SystemView({
                 <b>{entry.step}</b>
                 <ChevronDown size={15} />
               </button>
-              {openFlow === i && <p>{entry.detail}</p>}
+              {openFlow === i && <p>{say(entry.detail, entry.detailEasy)}</p>}
             </li>
           ))}
         </ol>
@@ -164,13 +177,16 @@ export function SystemView({
           {system.terms.map((term) => (
             <div key={term.word}>
               <dt>{term.word}</dt>
-              <dd>{term.mean}</dd>
+              <dd>{say(term.mean, term.meanEasy)}</dd>
             </div>
           ))}
         </dl>
       </section>
 
-      {system.experiment.map((exp) => (
+      {system.experiment.map((exp) => {
+        const result = say(exp.result, exp.easy?.result);
+        const meaning = say(exp.meaning, exp.easy?.meaning);
+        return (
         <section className="system-section system-experiment" key={exp.title}>
           <h3><FlaskConical size={15} aria-hidden /> {copy.experiment}</h3>
           <b className="experiment-title">{exp.title}</b>
@@ -185,16 +201,17 @@ export function SystemView({
               <ol>{exp.steps.map((item) => <li key={item}>{item}</li>)}</ol>
             </div>
           </div>
-          <p className="experiment-result"><em>{copy.result}</em> {exp.result}</p>
+          <p className="experiment-result"><em>{copy.result}</em> {result}</p>
           {/* Which part of the model stands for which part of the body. This
               is what the exam asks, so it is the loudest block in the card. */}
           <div className="experiment-meaning">
             <h4>{copy.meaning}</h4>
-            <p>{exp.meaning}</p>
-            <Listen text={exp.meaning} label={copy.listen} lang={speechLang} />
+            <p>{meaning}</p>
+            <Listen text={meaning} label={copy.listen} lang={speechLang} />
           </div>
         </section>
-      ))}
+        );
+      })}
 
       <section className="system-section">
         <h3>{copy.why}</h3>
@@ -207,8 +224,8 @@ export function SystemView({
               </button>
               {openWhy === i && (
                 <div>
-                  <p>{entry.a}</p>
-                  <Listen text={entry.a} label={copy.listen} lang={speechLang} />
+                  <p>{say(entry.a, entry.aEasy)}</p>
+                  <Listen text={say(entry.a, entry.aEasy)} label={copy.listen} lang={speechLang} />
                 </div>
               )}
             </li>
@@ -236,7 +253,7 @@ export function SystemView({
             <li key={t.title}>
               <b>{t.title}</b>
               <p>{t.how}</p>
-              <small>{t.what}</small>
+              <small>{say(t.what, t.whatEasy)}</small>
             </li>
           ))}
         </ul>
@@ -244,14 +261,14 @@ export function SystemView({
 
       <section className="system-section system-connection">
         <h3><Link2 size={15} aria-hidden /> {copy.connection}</h3>
-        <p>{system.connection}</p>
-        <Listen text={system.connection} label={copy.listen} lang={speechLang} />
+        <p>{connection}</p>
+        <Listen text={connection} label={copy.listen} lang={speechLang} />
       </section>
 
       <section className="system-section">
         <h3>{copy.summary}</h3>
         <ul className="system-summary">
-          {system.summary.map((line, i) => (
+          {summary.map((line, i) => (
             <li key={line}>
               <button
                 type="button"
@@ -281,7 +298,7 @@ export function SystemView({
           {system.exam.map((entry) => (
             <li key={entry.point}>
               <b>{entry.point}</b>
-              <p>{entry.note}</p>
+              <p>{say(entry.note, entry.noteEasy)}</p>
             </li>
           ))}
         </ul>

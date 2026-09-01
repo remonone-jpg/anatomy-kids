@@ -552,6 +552,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                   key={activeSystem.id}
                   system={activeSystem}
                   copy={{ ...kidsCopy.system }}
+                  easy={mode === "easy"}
                   speechLang={speechLang}
                   revealExam={revealExam}
                   onStartQuiz={() => setSystemQuiz("paper")}
