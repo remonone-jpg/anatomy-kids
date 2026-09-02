@@ -89,17 +89,23 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   border: 0;
   border-radius: 10px;
   background: none;
-  color: var(--muted);
+  color: var(--ink);
   cursor: pointer;
   white-space: nowrap;
   font: 500 13px var(--font-serif), serif;
 }
-.view-switch button svg { flex: none; }
-.view-switch button:hover { color: var(--ink); }
+.view-switch button svg { flex: none; stroke: currentColor; }
+/* Colour cannot carry the hover any more — resting is already the body
+   colour — so it moves to a wash, kept below `.active`'s solid card. */
+.view-switch button:hover { background: rgba(238, 124, 106, .05); }
+/* Three tabs sitting in one tray, one of them on. The card has to win on more
+   than a shade of grey: it is the only one with a solid ground, the only one
+   lifted off the tray, and the only one at 600. */
 .view-switch button.active {
   background: var(--paper);
   color: var(--ink);
-  box-shadow: 0 1px 3px rgba(60,45,30,.14);
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(60,45,30,.2), 0 0 0 1px rgba(60,45,30,.07);
 }
 
 /* The content row. It sits between the header and the workspace, and its own
@@ -126,18 +132,19 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 }
 /* Lucide icons are flex children here; without this they get squeezed before
    the label does when the row runs short. */
-.content-nav button svg { flex: none; }
-/* The old nav was scenery — disabled, so it never needed a resting colour or a
-   hover. These press, so they read as quieter than the body text until pointed
-   at, and `.active` stays the loudest of the three. */
-.content-nav button { color: var(--muted); }
-.content-nav button:hover { color: var(--ink); }
+.content-nav button svg { flex: none; stroke: currentColor; }
+/* Back to the body colour, as the old nav had it. Dimming these to `--muted`
+   made four live destinations read as disabled scenery, which is exactly what
+   the old ones were and these are not. */
+.content-nav button { color: var(--ink); }
+/* So the three states separate by ground rather than by shade: nothing,
+   a wash, then the wash at roughly twice the strength with a rim. */
+.content-nav button:hover { background: rgba(238, 124, 106, .04); }
 .content-nav button.active {
   background: rgba(238, 124, 106, .075);
   box-shadow: inset 0 0 0 1px rgba(215, 112, 91, .12);
-  /* The old nav sat at the body colour, so its tint alone was the whole
-     signal. Here the resting state is already dimmed, and a marked button
-     that stayed dim would read as weaker than a hovered one. */
+  /* Same as resting now that resting is the body colour. Left in place so the
+     rule states its own colour rather than depending on the one above it. */
   color: var(--ink);
 }
 
