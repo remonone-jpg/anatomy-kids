@@ -495,6 +495,14 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           two questions deserve to be told apart. It also sits directly above
           the panel it acts on, which is where the relationship shows. */}
       {kidsCopy && (
+        /* Two of the four carry a mark, and only because the thing they open
+           is a piece of state this component already holds. The other two open
+           something that is simply further down the same panel: the deep dive
+           keeps `openEntry` to itself, and a story is only ever "open" in the
+           sense that it is on screen. Lifting one and watching the scrollbar
+           for the other would be inventing an answer to make the row look
+           uniform, and a mark that means "you pressed this a moment ago"
+           teaches the wrong thing about what it means. */
         <nav className="content-nav" aria-label={kidsCopy.contentNav}>
           <button
             type="button"
@@ -515,9 +523,11 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             <BookOpen size={17} aria-hidden /> <span>{kidsCopy.navStories}</span>
           </button>
           {/* The one entry that stays where it is: each layer has its own
-              question bank, so this opens whichever belongs to the screen. */}
+              question bank, so this opens whichever belongs to the screen.
+              Three banks, one mark — whichever is up, this is what opened it. */}
           <button
             type="button"
+            className={kidsQuiz || knowledgeQuiz || systemQuiz !== null ? "active" : ""}
             onClick={() => {
               setQuizActive(false);
               if (systemId !== null) { setSystemQuiz("paper"); return; }
@@ -530,6 +540,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           {conditionCopy && conditionDetails.length > 0 && (
             <button
               type="button"
+              className={conditionView !== null ? "active" : ""}
               onClick={() => { backToOrgan(); setConditionView(""); }}
             >
               <FileText size={17} aria-hidden /> <span>{kidsCopy.navConditions}</span>
