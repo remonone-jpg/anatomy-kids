@@ -66,6 +66,41 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
    alongside the brand because the nav sat between them; with the nav gone it
    would stretch to twice its intended width. */
 .topbar > .search-box { flex: 0 1 280px; }
+/* The three views sit next to the logo rather than out at the right edge:
+   they answer "what am I looking at", which belongs with the name of the
+   place, not with the settings. */
+.topbar > .view-switch { order: -1; margin-inline-start: 4px; }
+.topbar > .brand { order: -2; }
+
+.view-switch {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(255,255,255,.4);
+}
+.view-switch button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  font: 500 13px var(--font-serif), serif;
+}
+.view-switch button svg { flex: none; }
+.view-switch button:hover { color: var(--ink); }
+.view-switch button.active {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(60,45,30,.14);
+}
 
 .brand {
   display: flex;
@@ -495,6 +530,11 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .app-shell { padding: 16px; }
   .topbar { gap: 12px; }
   .search-box { display: none; }
+  /* Icons only from here down. The three labels are 115+115+89px of a row
+     that has already given up the search box; the icons carry the same
+     meaning at a third of the width. Same trick the language pill uses. */
+  .view-switch button span { display: none; }
+  .view-switch button { padding: 0 10px; gap: 0; }
   .workspace { grid-template-columns: 250px minmax(500px,1fr) 300px; height: min(700px, calc(100vh - 105px)); }
   .learning-cards { grid-template-columns: repeat(3, 1fr); --art-max: 300px; }
 }
@@ -518,8 +558,14 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
      fixed value; the page scrolls vertically, so the extra row costs
      nothing below. */
   .topbar { height: auto; min-height: 58px; flex-wrap: wrap; column-gap: 8px; row-gap: 7px; padding-block: 6px; }
-  .topbar > .brand { flex: 1 0 100%; }
-  .topbar > .language-switcher { margin-inline-start: auto; }
+  /* Two rows, not three. The logo used to take a whole row to itself; with
+     the view switch beside it that pushed the settings onto a third. Letting
+     the logo shrink to its own width leaves room for the switch and the
+     language pill on the first row, and the remaining three settle on the
+     second. */
+  .topbar > .brand { flex: 0 1 auto; min-width: 0; }
+  .topbar > .view-switch { margin-inline-start: 0; }
+  .view-switch button { padding: 0 8px; }
   .brand strong { font-size: 29px; }
   /* Globe and chevron only. The language's own name is the widest part of
      the pill and the flag-less globe already says what the control is. */
@@ -931,36 +977,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .stage { position: relative; min-width: 0; min-height: 0; display: flex; }
 .stage > .viewer-shell, .stage > .body-scene { flex: 1; min-width: 0; min-height: 0; }
 
-.stage-tabs {
-  position: absolute;
-  top: 14px;
-  left: 50%;
-  z-index: 5;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 3px;
-  padding: 3px;
-  border: 1px solid var(--line);
-  border-radius: 13px;
-  background: rgba(253,250,244,.9);
-  backdrop-filter: blur(18px);
-  box-shadow: 0 8px 22px rgba(75,54,40,.08);
-}
-.stage-tabs button {
-  min-height: 34px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
-  font: 500 13px var(--font-serif), serif;
-}
-.stage-tabs button.active { background: color-mix(in srgb, var(--coral), transparent 90%); color: var(--ink); }
 
 .body-scene {
   position: relative;
@@ -1017,8 +1033,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 }
 
 @media (max-width: 760px) {
-  .stage-tabs { top: 10px; }
-  .stage-tabs button { padding: 0 11px; font-size: 12px; }
   .body-scene-tools { inset-inline-start: 10px; }
   .body-scene-tools button { width: 48px; font-size: 9px; }
   .body-scene-name b { font-size: 21px; }
@@ -1035,36 +1049,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 /* Side-panel tabs. The column is only ~220px wide, so the labels need
    `nowrap` — without it the icon lands on one line and the words on the next. */
-.library-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3px;
-  margin-bottom: 10px;
-  padding: 3px;
-  border-radius: 13px;
-  background: rgba(120,92,70,.06);
-}
-.library-tabs button {
-  min-height: 34px;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
-  font: 500 11px var(--font-serif), serif;
-}
-.library-tabs button svg { flex: none; }
-.library-tabs button.active {
-  background: rgba(255,253,249,.95);
-  color: var(--ink);
-  box-shadow: 0 2px 8px rgba(90,66,48,.09);
-}
 
 /* Body scene inside the side panel: it borrows the panel's chrome instead of
    bringing its own, and everything under the canvas is laid out in flow. The
@@ -1649,14 +1633,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 /* ── School: systems layer ───────────────────────────────────────────── */
 
-.school-tabs { display: flex; gap: 4px; margin-bottom: 14px; }
-.school-tabs button {
-  flex: 1; min-height: 36px;
-  border: 1px solid var(--line); border-radius: 12px;
-  background: rgba(255,255,255,.4); color: var(--muted);
-  cursor: pointer; font: 500 13.5px var(--font-serif), serif;
-}
-.school-tabs button.active { background: var(--paper); color: var(--ink); border-color: var(--coral); }
 
 .system-picker { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 18px; }
 .system-picker button {

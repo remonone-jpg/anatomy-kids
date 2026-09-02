@@ -217,12 +217,15 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const [modal, setModal] = useState<Modal>(null);
   const [query, setQuery] = useState("");
   const [mobileLibrary, setMobileLibrary] = useState(false);
-  // The map opens first for everyone: "where is it in me" is the question a
-  // child asks, and a grown-up gets the same orientation for free.
-  const [libraryView, setLibraryView] = useState<"body" | "list">("body");
-  // Which stage the centre column shows. The panel falls back to the list while
-  // the body is on the main stage: two copies of it would mean two WebGL
-  // contexts holding the same twelve models.
+  /**
+   * Which stage the centre column shows.
+   *
+   * There used to be a second copy of the body map in the side panel, and a
+   * derived `panelView` that forced the panel to the list whenever the map
+   * was on the main stage — otherwise two WebGL contexts would hold the same
+   * ten models. The map now lives on the main stage only, so the rule it
+   * enforced is structural rather than something to remember.
+   */
   const [stage, setStage] = useState<"organ" | "body">("organ");
   // The knowledge quiz lives beside the reading panels, not over the 3D stage
   // — the label quiz already owns that space.
@@ -244,7 +247,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // Set by the viewer; lets a step turn the model without a re-render.
   const focusRef = useRef<(id: string | null) => void>(() => {});
   const [revealCategory, setRevealCategory] = useState<KnowledgeQuizItem["category"] | null>(null);
-  const panelView = stage === "body" ? "list" : libraryView;
   const [quizActive, setQuizActive] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const prefetched = useRef(new Set<OrganId>());
@@ -394,7 +396,49 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         </button>
         {/* The five nav buttons, the profile avatar and the bookmark button
             were chrome from the original design, wired to nothing. Disabling
-            them only made the header say the app has features it does not. */}
+            them only made the header say the app has features it does not.
+            What sits here instead is the one thing that was missing: which of
+            the three views you are looking at. It used to be split between a
+            pair of tabs floating over the stage and another pair inside the
+            reading panel, with a third pair in the side panel repeating one of
+            the labels for a different purpose. */}
+        {kidsCopy && (
+          <div className="view-switch" role="tablist" aria-label={kidsCopy.viewSwitch}>
+            {/* Pressed state is derived, never stored. `systemId` is cleared
+                from five other places — a diagram jumping to another system,
+                the quiz, the organ links — and a stored flag would drift out
+                of step with every one of them. */}
+            <button
+              type="button"
+              role="tab"
+              aria-selected={systemId === null && stage === "organ"}
+              className={systemId === null && stage === "organ" ? "active" : ""}
+              onClick={() => { setSystemId(null); setStage("organ"); }}
+            >
+              <Heart size={15} aria-hidden /> <span>{kidsCopy.viewOrgan}</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={systemId === null && stage === "body"}
+              className={systemId === null && stage === "body" ? "active" : ""}
+              onClick={() => { setSystemId(null); setStage("body"); }}
+            >
+              <Scan size={15} aria-hidden /> <span>{kidsCopy.viewBody}</span>
+            </button>
+            {schoolOn && (
+              <button
+                type="button"
+                role="tab"
+                aria-selected={systemId !== null}
+                className={systemId !== null ? "active" : ""}
+                onClick={() => setSystemId(systemId ?? getSystems(locale.code)[0]?.id ?? null)}
+              >
+                <BrainCircuit size={15} aria-hidden /> <span>{kidsCopy.viewSystems}</span>
+              </button>
+            )}
+          </div>
+        )}
         <label className="search-box">
           <Search size={17} />
           <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t.search.placeholder} />
@@ -418,34 +462,14 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
       <div className="workspace">
         <aside className={`organ-library ${mobileLibrary ? "open" : ""}`}>
           <div className="panel-heading">
-            <span>{panelView === "body" && kidsCopy ? kidsCopy.viewBody : t.library.title}</span>
+            <span>{t.library.title}</span>
             <button aria-label={t.library.close} className="mobile-close" onClick={() => setMobileLibrary(false)}><X size={17} /></button>
           </div>
-          {kidsCopy && (
-            <div className="library-tabs" role="tablist">
-              <button
-                type="button"
-                role="tab"
-                aria-selected={panelView === "body"}
-                className={panelView === "body" ? "active" : ""}
-                onClick={() => { setLibraryView("body"); setStage("organ"); }}
-              >
-                <PersonStanding size={15} /> {kidsCopy.viewBody}
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={panelView === "list"}
-                className={panelView === "list" ? "active" : ""}
-                onClick={() => setLibraryView("list")}
-              >
-                <LibraryBig size={15} /> {kidsCopy.listTab}
-              </button>
-            </div>
-          )}
-          {panelView === "body" && kidsCopy ? (
-            <BodyScene organs={organById} activeId={organId} onSelect={selectOrgan} copy={kidsCopy} compact />
-          ) : (
+          {/* The panel used to offer the body map as a second tab. Choosing
+              which view to look at is the header's job now, and the map only
+              ever belonged on the main stage: two of them meant two WebGL
+              contexts holding the same ten models. This is the organ list
+              and nothing else. */}
           <div className="organ-list">
             {filteredOrgans.map((item) => (
               <button
@@ -466,8 +490,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               </button>
             ))}
           </div>
-          )}
-          {panelView === "list" && <button className="view-all" onClick={() => setQuery("")}>{t.library.viewAll} <ArrowRight size={14} /></button>}
+          <button className="view-all" onClick={() => setQuery("")}>{t.library.viewAll} <ArrowRight size={14} /></button>
           <blockquote>
             <Sparkles size={18} />
             <p>{t.library.quoteLine1}<br />{t.library.quoteLine2}</p>
@@ -476,28 +499,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         </aside>
 
         <div className="stage">
-          {kidsCopy && (
-            <div className="stage-tabs" role="tablist">
-              <button
-                type="button"
-                role="tab"
-                aria-selected={stage === "organ"}
-                className={stage === "organ" ? "active" : ""}
-                onClick={() => setStage("organ")}
-              >
-                <Heart size={15} /> {kidsCopy.viewOrgan}
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={stage === "body"}
-                className={stage === "body" ? "active" : ""}
-                onClick={() => setStage("body")}
-              >
-                <Scan size={15} /> {kidsCopy.viewBody}
-              </button>
-            </div>
-          )}
+          {/* The pair of tabs that floated over the stage moved into the
+              header, next to the third view they were never grouped with. */}
           {stage === "body" && kidsCopy ? (
             <BodyScene organs={organById} activeId={organId} onSelect={selectOrgan} copy={kidsCopy} />
           ) : (
@@ -533,28 +536,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         </div>
 
         <aside className="info-panel" ref={contentRef}>
-          {schoolOn && kidsCopy && (
-            <div className="school-tabs" role="tablist" aria-label={kidsCopy.schoolSystems}>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={systemId !== null}
-                className={systemId !== null ? "active" : ""}
-                onClick={() => setSystemId(systemId ?? getSystems(locale.code)[0]?.id ?? null)}
-              >
-                {kidsCopy.schoolSystems}
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={systemId === null}
-                className={systemId === null ? "active" : ""}
-                onClick={() => setSystemId(null)}
-              >
-                {kidsCopy.schoolOrgans}
-              </button>
-            </div>
-          )}
+          {/* The systems/organs pair moved into the header too. Choosing which
+              system to read stays here, right above what it opens. */}
           {schoolOn && kidsCopy && activeSystem && (
             <>
               <nav className="system-picker" aria-label={kidsCopy.schoolSystems}>

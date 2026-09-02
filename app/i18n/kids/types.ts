@@ -56,8 +56,16 @@ export type KidsUiCopy = {
   libraryTitle: string;
   viewAll: string;
   listTab: string;
+  /**
+   * The three views the header switches between, and the group's own name.
+   * `viewSystems` is shorter than `schoolSystems` ("기관계 보기") because the
+   * header row already reads as a set of views — the verb was doing work
+   * only when the pair sat alone inside the reading panel.
+   */
+  viewSwitch: string;
   viewOrgan: string;
   viewBody: string;
+  viewSystems: string;
   bodyLoading: string;
   bodyHint: string;
   bodyFocus: string;
