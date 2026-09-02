@@ -66,6 +66,12 @@ export type KidsUiCopy = {
   viewOrgan: string;
   viewBody: string;
   viewSystems: string;
+  /** The row under the header: what to read, rather than where to look. */
+  contentNav: string;
+  navDeepDive: string;
+  navStories: string;
+  navQuiz: string;
+  navConditions: string;
   bodyLoading: string;
   bodyHint: string;
   bodyFocus: string;

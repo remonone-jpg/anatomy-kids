@@ -102,6 +102,34 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   box-shadow: 0 1px 3px rgba(60,45,30,.14);
 }
 
+/* The content row. It sits between the header and the workspace, and its own
+   height is folded into the two `calc(100vh - …)` numbers below — `.app-shell`
+   clips its overflow, so anything the workspace does not subtract for is cut
+   off the bottom rather than scrolled to. */
+.content-nav {
+  max-width: 1720px;
+  margin: 10px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.content-nav button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255,255,255,.34);
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  font: 500 13px var(--font-serif), serif;
+}
+.content-nav button svg { flex: none; }
+.content-nav button:hover { color: var(--ink); border-color: var(--coral); }
+
 .brand {
   display: flex;
   align-items: baseline;
@@ -155,7 +183,7 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 
 .workspace {
   max-width: 1720px;
-  height: min(760px, calc(100vh - 128px));
+  height: min(760px, calc(100vh - 172px));
   min-height: 620px;
   margin: 12px auto 0;
   display: grid;
@@ -535,7 +563,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
      meaning at a third of the width. Same trick the language pill uses. */
   .view-switch button span { display: none; }
   .view-switch button { padding: 0 10px; gap: 0; }
-  .workspace { grid-template-columns: 250px minmax(500px,1fr) 300px; height: min(700px, calc(100vh - 105px)); }
+  .workspace { grid-template-columns: 250px minmax(500px,1fr) 300px; height: min(700px, calc(100vh - 149px)); }
   .learning-cards { grid-template-columns: repeat(3, 1fr); --art-max: 300px; }
 }
 
@@ -566,6 +594,10 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .topbar > .brand { flex: 0 1 auto; min-width: 0; }
   .topbar > .view-switch { margin-inline-start: 0; }
   .view-switch button { padding: 0 8px; }
+  /* Four pills in 370px. Without this the last one drops to a line of its
+     own, which reads as a fifth thing rather than the fourth. */
+  .content-nav { gap: 5px; }
+  .content-nav button { padding: 0 9px; gap: 5px; }
   .brand strong { font-size: 29px; }
   /* Globe and chevron only. The language's own name is the widest part of
      the pill and the flag-less globe already says what the control is. */

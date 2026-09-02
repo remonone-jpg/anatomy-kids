@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import gsap from "gsap";
 import {
   ArrowRight,
+  BookOpen,
   BrainCircuit,
   ChevronDown,
   CircleHelp,
@@ -250,6 +251,36 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const [quizActive, setQuizActive] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const prefetched = useRef(new Set<OrganId>());
+
+  /**
+   * Scrolls one of the reading panel's blocks into view.
+   *
+   * The panel is its own scroll container, so this moves the panel rather
+   * than the page. The wait is what the deep dive already learned: a block
+   * that a click has only just decided to show does not exist yet on the
+   * frame the click happens in.
+   */
+  const scrollToBlock = (selector: string) => {
+    window.setTimeout(() => {
+      contentRef.current?.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 60);
+  };
+
+  /**
+   * Leaves the systems layer if it is open, and says whether it had to.
+   *
+   * The systems view replaces the whole reading panel, so the three content
+   * entries that live in that panel have nothing to scroll to while it is up.
+   * They come back to the organ rather than going grey: a menu whose items
+   * stop working is harder to read than one that always does something.
+   */
+  const backToOrgan = () => {
+    if (systemId === null) return false;
+    setSystemId(null);
+    setSystemQuiz(null);
+    setRevealExam(null);
+    return true;
+  };
   const organ = organById[organId];
   const reference = organById[organId === "heart" ? "brain" : "heart"];
 
@@ -458,6 +489,54 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         )}
         <button className="mobile-library-trigger" onClick={() => setMobileLibrary(true)} aria-label={t.library.open}><LibraryBig size={20} /></button>
       </header>
+
+      {/* A row of its own rather than four more pills in the header. The header
+          answers "where am I"; this answers "what do I want to read", and the
+          two questions deserve to be told apart. It also sits directly above
+          the panel it acts on, which is where the relationship shows. */}
+      {kidsCopy && (
+        <nav className="content-nav" aria-label={kidsCopy.contentNav}>
+          <button
+            type="button"
+            onClick={() => {
+              const left = backToOrgan();
+              // Re-arming through null is what makes a second press work: the
+              // deep dive ignores a `reveal` it has already honoured.
+              setRevealCategory(null);
+              window.setTimeout(() => setRevealCategory("structure"), left ? 80 : 0);
+            }}
+          >
+            <Microscope size={15} aria-hidden /> {kidsCopy.navDeepDive}
+          </button>
+          <button
+            type="button"
+            onClick={() => { backToOrgan(); scrollToBlock(".stories"); }}
+          >
+            <BookOpen size={15} aria-hidden /> {kidsCopy.navStories}
+          </button>
+          {/* The one entry that stays where it is: each layer has its own
+              question bank, so this opens whichever belongs to the screen. */}
+          <button
+            type="button"
+            onClick={() => {
+              setQuizActive(false);
+              if (systemId !== null) { setSystemQuiz("paper"); return; }
+              if (kidsOn) { setKnowledgeQuiz(false); setKidsQuiz(true); scrollToBlock(".kids-quiz"); }
+              else { setKidsQuiz(false); setKnowledgeQuiz(true); setRevealCategory(null); scrollToBlock(".knowledge-quiz"); }
+            }}
+          >
+            <CircleHelp size={15} aria-hidden /> {kidsCopy.navQuiz}
+          </button>
+          {conditionCopy && conditionDetails.length > 0 && (
+            <button
+              type="button"
+              onClick={() => { backToOrgan(); setConditionView(""); }}
+            >
+              <FileText size={15} aria-hidden /> {kidsCopy.navConditions}
+            </button>
+          )}
+        </nav>
+      )}
 
       <div className="workspace">
         <aside className={`organ-library ${mobileLibrary ? "open" : ""}`}>
