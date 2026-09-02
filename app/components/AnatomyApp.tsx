@@ -506,13 +506,13 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               window.setTimeout(() => setRevealCategory("structure"), left ? 80 : 0);
             }}
           >
-            <Microscope size={15} aria-hidden /> {kidsCopy.navDeepDive}
+            <Microscope size={17} aria-hidden /> <span>{kidsCopy.navDeepDive}</span>
           </button>
           <button
             type="button"
             onClick={() => { backToOrgan(); scrollToBlock(".stories"); }}
           >
-            <BookOpen size={15} aria-hidden /> {kidsCopy.navStories}
+            <BookOpen size={17} aria-hidden /> <span>{kidsCopy.navStories}</span>
           </button>
           {/* The one entry that stays where it is: each layer has its own
               question bank, so this opens whichever belongs to the screen. */}
@@ -525,14 +525,14 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               else { setKidsQuiz(false); setKnowledgeQuiz(true); setRevealCategory(null); scrollToBlock(".knowledge-quiz"); }
             }}
           >
-            <CircleHelp size={15} aria-hidden /> {kidsCopy.navQuiz}
+            <CircleHelp size={17} aria-hidden /> <span>{kidsCopy.navQuiz}</span>
           </button>
           {conditionCopy && conditionDetails.length > 0 && (
             <button
               type="button"
               onClick={() => { backToOrgan(); setConditionView(""); }}
             >
-              <FileText size={15} aria-hidden /> {kidsCopy.navConditions}
+              <FileText size={17} aria-hidden /> <span>{kidsCopy.navConditions}</span>
             </button>
           )}
         </nav>

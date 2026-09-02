@@ -108,27 +108,34 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
    off the bottom rather than scrolled to. */
 .content-nav {
   max-width: 1720px;
-  margin: 10px auto 0;
+  margin: 4px auto 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  align-items: center;
+  gap: 2px;
 }
 .content-nav button {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 7px;
-  min-height: 34px;
-  padding: 0 14px;
-  border: 1px solid var(--line);
+  gap: 8px;
+  border: 0;
+  padding: 12px 15px;
   border-radius: 999px;
-  background: rgba(255,255,255,.34);
-  color: var(--muted);
+  background: transparent;
   cursor: pointer;
   white-space: nowrap;
-  font: 500 13px var(--font-serif), serif;
 }
+/* Lucide icons are flex children here; without this they get squeezed before
+   the label does when the row runs short. */
 .content-nav button svg { flex: none; }
-.content-nav button:hover { color: var(--ink); border-color: var(--coral); }
+/* The old nav was scenery — disabled, so it never needed a resting colour or a
+   hover. These press, so they read as quieter than the body text until pointed
+   at, and `.active` stays the loudest of the three. */
+.content-nav button { color: var(--muted); }
+.content-nav button:hover { color: var(--ink); }
+.content-nav button.active {
+  background: rgba(238, 124, 106, .075);
+  box-shadow: inset 0 0 0 1px rgba(215, 112, 91, .12);
+}
 
 .brand {
   display: flex;
@@ -183,7 +190,7 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 
 .workspace {
   max-width: 1720px;
-  height: min(760px, calc(100vh - 172px));
+  height: min(760px, calc(100vh - 177px));
   min-height: 620px;
   margin: 12px auto 0;
   display: grid;
@@ -563,11 +570,15 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
      meaning at a third of the width. Same trick the language pill uses. */
   .view-switch button span { display: none; }
   .view-switch button { padding: 0 10px; gap: 0; }
-  .workspace { grid-template-columns: 250px minmax(500px,1fr) 300px; height: min(700px, calc(100vh - 149px)); }
+  .workspace { grid-template-columns: 250px minmax(500px,1fr) 300px; height: min(700px, calc(100vh - 154px)); }
   .learning-cards { grid-template-columns: repeat(3, 1fr); --art-max: 300px; }
 }
 
 @media (max-width: 1040px) {
+  /* Where the old nav dropped its labels too. Four icons and four words are
+     the same four destinations; the words are what stops fitting first. */
+  .content-nav button span { display: none; }
+  .content-nav button { padding: 10px; }
   .workspace { grid-template-columns: 210px minmax(450px,1fr); height: 690px; }
   .info-panel { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px 22px; max-height: none; }
   .info-panel .description, .info-panel .rule, .info-panel h2, .key-facts, .medical-note, .listen-button, .body-sense { grid-column: 2; }
@@ -594,10 +605,10 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .topbar > .brand { flex: 0 1 auto; min-width: 0; }
   .topbar > .view-switch { margin-inline-start: 0; }
   .view-switch button { padding: 0 8px; }
-  /* Four pills in 370px. Without this the last one drops to a line of its
-     own, which reads as a fifth thing rather than the fourth. */
-  .content-nav { gap: 5px; }
-  .content-nav button { padding: 0 9px; gap: 5px; }
+  /* The old nav hid itself entirely here — it was scenery, so nothing was
+     lost. These four are the only way into the deep reads on a phone, so they
+     stay and give up padding instead. */
+  .content-nav button { padding: 8px; }
   .brand strong { font-size: 29px; }
   /* Globe and chevron only. The language's own name is the widest part of
      the pill and the flag-less globe already says what the control is. */
