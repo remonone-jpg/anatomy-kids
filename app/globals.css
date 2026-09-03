@@ -69,7 +69,6 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 /* The three views sit next to the logo rather than out at the right edge:
    they answer "what am I looking at", which belongs with the name of the
    place, not with the settings. */
-.topbar > .view-switch { order: -1; margin-inline-start: 4px; }
 .topbar > .brand { order: -2; }
 
 .view-switch {
@@ -112,16 +111,30 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
    height is folded into the two `calc(100vh - …)` numbers below — `.app-shell`
    clips its overflow, so anything the workspace does not subtract for is cut
    off the bottom rather than scrolled to. */
+/* Two groups on one line, laid out on the workspace's own columns so the view
+   switch sits over the middle card rather than over the middle of the screen —
+   the card moves when the list column changes width, and this moves with it.
+   Column 1 is left empty on purpose: the only thing that could go there is the
+   library's heading, which the list already carries, and a third group would
+   turn a row that answers two questions into one that answers three. */
 .content-nav {
   max-width: 1720px;
   margin: 4px auto 0;
+  display: grid;
+  grid-template-columns: 285px minmax(620px, 1fr) 330px;
+  gap: 18px;
+  align-items: center;
+}
+.content-nav > .view-switch { grid-column: 2; justify-self: center; }
+/* Ends under the mode switch. Wider than its column, so it is allowed to run
+   back into the gap on its left rather than being squeezed — at 1800 it is
+   378px against a 330px column and the view switch ends 350px short of it. */
+.content-menu {
+  grid-column: 3;
+  justify-self: end;
+  width: max-content;
   display: flex;
   align-items: center;
-  /* Right, not left. Starting on the same vertical line as the logo made the
-     row read as the logo's subtitle rather than as its own thing; the row
-     shares `max-width` with the header, so this ends it exactly under the mode
-     switch instead. */
-  justify-content: flex-end;
   gap: 2px;
 }
 .content-nav button {
@@ -206,7 +219,7 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 
 .workspace {
   max-width: 1720px;
-  height: min(760px, calc(100vh - 177px));
+  height: min(760px, calc(100vh - 180px));
   min-height: 620px;
   margin: 12px auto 0;
   display: grid;
@@ -433,9 +446,11 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
    half answered is still half answered when the reader comes back — and so the
    deep dive keeps whichever entry it had open. */
 .info-panel.tab-basic > .stories,
-.info-panel.tab-basic > .deep-dive { display: none; }
+.info-panel.tab-basic > .deep-dive,
+.info-panel.tab-basic > .organ-quiz-face { display: none; }
 .info-panel.tab-deep > :not(.deep-dive):not(.panel-back),
-.info-panel.tab-stories > :not(.stories):not(.panel-back) { display: none; }
+.info-panel.tab-stories > :not(.stories):not(.panel-back),
+.info-panel.tab-quiz > :not(.organ-quiz-face):not(.panel-back) { display: none; }
 /* Below 1040 the panel becomes a two-column read, and the column each block
    belongs to is named for the basic face only. The long faces are one section
    apiece and have no second column to pair with, so they take the full width —
@@ -460,6 +475,11 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 .info-panel.stab-exam .system-view > :not([data-tab="exam"]) { display: none; }
 /* The way back is not part of any face. */
 .info-panel .system-view > .panel-back { display: inline-flex; }
+/* The paper is a face of its own here too, so the reading steps aside for it
+   rather than being replaced by it. */
+.info-panel:not(.stab-quiz) > .system-quiz-face { display: none; }
+.info-panel.stab-quiz > .system-view,
+.info-panel.stab-quiz > .system-picker { display: none; }
 .info-kicker { display: flex; align-items: center; gap: 7px; color: #795c55; }
 .info-kicker svg { color: #ee8a7a; }
 .info-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 15px; }
@@ -630,12 +650,12 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .app-shell { padding: 16px; }
   .topbar { gap: 12px; }
   .search-box { display: none; }
-  /* Icons only from here down. The three labels are 115+115+89px of a row
-     that has already given up the search box; the icons carry the same
-     meaning at a third of the width. Same trick the language pill uses. */
-  .view-switch button span { display: none; }
-  .view-switch button { padding: 0 10px; gap: 0; }
-  .workspace { grid-template-columns: 250px minmax(500px,1fr) 300px; height: min(700px, calc(100vh - 154px)); }
+  /* The labels stay now. They were dropped because the header had given up
+     the search box and still could not fit them; the switch has its own row
+     and 732px of middle column to sit in. */
+  .workspace { grid-template-columns: 250px minmax(500px,1fr) 300px; height: min(700px, calc(100vh - 157px)); }
+  /* Same columns as the workspace, so the switch stays over the middle card. */
+  .content-nav { grid-template-columns: 250px minmax(500px,1fr) 300px; gap: 18px; }
   .learning-cards { grid-template-columns: repeat(3, 1fr); --art-max: 300px; }
 }
 
@@ -644,6 +664,16 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
      the same four destinations; the words are what stops fitting first. */
   .content-nav button span { display: none; }
   .content-nav button { padding: 10px; }
+  /* The view switch gives up its labels here too — same reason, and both
+     groups have to share one column from now on. */
+  .view-switch button span { display: none; }
+  .view-switch button { padding: 0 10px; gap: 0; }
+  /* Two columns like the workspace. The two groups sit in the same cell, one
+     centred and one at the end: at 1040 that is a 294px switch and a 154px
+     menu in 780px, which do not meet. */
+  .content-nav { grid-template-columns: 210px minmax(0, 1fr); gap: 18px; }
+  .content-nav > .view-switch { grid-column: 2; grid-row: 1; }
+  .content-menu { grid-column: 2; grid-row: 1; }
   .workspace { grid-template-columns: 210px minmax(450px,1fr); height: 690px; }
   .info-panel { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px 22px; max-height: none; }
   .info-panel .description, .info-panel .rule, .info-panel h2, .key-facts, .medical-note, .listen-button, .body-sense { grid-column: 2; }
@@ -673,12 +703,16 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
      language pill on the first row, and the remaining three settle on the
      second. */
   .topbar > .brand { flex: 0 1 auto; min-width: 0; }
-  .topbar > .view-switch { margin-inline-start: 0; }
-  .view-switch button { padding: 0 8px; }
   /* The old nav hid itself entirely here — it was scenery, so nothing was
      lost. These four are the only way into the deep reads on a phone, so they
      stay and give up padding instead. */
   .content-nav button { padding: 8px; }
+  /* One column: everything below here is stacked, so the middle card is the
+     whole width and centring on the row centres on the card. */
+  .content-nav { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .content-nav > .view-switch { grid-column: 1; grid-row: 1; }
+  .content-menu { grid-column: 1; grid-row: 1; }
+  .view-switch button { padding: 0 8px; }
   .brand strong { font-size: 29px; }
   /* Globe and chevron only. The language's own name is the widest part of
      the pill and the flag-less globe already says what the control is. */
@@ -1839,8 +1873,29 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 }
 .experiment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 .experiment-grid h4 { margin: 0 0 6px; font: 600 12.5px var(--font-serif), serif; color: var(--muted); }
-.experiment-grid ul, .experiment-grid ol { margin: 0; padding-left: 17px; }
-.experiment-grid li { font-size: 13px; line-height: 1.65; }
+/* The 17px here was room for bullets and numbers that Tailwind's preflight
+   takes away, so the items sat indented from their own heading with nothing in
+   the gap. The markers come back as content instead — every other list in this
+   panel draws its own rather than using the browser's — and the marker, not the
+   text, now lines up with 준비물 and 순서 above it. */
+.experiment-grid ul, .experiment-grid ol { margin: 0; padding-left: 0; }
+.experiment-grid li {
+  display: grid;
+  grid-template-columns: 15px 1fr;
+  gap: 3px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.experiment-grid ul li::before { content: "·"; color: var(--muted); }
+/* Numbered, because these are steps to do in order — the one list here where
+   the sequence is the point. */
+.experiment-grid ol { counter-reset: exp-step; }
+.experiment-grid ol li::before {
+  counter-increment: exp-step;
+  content: counter(exp-step) ".";
+  color: var(--coral);
+  font-weight: 600;
+}
 /* The correspondence between model and body — what the exam asks. */
 .experiment-meaning {
   padding: 13px 15px; border-radius: 12px;
@@ -2247,7 +2302,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
                     and starts needing a scroll of the eye instead.
    The learning cards below simply move down; the page has always scrolled.
 
-   161 rather than the organ view's 177: the title bar was given back the 16px
+   161 rather than the organ view's 180: the title bar was given back the 16px
    of top margin it was short of, and the drawing must not pay for it. All
    three columns are rows of the same grid, so growing this grows the three
    together and they stay level without anything else being touched. */

@@ -260,7 +260,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
    * which is the opposite of a mode that stays put. And nothing existing says
    * "basic": the absence of the other two is not the same as choosing it.
    */
-  const [panelTab, setPanelTab] = useState<"basic" | "deep" | "stories">("basic");
+  const [panelTab, setPanelTab] = useState<"basic" | "deep" | "stories" | "quiz">("basic");
   /**
    * The same idea for the systems layer, kept apart from `panelTab`.
    *
@@ -269,7 +269,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
    * Two names for two vocabularies is cheaper than one name that changes
    * meaning depending on where you are standing.
    */
-  const [systemTab, setSystemTab] = useState<"basic" | "flow" | "lab" | "exam">("basic");
+  const [systemTab, setSystemTab] = useState<"basic" | "flow" | "lab" | "exam" | "quiz">("basic");
   /**
    * The question banks, held still.
    *
@@ -284,6 +284,15 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     () => (stage === "body" ? getAllQuiz(locale.code) : getOrganQuiz(locale.code, organId)),
     [stage, locale.code, organId],
   );
+  /* The systems paper needs the same steadying: its bank is rebuilt on every
+     render too, and 15 questions reshuffling under a half-finished attempt is
+     the same bug as the organ quiz's. */
+  const systemPool = useMemo(
+    () => (systemQuiz === "mixed"
+      ? getAllSystemQuiz(locale.code)
+      : getSystemQuiz(locale.code, systemId ?? "")),
+    [systemQuiz, locale.code, systemId],
+  );
   const kidsPool = useMemo(
     () => getKidsQuiz(locale.code, organId, childName),
     [locale.code, organId, childName],
@@ -292,21 +301,12 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const contentRef = useRef<HTMLDivElement>(null);
   const prefetched = useRef(new Set<OrganId>());
 
-  /**
-   * Scrolls one of the reading panel's blocks into view.
-   *
-   * The panel is its own scroll container, so this moves the panel rather
-   * than the page. The wait is what the deep dive already learned: a block
-   * that a click has only just decided to show does not exist yet on the
-   * frame the click happens in.
-   */
-  const scrollToBlock = (selector: string) => {
-    window.setTimeout(() => {
-      contentRef.current?.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 60);
-  };
+  /* `scrollToBlock` used to live here too. Every entry in the content menu
+     now changes which face the panel shows, and a face begins at the top of
+     the panel — there is nothing left to scroll to. The quiz was its last
+     caller and it has a face of its own now.
 
-  /* `backToOrgan` used to live here. It existed because the content menu named
+     `backToOrgan` used to live here. It existed because the content menu named
      three organ-only destinations that had nothing to act on while the systems
      view was up, so pressing one had to leave that layer first. The menu now
      names the layer it is standing in, so nothing points out of it and there is
@@ -463,43 +463,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             pair of tabs floating over the stage and another pair inside the
             reading panel, with a third pair in the side panel repeating one of
             the labels for a different purpose. */}
-        {kidsCopy && (
-          <div className="view-switch" role="tablist" aria-label={kidsCopy.viewSwitch}>
-            {/* Pressed state is derived, never stored. `systemId` is cleared
-                from five other places — a diagram jumping to another system,
-                the quiz, the organ links — and a stored flag would drift out
-                of step with every one of them. */}
-            <button
-              type="button"
-              role="tab"
-              aria-selected={systemId === null && stage === "organ"}
-              className={systemId === null && stage === "organ" ? "active" : ""}
-              onClick={() => { setSystemId(null); setStage("organ"); setPanelTab("basic"); setSystemTab("basic"); }}
-            >
-              <Heart size={15} aria-hidden /> <span>{kidsCopy.viewOrgan}</span>
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={systemId === null && stage === "body"}
-              className={systemId === null && stage === "body" ? "active" : ""}
-              onClick={() => { setSystemId(null); setStage("body"); setPanelTab("basic"); setSystemTab("basic"); }}
-            >
-              <Scan size={15} aria-hidden /> <span>{kidsCopy.viewBody}</span>
-            </button>
-            {schoolOn && (
-              <button
-                type="button"
-                role="tab"
-                aria-selected={systemId !== null}
-                className={systemId !== null ? "active" : ""}
-                onClick={() => { setSystemId(systemId ?? getSystems(locale.code)[0]?.id ?? null); setSystemTab("basic"); }}
-              >
-                <BrainCircuit size={15} aria-hidden /> <span>{kidsCopy.viewSystems}</span>
-              </button>
-            )}
-          </div>
-        )}
         <label className="search-box">
           <Search size={17} />
           <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t.search.placeholder} />
@@ -534,6 +497,48 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
            uniform, and a mark that means "you pressed this a moment ago"
            teaches the wrong thing about what it means. */
         <nav className="content-nav" aria-label={kidsCopy.contentNav}>
+          {/* Moved down out of the header. It answers "where am I", which
+              belongs with what is on the stage rather than with the logo and
+              the settings, and the header had no room left for it. Centred on
+              the middle column so it sits over the thing it switches. */}
+            {kidsCopy && (
+        <div className="view-switch" role="tablist" aria-label={kidsCopy.viewSwitch}>
+        {/* Pressed state is derived, never stored. `systemId` is cleared
+            from five other places — a diagram jumping to another system,
+            the quiz, the organ links — and a stored flag would drift out
+            of step with every one of them. */}
+        <button
+          type="button"
+          role="tab"
+          aria-selected={systemId === null && stage === "organ"}
+          className={systemId === null && stage === "organ" ? "active" : ""}
+          onClick={() => { setSystemId(null); setStage("organ"); setPanelTab("basic"); setSystemTab("basic"); }}
+        >
+          <Heart size={15} aria-hidden /> <span>{kidsCopy.viewOrgan}</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={systemId === null && stage === "body"}
+          className={systemId === null && stage === "body" ? "active" : ""}
+          onClick={() => { setSystemId(null); setStage("body"); setPanelTab("basic"); setSystemTab("basic"); }}
+        >
+          <Scan size={15} aria-hidden /> <span>{kidsCopy.viewBody}</span>
+        </button>
+        {schoolOn && (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={systemId !== null}
+            className={systemId !== null ? "active" : ""}
+            onClick={() => { setSystemId(systemId ?? getSystems(locale.code)[0]?.id ?? null); setSystemTab("basic"); }}
+          >
+            <BrainCircuit size={15} aria-hidden /> <span>{kidsCopy.viewSystems}</span>
+          </button>
+        )}
+        </div>
+      )}
+          <div className="content-menu">
           {/* The first three entries belong to the layer being read. Each layer
               divides its panel differently, and naming the other layer's faces
               would be offering a reader four things where two of them are not
@@ -603,19 +608,18 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               pointing at something the reader cannot see is worse than none. */}
           <button
             type="button"
-            className={(activeSystem ? systemQuiz !== null : kidsQuiz || knowledgeQuiz) ? "active" : ""}
+            className={(activeSystem ? systemTab === "quiz" : panelTab === "quiz") ? "active" : ""}
             onClick={() => {
               setQuizActive(false);
-              if (systemId !== null) { setSystemQuiz("paper"); return; }
-              // The quiz stayed in the basic face, below the facts it asks
-              // about, so reaching it means going back to that face first.
-              setPanelTab("basic");
-              if (kidsOn) { setKnowledgeQuiz(false); setKidsQuiz(true); scrollToBlock(".kids-quiz"); }
-              else { setKidsQuiz(false); setKnowledgeQuiz(true); setRevealCategory(null); scrollToBlock(".knowledge-quiz"); }
+              if (systemId !== null) { setSystemQuiz("paper"); setSystemTab("quiz"); return; }
+              setPanelTab("quiz");
+              if (kidsOn) { setKnowledgeQuiz(false); setKidsQuiz(true); }
+              else { setKidsQuiz(false); setKnowledgeQuiz(true); setRevealCategory(null); }
             }}
           >
             <CircleHelp size={17} aria-hidden /> <span>{kidsCopy.navQuiz}</span>
           </button>
+          </div>
         </nav>
       )}
 
@@ -801,16 +805,20 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                   <button
                     type="button"
                     className="system-picker-quiz"
-                    onClick={() => setSystemQuiz("mixed")}
+                    onClick={() => { setSystemQuiz("mixed"); setSystemTab("quiz"); }}
                   >
                     {kidsCopy.systemQuiz.mixed}
                   </button>
                 </nav>
               )}
-              {systemQuiz && systemQuizAvailable(locale.code) ? (
+              {/* Both mounted, one shown. The paper used to replace the whole
+                  reading and unmounting it lost a half-finished attempt the
+                  moment anyone looked something up. */}
+              {systemQuiz && systemQuizAvailable(locale.code) && (
+                <div className="system-quiz-face" data-tab="quiz">
                 <SystemQuiz
                   key={`${activeSystem.id}-${systemQuiz}`}
-                  pool={systemQuiz === "mixed" ? getAllSystemQuiz(locale.code) : getSystemQuiz(locale.code, activeSystem.id)}
+                  pool={systemPool}
                   size={systemQuiz === "mixed" ? 30 : "all"}
                   copy={kidsCopy.systemQuiz}
                   onOpenPassage={(item) => {
@@ -823,7 +831,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                   }}
                   onClose={() => setSystemQuiz(null)}
                 />
-              ) : (
+                </div>
+              )}
+              {(
                 <SystemView
                   key={activeSystem.id}
                   system={activeSystem}
@@ -831,7 +841,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                   easy={mode === "easy"}
                   speechLang={speechLang}
                   revealExam={revealExam}
-                  onStartQuiz={() => setSystemQuiz("paper")}
+                  onStartQuiz={() => { setSystemQuiz("paper"); setSystemTab("quiz"); }}
                   tab={systemTab}
                   onBack={() => setSystemTab("basic")}
                   backLabel={kidsCopy.navBasic}
@@ -917,7 +927,12 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               hidden behind a control — it is simply not there. */}
           {/* The whole-body stage draws from every organ; a single organ on the
               stage asks only about itself. */}
+          {/* Its own face now. It used to sit under the facts and the menu only
+              scrolled to it, so pressing 퀴즈 changed nothing anyone could see
+              on a tall screen. Mounted whatever face is showing, hidden by CSS,
+              so a half-answered round survives a look at the deep dive. */}
           {kidsQuiz && kidsOn && kidsCopy && (
+            <div className="organ-quiz-face">
             <KidsQuiz
               key={organId}
               pool={kidsPool}
@@ -931,8 +946,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               }}
               onClose={() => setKidsQuiz(false)}
             />
+            </div>
           )}
           {knowledgeQuiz && !kidsOn && (
+            <div className="organ-quiz-face">
             <KnowledgeQuiz
               key={`${organId}-${stage}`}
               pool={knowledgePool}
@@ -948,6 +965,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               }}
               onClose={() => setKnowledgeQuiz(false)}
             />
+            </div>
           )}
           </>
           {organ.stories && (

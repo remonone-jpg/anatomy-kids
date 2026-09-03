@@ -25,7 +25,7 @@ export const kids: KidsCopy = {
     navBasic: "기본 정보로",
     navFlow: "과정",
     navLab: "실험",
-    navExam: "시험",
+    navExam: "핵심",
     bodyLoading: "몸을 만드는 중이에요",
     bodyHint: "몸을 돌려보고, 장기를 눌러보세요",
     bodyFocus: "가까이 보기",
