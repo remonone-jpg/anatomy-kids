@@ -311,17 +311,12 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
      nothing to leave. The header's view switch does its own resetting. */
   const organ = organById[organId];
 
-  // Kids mode shows the five organs a child can point to on their own body.
-  const listedOrgans = useMemo(
-    () => organs,
-    [organs],
-  );
   const filteredOrgans = useMemo(
     () =>
-      listedOrgans.filter((item) =>
+      organs.filter((item) =>
         `${item.name} ${item.system}`.toLocaleLowerCase(locale.code).includes(query.toLocaleLowerCase(locale.code)),
       ),
-    [listedOrgans, query, locale.code],
+    [organs, query, locale.code],
   );
 
   // Speech outlives the component otherwise — it belongs to the browser, not
@@ -667,9 +662,12 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               </button>
             ))}
           </div>
-          {/* "모든 장기 보기" clears the organ search. With systems listed
-              there is no search to clear and nothing it would reveal. */}
-          {!activeSystem && (
+          {/* Clears the organ search — so it only exists while there is one.
+              Always shown, it was a button that did nothing most of the time;
+              appearing with the filter, its name is finally accurate. It also
+              stays reachable below 1350px, where the search box itself is
+              hidden and this is the only way back to the full list. */}
+          {!activeSystem && query !== "" && (
             <button className="view-all" onClick={() => setQuery("")}>{t.library.viewAll} <ArrowRight size={14} /></button>
           )}
           <blockquote>
