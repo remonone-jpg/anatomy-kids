@@ -291,6 +291,40 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 .organ-library .view-all { margin-top: 9px; }
 .organ-library blockquote { display: none; }
 
+/* Site-wide search results, standing in for the organ/system list while a
+   query is typed. Same column, same scroll — the search was always the act
+   of filtering this list, so the answer lives where the list does. */
+.search-group { display: flex; flex-direction: column; gap: 4px; }
+.search-group + .search-group { margin-top: 12px; }
+.search-group-head {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 2px 4px 4px;
+  font: 600 12px var(--font-serif), serif;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
+.search-group-head span { font-size: 11px; font-weight: 500; color: #b3a89e; }
+.search-hit {
+  display: block;
+  text-align: left;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.search-hit:hover { background: rgba(238,124,106,.06); border-color: var(--line); }
+.search-hit b { display: block; font: 500 15px/1.2 var(--font-serif), serif; }
+.search-hit small { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
+.search-empty { padding: 14px 6px; color: var(--muted); font-size: 13px; }
+
+/* The narrow-screen entrance. Base state is the wide screen, where the header
+   still has its own box and these two do not exist. */
+.search-toggle { display: none; }
+.mobile-search { display: none; }
+
 .viewer-shell {
   position: relative;
   overflow: hidden;
@@ -632,6 +666,40 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .app-shell { padding: 16px; }
   .topbar { gap: 12px; }
   .search-box { display: none; }
+  /* The header's box is gone from here down, so the entrance moves into the
+     content row's first column — empty until now, kept only for symmetry with
+     the workspace. The unfolded input borrows the header box's dress. */
+  .content-nav > .search-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    width: 40px;
+    min-height: 40px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255,255,255,.28);
+    cursor: pointer;
+  }
+  .content-nav > .search-toggle.active { background: rgba(253,234,226,.72); border-color: rgba(238,124,106,.4); }
+  .mobile-search {
+    max-width: 1720px;
+    margin: 8px auto 0;
+    height: 42px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255,255,255,.28);
+    color: var(--muted);
+  }
+  .mobile-search input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 13px; }
+  .mobile-search input::placeholder { color: #a49b93; }
   /* The labels stay now. They were dropped because the header had given up
      the search box and still could not fit them; the switch has its own row
      and 732px of middle column to sit in. */
@@ -694,6 +762,9 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .content-nav { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .content-nav > .view-switch { grid-column: 1; grid-row: 1; }
   .content-menu { grid-column: 1; grid-row: 1; }
+  /* Same single cell as the other two groups; it keeps to the left edge the
+     way the menu keeps to the right, and the centred switch sits between. */
+  .content-nav > .search-toggle { grid-column: 1; grid-row: 1; width: 34px; min-height: 34px; }
   .view-switch button { padding: 0 8px; }
   .brand strong { font-size: 29px; }
   /* Globe and chevron only. The language's own name is the widest part of

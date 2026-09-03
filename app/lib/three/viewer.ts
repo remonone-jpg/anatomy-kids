@@ -603,9 +603,11 @@ export class AnatomyViewer {
   /** Turns the model until the named structure faces the camera, selects it,
    *  and pulls in a little. Used by the walkthrough, which steps through an
    *  organ's parts while the panel explains each one. */
-  focusHotspot(id: string) {
+  /** True when the marker existed and the turn began; false while the organ
+   *  is still loading (or the id is unknown), so a caller can try again. */
+  focusHotspot(id: string): boolean {
     const marker = this.hotspots.list.find((item) => item.hotspot.id === id);
-    if (!marker || !this.organ) return this.reset();
+    if (!marker || !this.organ) return false;
 
     this.select(id);
     // The anchor sits in the pivot's own space, so the angle it needs to be
@@ -624,6 +626,7 @@ export class AnatomyViewer {
     this.tween(this.controls.target, { ...HOME_TARGET, duration: 0.85, ease: "power3.inOut" });
     // Long enough that auto-rotate does not fight the tween mid-step.
     this.busy(1.2);
+    return true;
   }
 
   reset() {

@@ -30,7 +30,7 @@ type Props = {
   speechLang: string;
   /** Filled in with a handle the walkthrough uses to drive the model: a
    *  structure id turns to face it, null returns to the resting view. */
-  focusRef?: { current: (id: string | null) => void };
+  focusRef?: { current: (id: string | null) => boolean };
 };
 
 /** Fisher–Yates. The quiz asks for every structure once, in a fresh order. */
@@ -295,8 +295,9 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, quizActive, on
   useEffect(() => {
     if (!focusRef) return;
     focusRef.current = (id) => {
-      if (id) viewerRef.current?.focusHotspot(id);
-      else viewerRef.current?.reset();
+      if (id) return viewerRef.current?.focusHotspot(id) ?? false;
+      viewerRef.current?.reset();
+      return true;
     };
   }, [focusRef]);
 

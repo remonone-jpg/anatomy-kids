@@ -63,6 +63,7 @@ import {
   writeChildName,
 } from "../lib/child-name";
 import { asset } from "../lib/asset";
+import { buildSearchIndex, runSearch, type SearchHit } from "../lib/search";
 
 type Modal = "lesson" | "animation" | "system" | null;
 
@@ -219,6 +220,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const [autoRotate, setAutoRotate] = useState(true);
   const [modal, setModal] = useState<Modal>(null);
   const [query, setQuery] = useState("");
+  /** The debounced copy the search actually runs on; `query` stays immediate
+   *  so the input never lags a keystroke. */
+  const [needle, setNeedle] = useState("");
+  const [mobileSearch, setMobileSearch] = useState(false);
   const [mobileLibrary, setMobileLibrary] = useState(false);
   /**
    * Which stage the centre column shows.
@@ -247,7 +252,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // another system. Cleared as soon as that diagram is closed.
   const [diagramLabel, setDiagramLabel] = useState<string | null>(null);
   // Set by the viewer; lets a step turn the model without a re-render.
-  const focusRef = useRef<(id: string | null) => void>(() => {});
+  const focusRef = useRef<(id: string | null) => boolean>(() => false);
   const [revealCategory, setRevealCategory] = useState<KnowledgeQuizItem["category"] | null>(null);
   /**
    * Which of the reading panel's three faces is showing.
@@ -318,6 +323,104 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
       ),
     [organs, query, locale.code],
   );
+
+  useEffect(() => {
+    const t = window.setTimeout(() => setNeedle(query), 300);
+    return () => window.clearTimeout(t);
+  }, [query]);
+
+  /**
+   * The whole site, flat. Built from the active dictionary so the easy mode
+   * indexes the easy writing; rebuilding on a mode flip costs a millisecond or
+   * two, which is cheaper than carrying both editions in every entry.
+   * Korean-only, like the content itself — without `kidsCopy` the search box
+   * stays the plain organ filter it always was.
+   */
+  const searchIndex = useMemo(() => {
+    if (!kidsCopy) return null;
+    return buildSearchIndex({
+      organs,
+      conditions: (id) => getConditions(locale.code, id),
+      systems: getSystems(locale.code),
+      diagramLabels: (sid) => getDiagramLabels(locale.code, sid),
+      moreFacts: (id) => getMoreFacts(locale.code, id, childName),
+      bodySense: (id) => getBodySense(locale.code, id, childName) ,
+      easy: kidsOn,
+      faceLabels: { basic: kidsCopy.faceBasic, flow: kidsCopy.navFlow, lab: kidsCopy.navLab, exam: kidsCopy.navExam },
+      subLabels: kidsCopy.searchGroups,
+    });
+  }, [kidsCopy, organs, locale.code, childName, kidsOn]);
+
+  const searchHits = useMemo(() => {
+    if (!searchIndex) return null;
+    const results = runSearch(searchIndex, needle);
+    if (!results) return null;
+    // Grouped for display: order of first appearance keeps the ranking's
+    // decision about which kind answered best.
+    const groups: { type: SearchHit["type"]; label: string; items: SearchHit[] }[] = [];
+    for (const r of results) {
+      let g = groups.find((x) => x.type === r.hit.type);
+      if (!g) { g = { type: r.hit.type, label: kidsCopy!.searchGroups[r.hit.type], items: [] }; groups.push(g); }
+      g.items.push(r.hit);
+    }
+    return { total: results.length, groups };
+  }, [searchIndex, needle, kidsCopy]);
+
+  /**
+   * Lands on whatever a search row names. States are laid in one batch here
+   * rather than by pressing the existing buttons — those handlers reset
+   * `panelTab`/`systemTab` on the way through, and a landing that goes via
+   * them gets washed back to the basic face.
+   */
+  const goToHit = (hit: SearchHit) => {
+    if (hit.type === "label" || hit.type === "system") {
+      // The organ branches close the drawer through selectOrgan; these two
+      // never pass through it, and a landing behind the drawer is no landing.
+      setMobileLibrary(false);
+      setSystemId(hit.systemId ?? null);
+      setSystemQuiz(null);
+      setRevealExam(null);
+      setDiagramLabel(hit.type === "label" ? hit.key ?? null : null);
+      setSystemTab(hit.type === "system" ? (hit.key as "basic" | "flow" | "lab" | "exam") : "basic");
+      return;
+    }
+    setSystemId(null);
+    setSystemQuiz(null);
+    setRevealExam(null);
+    if (hit.organId) selectOrgan(hit.organId);
+    switch (hit.type) {
+      case "organ":
+        setPanelTab("basic");
+        break;
+      case "hotspot": {
+        setPanelTab("basic");
+        // The model may still be loading when the organ just changed, and the
+        // viewer answers false until its markers exist — so keep knocking, at
+        // most for six seconds, rather than guessing a load time.
+        const id = hit.key ?? null;
+        const tryFocus = (left: number) => {
+          if (focusRef.current(id) || left <= 0) return;
+          window.setTimeout(() => tryFocus(left - 1), 300);
+        };
+        window.setTimeout(() => tryFocus(20), 300);
+        break;
+      }
+      case "deep":
+        setPanelTab("deep");
+        // Re-armed through null: the deep dive ignores a reveal it has honoured.
+        setRevealCategory(null);
+        window.setTimeout(() => setRevealCategory(hit.key as KnowledgeQuizItem["category"]), 80);
+        break;
+      case "story":
+        setPanelTab("stories");
+        break;
+      case "condition":
+        setPanelTab("basic");
+        // After selectOrgan, which clears the open condition — later call wins.
+        setConditionView(hit.key ?? "");
+        break;
+    }
+  };
 
   // Speech outlives the component otherwise — it belongs to the browser, not
   // to React, so navigating away would leave a sentence still being read.
@@ -478,6 +581,20 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
            uniform, and a mark that means "you pressed this a moment ago"
            teaches the wrong thing about what it means. */
         <nav className="content-nav" aria-label={kidsCopy.contentNav}>
+          {/* Below 1350px the header's search box is display:none, which made
+              search a wide-screen-only feature. The row's first column is empty
+              there — the grid keeps it for symmetry — so the entrance stands in
+              it: a magnifier that unfolds an input row underneath. Wide screens
+              keep the header box and never see this. */}
+          <button
+            type="button"
+            className={`search-toggle ${mobileSearch ? "active" : ""}`}
+            aria-label={kidsCopy.searchOpen}
+            aria-expanded={mobileSearch}
+            onClick={() => setMobileSearch((v) => !v)}
+          >
+            <Search size={16} aria-hidden />
+          </button>
           {/* Moved down out of the header. It answers "where am I", which
               belongs with what is on the stage rather than with the logo and
               the settings, and the header had no room left for it. Centred on
@@ -603,6 +720,12 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           </div>
         </nav>
       )}
+      {kidsCopy && mobileSearch && (
+        <label className="mobile-search">
+          <Search size={15} aria-hidden />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t.search.placeholder} />
+        </label>
+      )}
 
       {/* The systems layer gets a taller box than the organ views. All five
           diagrams are portrait — 1.04 to 1.93 tall for every one wide — so
@@ -612,7 +735,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
       <div className={`workspace ${activeSystem ? "workspace-systems" : ""}`}>
         <aside className={`organ-library ${mobileLibrary ? "open" : ""}`}>
           <div className="panel-heading">
-            <span>{activeSystem && kidsCopy ? kidsCopy.schoolSystems : t.library.title}</span>
+            <span>{searchHits && kidsCopy ? kidsCopy.searchResults : activeSystem && kidsCopy ? kidsCopy.schoolSystems : t.library.title}</span>
             <button aria-label={t.library.close} className="mobile-close" onClick={() => setMobileLibrary(false)}><X size={17} /></button>
           </div>
           {/* The panel used to offer the body map as a second tab. Choosing
@@ -620,6 +743,32 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               ever belonged on the main stage: two of them meant two WebGL
               contexts holding the same ten models. This is the organ list
               and nothing else. */}
+          {/* With a query typed this column answers it, whichever layer is
+              up. Typing in the box was always the act of filtering this list,
+              so the answer appearing anywhere else would be a surprise; and it
+              means the results outrank both the organ and the system list
+              until the query is cleared. */}
+          {searchHits && kidsCopy ? (
+            <div className="organ-list search-results">
+              {searchHits.groups.map((group) => (
+                <div key={group.type} className="search-group">
+                  <div className="search-group-head">{group.label} <span>{group.items.length}</span></div>
+                  {group.items.map((hit) => (
+                    <button
+                      key={`${hit.type}:${hit.organId ?? hit.systemId}:${hit.key ?? hit.title}`}
+                      type="button"
+                      className="search-hit"
+                      onClick={() => goToHit(hit)}
+                    >
+                      <b>{hit.title}</b>
+                      <small>{hit.sub}</small>
+                    </button>
+                  ))}
+                </div>
+              ))}
+              {searchHits.total === 0 && <p className="search-empty">{kidsCopy.searchEmpty}</p>}
+            </div>
+          ) : (
           <div className="organ-list">
             {/* Reading a system, this column lists systems. The seven pills
                 that used to sit on top of the reading panel said the same
@@ -662,12 +811,13 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               </button>
             ))}
           </div>
-          {/* Clears the organ search — so it only exists while there is one.
-              Always shown, it was a button that did nothing most of the time;
-              appearing with the filter, its name is finally accurate. It also
-              stays reachable below 1350px, where the search box itself is
-              hidden and this is the only way back to the full list. */}
-          {!activeSystem && query !== "" && (
+          )}
+          {/* Clears the search — so it only exists while there is one. It also
+              stays reachable below 1350px, where the header's box is hidden and
+              this is one of the two ways back to the full list. No layer guard:
+              with the site-wide search the results show over the systems list
+              too, and the way out has to be standing there as well. */}
+          {query !== "" && (
             <button className="view-all" onClick={() => setQuery("")}>{t.library.viewAll} <ArrowRight size={14} /></button>
           )}
           <blockquote>

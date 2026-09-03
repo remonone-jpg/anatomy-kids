@@ -79,6 +79,13 @@ export type KidsUiCopy = {
   navFlow: string;
   navLab: string;
   navExam: string;
+  /** Site-wide search: the result list's furniture. Lives here because the
+   *  searchable text is Korean-only, like everything else in this file. */
+  searchResults: string;
+  searchEmpty: string;
+  searchOpen: string;
+  faceBasic: string;
+  searchGroups: { organ: string; hotspot: string; deep: string; story: string; condition: string; label: string; system: string };
   bodyLoading: string;
   bodyHint: string;
   bodyFocus: string;
