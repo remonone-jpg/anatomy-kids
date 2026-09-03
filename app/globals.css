@@ -2228,8 +2228,13 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
                     of the drawing below the fold.
      · cap 1180   — a figure taller than this stops being readable as a whole
                     and starts needing a scroll of the eye instead.
-   The learning cards below simply move down; the page has always scrolled. */
-.workspace-systems { height: min(1400px, calc(100vh - 177px)); }
+   The learning cards below simply move down; the page has always scrolled.
+
+   161 rather than the organ view's 177: the title bar was given back the 16px
+   of top margin it was short of, and the drawing must not pay for it. All
+   three columns are rows of the same grid, so growing this grows the three
+   together and they stay level without anything else being touched. */
+.workspace-systems { height: min(1400px, calc(100vh - 161px)); }
 
 /* One card per column, the same card the other two use.
    The title bar has no box of its own, so the drawing and the note started
@@ -2249,7 +2254,12 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 }
 /* Tight, because every pixel the bar takes comes off the drawing. The card's
    own border now supplies the frame the bar used to stand outside of. */
-.diagram-inline .diagram-bar { padding: 4px 20px 8px; }
+/* 20 + the card's 1px border puts the title 21px below the top edge, which is
+   where the other two columns start their first line — 기관계 보기 at 21,
+   전체 30문제 뽑기 at 22. At 4px it sat 5px down and read as pinned to the
+   frame. The 16px this costs is added to the workspace above, not taken from
+   the drawing. */
+.diagram-inline .diagram-bar { padding: 20px 20px 8px; }
 .diagram-inline .diagram-stage,
 .diagram-inline .diagram-panel {
   border: 0;
@@ -2421,11 +2431,13 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   /* Taller than the 650px the organ views use. The note takes 250 of whatever
      the stage has, and at 650 that left the drawing 336 — smaller than before
      this change. The page already scrolls at this width; the cards move down. */
-  .workspace-systems .stage { height: 820px; }
+  /* 836, not 820 — the same 16px the title bar took, so the drawing keeps its
+     height here too. The list beside it follows on the next line. */
+  .workspace-systems .stage { height: 836px; }
   /* The list stands beside the stage on this row, so it takes the same height
      — 650 against 820 left a 170px step between the two cards. The organ view
      keeps its own 650; this is scoped to the systems layer. */
-  .workspace-systems .organ-library { height: 820px; }
+  .workspace-systems .organ-library { height: 836px; }
   /* A fixed share of a fixed stage, rather than following the screen. */
   .diagram-inline .diagram-panel { height: 250px; }
 }
