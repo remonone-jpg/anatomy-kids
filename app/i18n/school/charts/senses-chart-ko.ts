@@ -20,6 +20,8 @@ export const sensesChart: SystemChart = {
       nodes: [
         {
           id: "stimulus",
+          accent: "#b9ada3",
+          icon: "waves",
           label: "바깥의 자극",
           kicker: "빛·소리·냄새·맛·닿음",
           desc: "",
@@ -31,11 +33,11 @@ export const sensesChart: SystemChart = {
       id: "organs",
       arrow: "몸에 닿는 자극",
       nodes: [
-        { id: "eye", label: "눈", kicker: "빛", goOrgan: "eyeball", desc: "", descEasy: "" },
-        { id: "ear", label: "귀", kicker: "소리·균형", desc: "", descEasy: "" },
-        { id: "nose", label: "코", kicker: "냄새", desc: "", descEasy: "" },
-        { id: "tongue", label: "혀", kicker: "맛", desc: "", descEasy: "" },
-        { id: "skin", label: "피부", kicker: "닿음·아픔·온도", goOrgan: "skin", desc: "", descEasy: "" },
+        { id: "eye", accent: "#7294b9", icon: "light", label: "눈", kicker: "빛", goOrgan: "eyeball", desc: "", descEasy: "" },
+        { id: "ear", accent: "#d89bc4", icon: "sound", label: "귀", kicker: "소리·균형", desc: "", descEasy: "" },
+        { id: "nose", accent: "#7fa88a", icon: "scent", label: "코", kicker: "냄새", desc: "", descEasy: "" },
+        { id: "tongue", accent: "#f2a33b", icon: "taste", label: "혀", kicker: "맛", desc: "", descEasy: "" },
+        { id: "skin", accent: "#c99277", icon: "touch", label: "피부", kicker: "닿음·아픔·온도", goOrgan: "skin", desc: "", descEasy: "" },
       ],
     },
     {
@@ -44,6 +46,8 @@ export const sensesChart: SystemChart = {
       nodes: [
         {
           id: "nerve-up",
+          accent: "#8d6bcc",
+          icon: "nerve",
           label: "신경",
           kicker: "전하는 길",
           desc: "",
@@ -56,6 +60,8 @@ export const sensesChart: SystemChart = {
       nodes: [
         {
           id: "brain",
+          accent: "#c58696",
+          icon: "brain",
           label: "뇌",
           kicker: "알아차리고 정해요",
           goOrgan: "brain",
@@ -76,6 +82,8 @@ export const sensesChart: SystemChart = {
       nodes: [
         {
           id: "muscle",
+          accent: "#c98a5b",
+          icon: "muscle",
           label: "근육",
           kicker: "몸이 움직여요",
           goSystem: "movement",

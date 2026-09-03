@@ -28,6 +28,8 @@ export const togetherChart: SystemChart = {
       nodes: [
         {
           id: "digestion",
+          accent: "#cf7d63",
+          icon: "utensils",
           label: "소화 기관",
           kicker: "영양분을 들여와요",
           goSystem: "digestion",
@@ -36,6 +38,8 @@ export const togetherChart: SystemChart = {
         },
         {
           id: "respiration",
+          accent: "#7fa8c4",
+          icon: "wind",
           label: "호흡 기관",
           kicker: "산소를 들여와요",
           goSystem: "respiration",
@@ -51,6 +55,8 @@ export const togetherChart: SystemChart = {
       nodes: [
         {
           id: "circulation",
+          accent: "#d06f74",
+          icon: "heart",
           label: "순환 기관",
           kicker: "온몸으로 실어 날라요",
           goSystem: "circulation",
@@ -65,6 +71,8 @@ export const togetherChart: SystemChart = {
       nodes: [
         {
           id: "cells",
+          accent: "#2f2a27",
+          icon: "cell",
           label: "온몸의 세포",
           kicker: "받아 쓰고 찌꺼기를 내요",
           desc: "",
@@ -78,6 +86,8 @@ export const togetherChart: SystemChart = {
       nodes: [
         {
           id: "excretion",
+          accent: "#86a97f",
+          icon: "droplets",
           label: "배설 기관",
           kicker: "몸 밖으로 내보내요",
           goSystem: "excretion",
@@ -92,6 +102,8 @@ export const togetherChart: SystemChart = {
       nodes: [
         {
           id: "senses",
+          accent: "#a98cc4",
+          icon: "brain",
           label: "감각 기관과 뇌",
           kicker: "알아차리고 정해요",
           goSystem: "senses",
@@ -100,6 +112,8 @@ export const togetherChart: SystemChart = {
         },
         {
           id: "movement",
+          accent: "#c98a5b",
+          icon: "bone",
           label: "운동 기관",
           kicker: "실제로 움직여요",
           goSystem: "movement",

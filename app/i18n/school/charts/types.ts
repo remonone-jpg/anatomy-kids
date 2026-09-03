@@ -32,6 +32,17 @@ export type ChartNode = {
   /** Something to try, shown under the writing. Optional. */
   tryIt?: string;
   tryItEasy?: string;
+  /**
+   * The box's colour, as a hex value. Written here rather than in the
+   * stylesheet because it belongs to the thing, not to the layout: the four
+   * systems in the loop carry the same colours the list on the left gives
+   * them, and the eye and the skin carry their own organ's. The box tints
+   * itself from this; the chosen box still turns coral, so "what this is" and
+   * "what I pressed" stay two different signals.
+   */
+  accent?: string;
+  /** Key into the chart's icon set. A name, not a component: this is data. */
+  icon?: string;
   /** Opens that system's own layer — the way out of the chart into a diagram. */
   goSystem?: string;
   /** Opens the 3D organ page. Only for the organs this site has modelled. */

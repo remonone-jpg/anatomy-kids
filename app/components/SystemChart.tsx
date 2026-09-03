@@ -1,9 +1,59 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight, Hand } from "lucide-react";
+import {
+  ArrowRight,
+  AudioLines,
+  Bone,
+  Brain,
+  Candy,
+  ChevronLeft,
+  ChevronRight,
+  CircleDot,
+  Droplets,
+  Dumbbell,
+  Flower2,
+  Hand,
+  HeartPulse,
+  RefreshCw,
+  Sun,
+  Utensils,
+  Waves,
+  Wind,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
 import type { OrganId } from "../lib/anatomy-data";
 import type { ChartNode, SystemChart as Chart } from "../i18n/school/charts";
+
+/**
+ * The chart's icon set, by name.
+ *
+ * The five senses are all read as metaphors rather than as organs: lucide has
+ * an eye and an ear but no nose and no tongue, and three drawings of organs
+ * beside two of something else would look like two of them were forgotten.
+ * What they have in common is the stimulus each one takes, so that is what
+ * they show — light, sound, scent, taste, touch.
+ */
+const ICONS: Record<string, LucideIcon> = {
+  // together
+  utensils: Utensils,
+  wind: Wind,
+  heart: HeartPulse,
+  cell: CircleDot,
+  droplets: Droplets,
+  brain: Brain,
+  bone: Bone,
+  // senses
+  waves: Waves,
+  light: Sun,
+  sound: AudioLines,
+  scent: Flower2,
+  taste: Candy,
+  touch: Hand,
+  nerve: Zap,
+  muscle: Dumbbell,
+};
 
 const fill = (template: string, values: Record<string, string | number>) =>
   template.replace(/\{(\w+)\}/g, (_, key: string) => String(values[key] ?? ""));
@@ -76,19 +126,26 @@ export function SystemChart({
   const loopTo = chart.loop ? main.findIndex((row) => row.id === chart.loop!.to) : -1;
   const loopSpan = loopFrom >= 0 && loopTo >= 0 ? `${loopFrom + 1} / ${loopTo + 2}` : undefined;
 
-  const box = (node: ChartNode) => (
-    <button
-      type="button"
-      key={node.id}
-      className={`chart-node ${picked?.id === node.id ? "active" : ""}`}
-      aria-pressed={picked?.id === node.id}
-      onClick={() => setPickedId(picked?.id === node.id ? null : node.id)}
-    >
-      <b>{say(node.label, node.labelEasy)}</b>
-      {node.kicker && <small>{say(node.kicker, node.kickerEasy)}</small>}
-      {(node.goSystem || node.goOrgan) && <ArrowRight className="chart-go" size={13} aria-hidden />}
-    </button>
-  );
+  const box = (node: ChartNode) => {
+    const Icon = node.icon ? ICONS[node.icon] : undefined;
+    return (
+      <button
+        type="button"
+        key={node.id}
+        className={`chart-node ${picked?.id === node.id ? "active" : ""}`}
+        aria-pressed={picked?.id === node.id}
+        style={node.accent ? ({ "--node-accent": node.accent } as React.CSSProperties) : undefined}
+        onClick={() => setPickedId(picked?.id === node.id ? null : node.id)}
+      >
+        {Icon && <Icon className="chart-icon" size={19} aria-hidden />}
+        <span className="chart-text">
+          <b>{say(node.label, node.labelEasy)}</b>
+          {node.kicker && <small>{say(node.kicker, node.kickerEasy)}</small>}
+        </span>
+        {(node.goSystem || node.goOrgan) && <ArrowRight className="chart-go" size={13} aria-hidden />}
+      </button>
+    );
+  };
 
   return (
     <section className="diagram-viewer diagram-inline system-chart" aria-label={title}>
@@ -104,20 +161,33 @@ export function SystemChart({
           <div className="chart-rows">
             {main.map((row, index) => (
               <div className="chart-row" key={row.id} style={{ gridRow: index + 1 }}>
-                {/* Nothing points at the first row. */}
+                {/* Nothing points at the first row. The line is drawn rather
+                    than suggested — a chevron floating in a gap left the boxes
+                    looking like a list, which is the one thing this is not. */}
                 {index > 0 && (
                   <span className="chart-arrow">
-                    <ChevronDown size={15} aria-hidden />
+                    <i className="chart-line" aria-hidden />
                     {row.arrow && <em>{say(row.arrow, row.arrowEasy)}</em>}
                   </span>
                 )}
-                <div className="chart-boxes">{row.nodes.map(box)}</div>
+                {/* A row of several that is followed by another row has to
+                    gather before it can point: a stub under each box down to a
+                    rail, and the arrow below carries all of them on. Derived
+                    rather than declared — a row with one box has nothing to
+                    gather, and the last row leads nowhere. */}
+                <div
+                  className={`chart-boxes ${row.nodes.length > 1 && index < main.length - 1 ? "gather" : ""}`}
+                  data-count={row.nodes.length}
+                >
+                  {row.nodes.map(box)}
+                </div>
               </div>
             ))}
             {chart.loop && loopSpan && (
               <>
                 <span className="chart-loop chart-loop-left" style={{ gridRow: loopSpan }} aria-hidden />
                 <span className="chart-loop chart-loop-right" style={{ gridRow: loopSpan }}>
+                  <RefreshCw className="chart-loop-icon" size={13} aria-hidden />
                   <em>{say(chart.loop.label, chart.loop.labelEasy)}</em>
                 </span>
               </>
@@ -128,7 +198,7 @@ export function SystemChart({
             <div className="chart-aside">
               {chart.asideTitle && <h3>{chart.asideTitle}</h3>}
               {aside.map((row) => (
-                <div className="chart-boxes" key={row.id}>
+                <div className="chart-boxes" data-count={row.nodes.length} key={row.id}>
                   {row.nodes.map(box)}
                 </div>
               ))}

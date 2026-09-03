@@ -2534,12 +2534,21 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
    diagram uses and keeps the diagram's drawer, so the only thing new on screen
    is the chart itself. */
 .system-chart .chart-stage {
+  /* One weight for every line in the chart — the arrows down the middle, the
+     rail the senses gather on, the bracket that returns. Set once here so the
+     set cannot drift apart a rule at a time. */
+  --chart-rule: rgba(168, 154, 142, .75);
   min-height: 0;
   overflow: auto;
   scrollbar-width: none;
   padding: 6px 20px 18px;
   display: flex;
   flex-direction: column;
+  /* Centred in what is left over, the way the five diagrams fill their stage —
+     pinned to the top, the chart read as though the bottom had been cut off.
+     `safe` so that a chart taller than the box still starts at the top instead
+     of hiding its first row above the scroll. */
+  justify-content: safe center;
   gap: 16px;
 }
 /* A gutter each side, empty until a chart loops back on itself. The bracket
@@ -2555,69 +2564,164 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 /* The arrow belongs to the row it points at: written this way a row carries
    its own way in, and adding a row cannot leave an arrow behind. */
 .chart-arrow {
+  position: relative;
+  align-self: stretch;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-  padding: 7px 0 6px;
-  color: #b9ada3;
+  justify-content: center;
+  padding: 4px 0 3px;
 }
-.chart-arrow svg { stroke: currentColor; }
+/* Drawn, not suggested. A line with a head on it is what makes a column of
+   boxes a flow; the chevron that stood here before was floating in the gap and
+   the boxes read as a list. */
+.chart-line {
+  display: block;
+  width: 1.5px;
+  height: 30px;
+  background: var(--chart-rule);
+}
+.chart-line::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4.5px solid transparent;
+  border-right: 4.5px solid transparent;
+  border-top: 7px solid var(--chart-rule);
+}
+/* Beside the line rather than under it: under it the label pushed every row
+   apart by its own height, and the line stopped being one line. */
 .chart-arrow em {
-  font: 500 11.5px var(--font-serif), serif;
+  position: absolute;
+  left: calc(50% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: calc(50% - 16px);
+  font: 500 11.5px/1.35 var(--font-serif), serif;
   font-style: normal;
   color: var(--muted);
-  text-align: center;
 }
-.chart-boxes { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; }
+.chart-boxes { position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; }
+/* Every box carries its own colour, set from the data as `--node-accent`: the
+   four systems in the loop take the colours the list on the left already gives
+   them, and the eye and the skin take their own organ's. A tint this light is
+   not decoration — with seven identical boxes the eye had nothing to hold on
+   to, and no way to tell that the box it is looking at is the same thing as
+   the coloured dot in the list beside it. The fallback keeps a box that has
+   been given no colour looking exactly as it did. */
 .chart-node {
+  --node-accent: #b9ada3;
   position: relative;
   flex: 0 1 auto;
-  min-width: 116px;
+  min-width: 160px;
   max-width: 100%;
-  padding: 11px 14px;
+  padding: 23px 17px;
   display: flex;
-  flex-direction: column;
-  gap: 3px;
+  flex-direction: row;
   align-items: center;
-  text-align: center;
-  border: 1px solid var(--line);
+  gap: 11px;
+  text-align: left;
+  border: 1px solid color-mix(in srgb, var(--node-accent) 35%, transparent);
   border-radius: 15px;
-  background: rgba(255,255,255,.6);
+  background: color-mix(in srgb, var(--node-accent) 7%, rgba(255,255,255,.55));
   cursor: pointer;
 }
-.chart-node:hover { border-color: var(--coral); background: rgba(255,255,255,.85); }
+.chart-icon { flex: none; color: var(--node-accent); stroke-width: 1.7; }
+.chart-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.chart-node:hover { border-color: color-mix(in srgb, var(--node-accent) 65%, transparent); }
+/* Chosen is coral, whatever the box's own colour is. Two different questions —
+   what this is, and which one I pressed — need two different answers. */
 .chart-node.active {
   border-color: var(--coral);
   background: rgba(253,234,226,.8);
   box-shadow: 0 8px 20px rgba(195,91,70,.08);
 }
-.chart-node b { font: 500 16px/1.2 var(--font-serif), serif; }
-.chart-node small { color: var(--muted); font-size: 12px; line-height: 1.4; }
+.chart-node.active .chart-icon { color: var(--coral); }
+.chart-node b { font: 500 17px/1.2 var(--font-serif), serif; }
+.chart-node small { color: var(--muted); font-size: 13px; line-height: 1.4; }
 /* A box that leads somewhere says so quietly. The drawer is where it is
    actually pressed — the same as a diagram label. */
 .chart-node .chart-go { position: absolute; top: 8px; right: 9px; opacity: .35; }
 .chart-node.active .chart-go { opacity: .6; }
 
+/* A row of four or five cannot hold an icon beside two lines of writing and
+   still fit five across 619px. Stacked, the same box is 117 wide instead of
+   210, and the five stay in one line where the sketch put them. */
+.chart-boxes[data-count="4"] .chart-node,
+.chart-boxes[data-count="5"] .chart-node {
+  flex: 1 1 96px;
+  min-width: 96px;
+  max-width: 132px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 16px 10px;
+}
+.chart-boxes[data-count="4"] .chart-text,
+.chart-boxes[data-count="5"] .chart-text { align-items: center; }
+.chart-boxes[data-count="4"] .chart-node .chart-go,
+.chart-boxes[data-count="5"] .chart-node .chart-go { top: 7px; right: 7px; }
+
+/* Where several boxes carry on into one: a stub under each, a rail across
+   them, and the arrow below takes all of them on together. Without it the
+   five senses looked like five endings rather than five ways in. */
+.chart-boxes.gather { margin-bottom: 15px; }
+.chart-boxes.gather .chart-node::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 1.5px;
+  height: 15px;
+  background: var(--chart-rule);
+}
+.chart-boxes.gather::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 12%;
+  right: 12%;
+  margin-top: 15px;
+  border-top: 1.5px solid var(--chart-rule);
+}
+
 /* The return leg: down one side, along the bottom, back up the other. Drawn as
    two brackets rather than an arrow so it reads as "and round again" without
    competing with the arrows down the middle. */
 .chart-loop {
+  position: relative;
   align-self: stretch;
   /* The rows are centred in their column; the brackets are not rows, and a
      bracket that shrinks to its contents is a line, not a bracket. */
   justify-self: stretch;
   margin: 26px 0 6px;
-  border: 1.5px solid rgba(185,173,163,.55);
+  /* Same weight and colour as the arrows, so the way back is the same kind of
+     line as the way down rather than a second, quieter idea. */
+  border: 1.5px solid var(--chart-rule);
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 3px;
 }
 .chart-loop-left { grid-column: 1; border-right: 0; border-radius: 12px 0 0 12px; }
 .chart-loop-right { grid-column: 3; border-left: 0; border-radius: 0 12px 12px 0; }
+/* The head goes at the top of both sides: the return runs upward, and a
+   bracket with no head is a brace rather than a route. */
+.chart-loop::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  border-left: 4.5px solid transparent;
+  border-right: 4.5px solid transparent;
+  border-bottom: 7px solid var(--chart-rule);
+}
+.chart-loop-left::before { left: -4.5px; }
+.chart-loop-right::before { right: -4.5px; }
+.chart-loop-icon { color: var(--chart-rule); flex: none; }
 .chart-loop-right em {
   writing-mode: vertical-rl;
-  margin-left: 4px;
-  max-height: 100%;
+  max-height: calc(100% - 26px);
   overflow: hidden;
   font: 500 11px var(--font-serif), serif;
   font-style: normal;
@@ -2733,6 +2837,21 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .diagram-inline .diagram-panel.shut .diagram-prompt { margin: 0; line-height: normal; }
   .diagram-inline .diagram-panel.shut .diagram-step { display: flex; }
   .diagram-inline .diagram-read { padding-block: 0; }
+}
+
+/* The one band where the stage is narrow: three columns still, but the middle
+   one is 415px instead of 727. The boxes written for 1800 do fit — and then
+   the chart is 750px tall in a 667px box, scrolling with no scrollbar to say
+   so, which reads as a chart with its last row cut off. Below 1040 the layout
+   stacks and the stage is wide again, so this is bounded at both ends. */
+@media (max-width: 1350px) and (min-width: 1041px) {
+  .chart-node { padding: 16px 14px; min-width: 140px; }
+  .chart-boxes[data-count="4"] .chart-node,
+  .chart-boxes[data-count="5"] .chart-node { padding: 13px 8px; gap: 4px; }
+  .chart-node b { font-size: 16px; }
+  .chart-node small { font-size: 12px; }
+  .chart-line { height: 24px; }
+  .chart-loop { margin-top: 20px; }
 }
 
 /* Seven systems in a column sized for ten organs leaves a hole at the bottom,
