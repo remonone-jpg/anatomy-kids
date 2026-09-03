@@ -394,9 +394,13 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 .hotspot-callout[data-side="left"] .callout-body:before { left: 100%; }
 /* The connector meets the dot, so it moves to whichever edge is nearest it. */
 .hotspot-callout[data-vside="up"] .callout-body:before { top: auto; bottom: 32px; }
-.callout-body b { display: block; padding-inline-start: 13px; font: 500 13px var(--font-serif), serif; }
+/* 14 and 12, up from 13 and 10. Ten-pixel type was fine when a note was seven
+   characters; the rewrite made it five lines of 122, and a paragraph at 10px
+   is squinting material. Kids mode already sits higher (17/13) and keeps its
+   own sizes below. */
+.callout-body b { display: block; padding-inline-start: 13px; font: 500 14px var(--font-serif), serif; }
 .callout-body b:before { content: ""; position: absolute; left: 12px; top: 15px; width: 7px; height: 7px; border-radius: 50%; background: var(--hotspot-color); }
-.callout-body small { display: block; margin-top: 3px; padding-inline-start: 13px; color: var(--muted); font-size: 10px; line-height: 1.35; }
+.callout-body small { display: block; margin-top: 3px; padding-inline-start: 13px; color: var(--muted); font-size: 12px; line-height: 1.35; }
 .callout-close { position: absolute; top: 6px; inset-inline-end: 6px; width: 20px; height: 20px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: var(--muted); cursor: pointer; }
 .callout-close:hover { background: rgba(116,89,67,.09); }
 @keyframes callout-in { from { opacity: 0; transform: translateX(-6px) scale(.96); } }
