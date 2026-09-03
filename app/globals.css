@@ -1614,35 +1614,36 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
    is the content, and a backdrop would cover it. */
 .walkthrough {
   position: absolute; left: 16px; right: 16px; bottom: 16px; z-index: 6;
-  padding: 13px 15px 12px;
+  padding: 11px 14px 11px;
   border: 1px solid var(--line); border-radius: 16px;
   background: color-mix(in srgb, var(--paper), transparent 8%);
   backdrop-filter: blur(9px);
   box-shadow: 0 10px 30px rgba(60,45,30,.16);
 }
-.walkthrough > header { display: flex; align-items: center; gap: 9px; }
-.walkthrough > header em {
-  font: 600 11.5px var(--font-serif), serif; letter-spacing: .06em;
-  color: var(--muted); font-style: normal;
-}
 .walk-pips { margin: 0; padding: 0; list-style: none; display: flex; gap: 4px; }
 .walk-pips li { width: 6px; height: 6px; border-radius: 50%; background: rgba(117,91,70,.22); }
 .walk-pips li.seen { background: rgba(117,91,70,.45); }
 .walk-pips li.now { background: var(--coral); transform: scale(1.3); }
-.walk-count { margin-left: auto; color: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; }
-.walkthrough > header button {
-  padding: 3px; border: 0; background: none; color: var(--muted); cursor: pointer; line-height: 0;
-}
-.walkthrough > header button:hover { color: var(--ink); }
+.walk-count { color: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; }
 
-.walk-body { margin: 9px 0 11px; }
+/* Tight, because the reading is often six characters. The box grows on its
+   own for the 155-character overview — it is only the frame that was fixed. */
+.walk-body { margin: 0 0 9px; }
 .walk-body b { display: block; margin-bottom: 4px; font: 600 15px var(--font-serif), serif; }
 .walk-body p { margin: 0; font-size: 13.5px; line-height: 1.65; color: var(--muted); }
 
-.walkthrough > footer { display: flex; gap: 7px; }
+.walkthrough > footer { display: flex; align-items: center; gap: 7px; }
+/* Dots and count moved down here from the heading row that no longer exists. */
+.walk-meta { display: flex; align-items: center; gap: 9px; margin: 0 auto; }
+.walk-close {
+  flex: none; width: 30px; min-height: 30px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; background: transparent; color: var(--muted); cursor: pointer;
+}
+.walk-close:hover { color: var(--ink); }
 .walkthrough > footer button {
   display: inline-flex; align-items: center; gap: 5px;
-  min-height: 34px; padding: 0 13px;
+  min-height: 32px; padding: 0 12px;
   border: 1px solid var(--line); border-radius: 11px;
   background: rgba(255,255,255,.5); color: var(--ink);
   cursor: pointer; font: 500 13px var(--font-serif), serif;
@@ -1665,8 +1666,16 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .tissue-passage h3 { margin: 0 0 6px; font: 600 15px var(--font-serif), serif; }
 .tissue-passage p { margin: 0; font-size: 14.5px; line-height: 1.7; color: var(--muted); }
 
-@media (max-width: 700px) {
-  .walkthrough { left: 10px; right: 10px; bottom: 10px; padding: 11px 12px; }
+/* 760, not 700. The toolbar turns horizontal at 760 and takes the bottom of
+   the viewer, so the walkthrough has to clear it from the same width — at
+   701–760 it was sitting underneath the bar. This block is after the base
+   rule; the copy tried first at line 657 was before it and lost on order. */
+@media (max-width: 760px) {
+  /* Above the toolbar, not on top of it. The bar turns horizontal here and
+     sits at bottom:12 with a height of 61, so anything anchored to bottom:10
+     lands underneath it — the two have overlapped at this width all along.
+     81 clears the bar and leaves 8px between them. */
+  .walkthrough { left: 10px; right: 10px; bottom: 81px; padding: 11px 12px; }
   .walk-body p { font-size: 13px; }
 }
 

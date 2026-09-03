@@ -762,6 +762,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             <Walkthrough
               key={organId}
               mechanism={mechanism}
+              easy={mode === "easy"}
               hotspots={organ.hotspots}
               copy={t.walk}
               // An organ with no model has nothing to turn; the steps still read.
@@ -981,6 +982,13 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           needs a second model to put beside the first, which this never had.
           Unreachable UI is worse than none. */}
 
+      {/* Organ-only. Every one of these five reads from `organ` — the tissue,
+          the mechanism, the conditions, the system it belongs to — so on the
+          systems layer they were showing the heart's while the stage showed
+          the skeleton. The label said "심장 학습 자료" too. There is nothing in
+          `SystemContent` left to build a systems set from: everything but the
+          name, the one-liner and the drawing is already in the four tabs. */}
+      {!activeSystem && (
       <section className="learning-cards" aria-label={format(t.cards.resources, { organ: organ.name })}>
         <article className="curiosity-card">
           <span>✿</span><p>{t.library.quoteLine1}<br />{t.library.quoteLine2}</p><em>{t.library.quoteSign}</em>
@@ -1049,6 +1057,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <button onClick={() => setModal("system")}>{t.cards.seeSystem} <ArrowRight size={14} /></button>
         </article>
       </section>
+      )}
 
       {modal && (
         <LearningModal

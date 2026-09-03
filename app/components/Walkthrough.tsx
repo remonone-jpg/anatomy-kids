@@ -20,6 +20,7 @@ export function Walkthrough({
   hotspots,
   copy,
   /** Null when the organ has no model; the steps then run as text only. */
+  easy,
   onFocus,
   onOpenPassage,
   onClose,
@@ -27,12 +28,21 @@ export function Walkthrough({
   mechanism: DeepDive;
   hotspots: Hotspot[];
   copy: Copy;
+  /** The plain rewrite, where one exists. */
+  easy?: boolean;
   onFocus: ((id: string | null) => void) | null;
   onOpenPassage: () => void;
   onClose: () => void;
 }) {
   const steps: Step[] = [
-    { kind: "overview", title: mechanism.title, body: mechanism.body },
+    {
+      kind: "overview",
+      // The plain rewrite was written and then not read here — every other
+      // reader of `deepDive` falls back like this and this one did not, so the
+      // easy setting showed the full 155-character passage.
+      title: easy && mechanism.titleEasy ? mechanism.titleEasy : mechanism.title,
+      body: easy && mechanism.bodyEasy ? mechanism.bodyEasy : mechanism.body,
+    },
     ...hotspots.map((hotspot) => ({ kind: "part" as const, hotspot })),
   ];
   const [index, setIndex] = useState(0);
@@ -53,20 +63,6 @@ export function Walkthrough({
 
   return (
     <div className="walkthrough" role="region" aria-label={copy.title}>
-      <header>
-        <em>{copy.title}</em>
-        <ol className="walk-pips" aria-hidden>
-          {steps.map((entry, i) => (
-            <li
-              key={entry.kind === "overview" ? "overview" : entry.hotspot.id}
-              className={i === index ? "now" : i < index ? "seen" : ""}
-            />
-          ))}
-        </ol>
-        <span className="walk-count">{index + 1} / {steps.length}</span>
-        <button type="button" onClick={onClose} aria-label={copy.close}><X size={15} /></button>
-      </header>
-
       {step.kind === "overview" ? (
         <div className="walk-body">
           <b>{step.title}</b>
@@ -79,10 +75,25 @@ export function Walkthrough({
         </div>
       )}
 
+      {/* One row instead of two. The heading said the name of the button that
+          opened this, the dots and the count are small, and the reading was
+          losing 21px of a 146px box to a line that repeated itself. The
+          container still carries the name for a screen reader. */}
       <footer>
         <button type="button" onClick={() => setIndex((i) => i - 1)} disabled={index === 0}>
           <ArrowLeft size={14} /> {copy.prev}
         </button>
+        <span className="walk-meta">
+          <ol className="walk-pips" aria-hidden>
+            {steps.map((entry, i) => (
+              <li
+                key={entry.kind === "overview" ? "overview" : entry.hotspot.id}
+                className={i === index ? "now" : i < index ? "seen" : ""}
+              />
+            ))}
+          </ol>
+          <span className="walk-count">{index + 1} / {steps.length}</span>
+        </span>
         {last ? (
           <button type="button" className="primary" onClick={onOpenPassage}>
             <BookOpen size={14} /> {copy.passage}
@@ -92,6 +103,9 @@ export function Walkthrough({
             {copy.next} <ArrowRight size={14} />
           </button>
         )}
+        <button type="button" className="walk-close" onClick={onClose} aria-label={copy.close}>
+          <X size={15} />
+        </button>
       </footer>
     </div>
   );
