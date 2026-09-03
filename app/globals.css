@@ -2215,6 +2215,21 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .stage > .diagram-viewer,
 .stage > .system-stage { flex: 1; min-width: 0; min-height: 0; }
 
+/* The 760px ceiling is sized for a 3D model, which is roughly square and gains
+   nothing from a taller box. Every diagram is portrait — 1.04 to 1.93 — so the
+   figure is height-bound in all five and that ceiling was capping the only
+   dimension that helps. Lifted for this layer alone.
+     · calc       — fills the screen exactly, the same arithmetic the organ
+                    view uses, so the box never runs below the fold and the
+                    picture is never half off the bottom of the screen. A
+                    `max(760px, …)` floor was tried first and was wrong: on an
+                    850-tall window it forced 760 where 673 fits and hung 61px
+                    of the drawing below the fold.
+     · cap 1180   — a figure taller than this stops being readable as a whole
+                    and starts needing a scroll of the eye instead.
+   The learning cards below simply move down; the page has always scrolled. */
+.workspace-systems { height: min(1180px, calc(100vh - 177px)); }
+
 .diagram-viewer.diagram-inline {
   width: auto;
   height: 100%;
@@ -2243,14 +2258,62 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 /* The drawer. Both ends are real numbers because `height: auto` has nothing to
    transition to; the note scrolls inside its own box instead of pushing the
    picture. Closed it is one line of invitation. */
+/* Tied to the screen, not fixed, because what the drawer takes the picture
+   loses. The three columns brought the tallest note down from 480px to 276, so
+   300 shows every label of both readings; 240 still covers the easy reading's
+   median with room, and a short window needs its height for the drawing more
+   than for the note. At 1000px tall this lands on 280 — the picture keeps the
+   479px it had, and the note holds all 154 easy labels without scrolling. */
 .diagram-inline .diagram-panel {
-  height: 216px;
+  height: clamp(240px, 28vh, 300px);
   padding: 0 18px;
   border-radius: 20px;
   transition: height .28s cubic-bezier(.4, 0, .2, 1);
 }
 .diagram-inline .diagram-panel.shut { height: 48px; }
 .diagram-inline .diagram-read { padding-block: 14px; }
+
+/* Two columns, because the height was being spent on a shape problem rather
+   than on the writing. The drawer is over 1000px wide and was stacking six
+   blocks down one column: the longest label needed 437px of height while its
+   own paragraph was only 79px of it. Reading runs down the left, the things to
+   do and the ways out run down the right, and the tallest of the two decides
+   the height instead of their sum. No type size changes — the same words at
+   the same size in a shape that fits. */
+/* Three columns, placed by hand.
+   `columns: 300px 3` looked right and was not: a multi-column box with a fixed
+   height overflows sideways into further columns, and on 34 of the 154 labels
+   the fourth column carried `.diagram-jump-cross` 353px off the right edge.
+   Nothing showed it — the box scrolls vertically — so it read as "fits" while
+   the only route between diagrams sat outside the panel. A grid cannot
+   fragment, so a block is either placed or visibly missing.
+     column 1  the reading — name, badges, the paragraph
+     column 2  what to do — try it, and the neighbours worth reading next
+     column 3  the way out — the other diagram this one leads to
+   Splitting the two jump lists is deliberate: together they came to 237px and
+   set the height on their own. */
+.diagram-inline .diagram-read {
+  display: grid;
+  /* The reading gets nearly half. It is the column that sets the height — the
+     other two hold short lists — and every 100px of width taken off it turns
+     into another wrapped line. The detailed reading is what to size for: its
+     paragraphs run to 236 characters against the easy version's 113. */
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr) minmax(0, 1.05fr);
+  column-gap: 24px;
+  align-items: start;
+}
+/* Each column is one box, so its own height is its own business. Placing the
+   blocks directly in the grid instead made them share rows: the paragraph sat
+   in row 3 because the cross-system note in row 1 was 122px tall, and the
+   panel came out 368px for content that stacks to 192 in its own column. */
+.diagram-inline .diagram-col-read { grid-column: 1; }
+.diagram-inline .diagram-col-do { grid-column: 2; }
+.diagram-inline .diagram-col-go { grid-column: 3; }
+/* The invitation has no columns to sit beside. */
+.diagram-inline .diagram-read > .diagram-prompt { grid-column: 1 / -1; }
+/* Whatever starts a column starts level with the name rather than carrying
+   the margin it needs when these are stacked. */
+.diagram-inline .diagram-col > :first-child { margin-top: 0; }
 .diagram-inline .diagram-panel.shut .diagram-read { padding-block: 0; overflow: hidden; }
 .diagram-inline .diagram-panel.shut .diagram-prompt { margin: 0; line-height: 48px; }
 /* The pager is for stepping through a note that is showing. With the drawer
@@ -2311,18 +2374,43 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
    Same specificity, and the later rule wins — the copies that lived in the
    1040 and 760 blocks were overruled by the base heights sitting further down
    the file and did nothing at all. */
+/* Three columns need roughly 1000px of drawer to sit in. At a 1350px window
+   the drawer is 730 and three of them come to 298 / 170 / 178 — the reading
+   wraps to twice the height and the cross-system note falls out of the bottom
+   of the panel entirely. Two from here down. */
+@media (max-width: 1500px) {
+  .diagram-inline .diagram-read { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
+  .diagram-inline .diagram-col-go { grid-column: 2; grid-row: 2; }
+}
 @media (max-width: 1040px) {
-  /* A shorter stage gives the note less and keeps the rest for the picture. */
-  .diagram-inline .diagram-panel { height: 180px; }
+  /* Back to `auto`, which is what the stacked layout needs — the columns
+     become rows here and each sizes itself. Without this the systems height
+     above wins on file order and pins the whole thing to one screenful, which
+     squeezed the drawing down to 173px inside a 336px stage. */
+  .workspace-systems { height: auto; }
+  /* Taller than the 650px the organ views use. The note takes 250 of whatever
+     the stage has, and at 650 that left the drawing 336 — smaller than before
+     this change. The page already scrolls at this width; the cards move down. */
+  .workspace-systems .stage { height: 820px; }
+  /* A fixed share of a fixed stage, rather than following the screen. */
+  .diagram-inline .diagram-panel { height: 250px; }
 }
 @media (max-width: 760px) {
   .diagram-inline .diagram-stage, .system-stage-body { border-radius: 22px; }
   .diagram-inline .diagram-bar h2, .system-stage .diagram-bar h2 { font-size: 19px; }
-  /* A phone cannot spare 216px for the note; the rest of a long one scrolls
-     where it sits rather than taking the picture's height. */
-  .diagram-inline .diagram-panel { height: 132px; border-radius: 18px; }
+  /* One column again: at 740px the two would be 350px each, and the jump
+     lists wrap to nothing useful at that width. Stacked it needs the height
+     back, so the note scrolls here — the only breakpoint where it does. */
+  .diagram-inline .diagram-read { grid-template-columns: minmax(0, 1fr); }
+  .diagram-inline .diagram-col-do,
+  .diagram-inline .diagram-col-go { grid-column: 1; grid-row: auto; }
+  .diagram-inline .diagram-panel { height: 208px; border-radius: 18px; }
   /* Back up to a comfortable touch target — 34px is a mouse size. */
   .diagram-inline .diagram-tools button { width: 40px; height: 40px; }
+  /* The 900px block caps this at 34dvh for the modal. On a 844-tall phone
+     that is 287px, above the 208 set here — but the cap is written for a
+     panel that sizes itself, and this one is told its height. */
+  .diagram-inline .diagram-panel { max-height: none; }
 }
 .diagram-beyond {
   align-self: flex-start; margin: 0 0 12px; padding: 3px 10px;

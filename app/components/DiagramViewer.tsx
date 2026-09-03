@@ -496,6 +496,16 @@ export function DiagramViewer({
             <div className="diagram-read" aria-live="polite">
               {picked ? (
                 <>
+                  {/* Three groups rather than one run of blocks. Inline they
+                      become columns, and a column has to be a real box: a grid
+                      shares its rows between columns, so the paragraph was
+                      being pushed down by whatever stood beside it, and a
+                      multi-column box with a fixed height spills sideways —
+                      it put the cross-system link 353px off the right edge on
+                      34 labels with nothing to show it was there. Stacked, as
+                      the modal has them, three plain divs read exactly as the
+                      flat list did. */}
+                  <div className="diagram-col diagram-col-read">
                   <h3>{picked.name}</h3>
                   {(parent || picked.beyond) && (
                     <p className="diagram-badges">
@@ -515,7 +525,9 @@ export function DiagramViewer({
                   {easy && !picked.descEasy && (
                     <p className="diagram-fallback">{copy.readingFallback}</p>
                   )}
+                  </div>
 
+                  <div className="diagram-col diagram-col-do">
                   {picked.tryIt && (
                     <div className="diagram-try">
                       <h4><Hand size={14} aria-hidden /> {copy.tryIt}</h4>
@@ -549,7 +561,9 @@ export function DiagramViewer({
                       </div>
                     ) : null,
                   )}
+                  </div>
 
+                  <div className="diagram-col diagram-col-go">
                   {picked.crossSystem && (
                     <div className="diagram-jump diagram-jump-cross">
                       <h4>{copy.crossSystem}</h4>
@@ -586,6 +600,7 @@ export function DiagramViewer({
                       {copy.detail} <ArrowRight size={15} />
                     </button>
                   )}
+                  </div>
                 </>
               ) : (
                 <p className="diagram-prompt">{copy.hint}</p>

@@ -548,7 +548,12 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         </nav>
       )}
 
-      <div className="workspace">
+      {/* The systems layer gets a taller box than the organ views. All five
+          diagrams are portrait — 1.04 to 1.93 tall for every one wide — so
+          height is the only dimension that makes the figure bigger, and the
+          760px ceiling that suits a 3D model was throwing away whatever the
+          screen had beyond it. */}
+      <div className={`workspace ${activeSystem ? "workspace-systems" : ""}`}>
         <aside className={`organ-library ${mobileLibrary ? "open" : ""}`}>
           <div className="panel-heading">
             <span>{activeSystem && kidsCopy ? kidsCopy.schoolSystems : t.library.title}</span>
