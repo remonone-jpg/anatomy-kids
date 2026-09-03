@@ -72,6 +72,8 @@ export type KidsUiCopy = {
   navStories: string;
   navQuiz: string;
   navConditions: string;
+  /** Back out of a long face of the reading panel to the organ's own facts. */
+  navBasic: string;
   bodyLoading: string;
   bodyHint: string;
   bodyFocus: string;

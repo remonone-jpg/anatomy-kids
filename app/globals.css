@@ -406,6 +406,43 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 @keyframes orbit { to { transform: rotate(360deg); } }
 
 .info-panel { padding: 21px 20px 17px; overflow: auto; scrollbar-width: none; }
+/* The way out of a long face of the panel. The header's menu can also switch
+   back, but on a phone the panel sits below the stage and that menu has
+   scrolled off the top by the time anyone is reading here. */
+.panel-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 5px 12px 5px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255,255,255,.4);
+  color: var(--muted);
+  cursor: pointer;
+  font: 500 12.5px var(--font-serif), serif;
+}
+.panel-back:hover { color: var(--ink); border-color: var(--coral); }
+
+/* Which face of the panel is showing. Hidden rather than unmounted, so a quiz
+   half answered is still half answered when the reader comes back — and so the
+   deep dive keeps whichever entry it had open. */
+.info-panel.tab-basic > .stories,
+.info-panel.tab-basic > .deep-dive { display: none; }
+.info-panel.tab-deep > :not(.deep-dive):not(.panel-back),
+.info-panel.tab-stories > :not(.stories):not(.panel-back) { display: none; }
+/* Below 1040 the panel becomes a two-column read, and the column each block
+   belongs to is named for the basic face only. The long faces are one section
+   apiece and have no second column to pair with, so they take the full width —
+   left to auto-placement the deep dive sat in column 2 with column 1 empty.
+   Each one is named rather than reached with `> *`: the universal selector
+   adds no specificity, so `.info-panel.tab-deep > *` tied with
+   `.info-panel .deep-dive` further down the file and lost on order — measured,
+   the deep dive stayed in column 2 while the back button moved. Outside a grid
+   these do nothing. */
+.info-panel.tab-deep > .deep-dive,
+.info-panel.tab-stories > .stories,
+.info-panel > .panel-back { grid-column: 1 / -1; }
 .info-kicker { display: flex; align-items: center; gap: 7px; color: #795c55; }
 .info-kicker svg { color: #ee8a7a; }
 .info-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 15px; }

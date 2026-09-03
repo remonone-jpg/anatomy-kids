@@ -22,6 +22,7 @@ export const kids: KidsCopy = {
     navStories: "이야기",
     navQuiz: "퀴즈",
     navConditions: "임상 노트",
+    navBasic: "기본 정보로",
     bodyLoading: "몸을 만드는 중이에요",
     bodyHint: "몸을 돌려보고, 장기를 눌러보세요",
     bodyFocus: "가까이 보기",

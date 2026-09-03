@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import gsap from "gsap";
 import {
+  ArrowLeft,
   ArrowRight,
   BookOpen,
   BrainCircuit,
@@ -247,6 +248,34 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // Set by the viewer; lets a step turn the model without a re-render.
   const focusRef = useRef<(id: string | null) => void>(() => {});
   const [revealCategory, setRevealCategory] = useState<KnowledgeQuizItem["category"] | null>(null);
+  /**
+   * Which of the reading panel's three faces is showing.
+   *
+   * A state of its own rather than something derived. `revealCategory` looks
+   * like it would do — it already says "open the deep dive" — but it is a
+   * one-shot signal the deep dive consumes and then ignores until it changes,
+   * which is the opposite of a mode that stays put. And nothing existing says
+   * "basic": the absence of the other two is not the same as choosing it.
+   */
+  const [panelTab, setPanelTab] = useState<"basic" | "deep" | "stories">("basic");
+  /**
+   * The question banks, held still.
+   *
+   * Both quizzes deal their round in a `useMemo` keyed on the pool, and these
+   * builders return a fresh array every call — so any re-render of this
+   * component reshuffled a quiz that was halfway through. It was always true;
+   * changing the panel's face is simply the first thing that re-renders often
+   * enough to see it. Measured: answering question 2, switching face and
+   * coming back kept the score but dealt a different question 2.
+   */
+  const knowledgePool = useMemo(
+    () => (stage === "body" ? getAllQuiz(locale.code) : getOrganQuiz(locale.code, organId)),
+    [stage, locale.code, organId],
+  );
+  const kidsPool = useMemo(
+    () => getKidsQuiz(locale.code, organId, childName),
+    [locale.code, organId, childName],
+  );
   const [quizActive, setQuizActive] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const prefetched = useRef(new Set<OrganId>());
@@ -278,6 +307,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     setSystemId(null);
     setSystemQuiz(null);
     setRevealExam(null);
+    // The systems view has no tabs, so whatever was showing before belongs to
+    // an organ the reader has since left. Arriving back on the deep dive of an
+    // organ they never opened it on reads as the site losing its place.
+    setPanelTab("basic");
     return true;
   };
   const organ = organById[organId];
@@ -443,7 +476,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               role="tab"
               aria-selected={systemId === null && stage === "organ"}
               className={systemId === null && stage === "organ" ? "active" : ""}
-              onClick={() => { setSystemId(null); setStage("organ"); }}
+              onClick={() => { setSystemId(null); setStage("organ"); setPanelTab("basic"); }}
             >
               <Heart size={15} aria-hidden /> <span>{kidsCopy.viewOrgan}</span>
             </button>
@@ -452,7 +485,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               role="tab"
               aria-selected={systemId === null && stage === "body"}
               className={systemId === null && stage === "body" ? "active" : ""}
-              onClick={() => { setSystemId(null); setStage("body"); }}
+              onClick={() => { setSystemId(null); setStage("body"); setPanelTab("basic"); }}
             >
               <Scan size={15} aria-hidden /> <span>{kidsCopy.viewBody}</span>
             </button>
@@ -503,21 +536,21 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
            uniform, and a mark that means "you pressed this a moment ago"
            teaches the wrong thing about what it means. */
         <nav className="content-nav" aria-label={kidsCopy.contentNav}>
+          {/* These two now change the panel's face rather than scroll to a
+              block within it, so no re-arming through null and no waiting a
+              frame for something to exist: the section they name is the only
+              thing on the panel, already at the top. */}
           <button
             type="button"
-            onClick={() => {
-              const left = backToOrgan();
-              // Re-arming through null is what makes a second press work: the
-              // deep dive ignores a `reveal` it has already honoured.
-              setRevealCategory(null);
-              window.setTimeout(() => setRevealCategory("structure"), left ? 80 : 0);
-            }}
+            className={!activeSystem && panelTab === "deep" ? "active" : ""}
+            onClick={() => { backToOrgan(); setPanelTab("deep"); }}
           >
             <Microscope size={17} aria-hidden /> <span>{kidsCopy.navDeepDive}</span>
           </button>
           <button
             type="button"
-            onClick={() => { backToOrgan(); scrollToBlock(".stories"); }}
+            className={!activeSystem && panelTab === "stories" ? "active" : ""}
+            onClick={() => { backToOrgan(); setPanelTab("stories"); }}
           >
             <BookOpen size={17} aria-hidden /> <span>{kidsCopy.navStories}</span>
           </button>
@@ -530,6 +563,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             onClick={() => {
               setQuizActive(false);
               if (systemId !== null) { setSystemQuiz("paper"); return; }
+              // The quiz stayed in the basic face, below the facts it asks
+              // about, so reaching it means going back to that face first.
+              setPanelTab("basic");
               if (kidsOn) { setKnowledgeQuiz(false); setKidsQuiz(true); scrollToBlock(".kids-quiz"); }
               else { setKidsQuiz(false); setKnowledgeQuiz(true); setRevealCategory(null); scrollToBlock(".knowledge-quiz"); }
             }}
@@ -715,7 +751,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           )}
         </div>
 
-        <aside className="info-panel" ref={contentRef}>
+        <aside
+          className={`info-panel${activeSystem ? "" : ` tab-${panelTab}`}`}
+          ref={contentRef}
+        >
           {/* The seven pills moved to the left column, beside the organ list
               they replace. 섞어 풀기 stayed: it is not a choice of what to
               read but an action on all seven, and putting it eighth in a row
@@ -772,6 +811,32 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               above it; both want the whole reading column. */}
           {!activeSystem && (
           <>
+          {/* Three faces of one panel. The reading was 2,173px in a 760px box,
+              and nine tenths of that was the two long sections at the bottom —
+              a reader who wanted the size of a heart scrolled past four stories
+              to find it. Each face is now its own screenful.
+
+              No tab row in here. The header's content menu already names these
+              four and sits directly above; a second set of the same words would
+              be two controls for one job. What the panel owes instead is a way
+              to tell where you are and how to get back, which is the two lines
+              below — and on the long faces the section's own heading (더 깊이
+              보기 / 이야기) says which one you are on.
+
+              All three faces stay mounted and CSS hides two of them. Rendering
+              only the active one was the first attempt and it cost the quiz:
+              leaving the basic face unmounted it, and coming back dealt a fresh
+              five questions — measured, the question on screen changed. A
+              wrapper element would have been tidier than `:not()` in the
+              stylesheet, but the two-column reading at 1040px places these
+              blocks as direct children of the panel, and a wrapper leaves the
+              grid with one child to place. */}
+          {panelTab !== "basic" && kidsCopy && (
+            <button type="button" className="panel-back" onClick={() => setPanelTab("basic")}>
+              <ArrowLeft size={14} aria-hidden /> {kidsCopy.navBasic}
+            </button>
+          )}
+          <>
           <div className="info-kicker" data-reveal><Heart size={13} fill="currentColor" /> {format(t.info.kicker, { organ: organ.name })}</div>
           <div className="info-title-row" data-reveal>
             <div><h1>{organ.name}</h1><em>{organ.poetic}</em></div>
@@ -817,7 +882,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           {kidsQuiz && kidsOn && kidsCopy && (
             <KidsQuiz
               key={organId}
-              pool={getKidsQuiz(locale.code, organId, childName)}
+              pool={kidsPool}
             childName={childName}
               speechLang={speechLang}
               copy={{
@@ -832,14 +897,24 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           {knowledgeQuiz && !kidsOn && (
             <KnowledgeQuiz
               key={`${organId}-${stage}`}
-              pool={stage === "body" ? getAllQuiz(locale.code) : getOrganQuiz(locale.code, organId)}
+              pool={knowledgePool}
               size={stage === "body" ? BODY_QUIZ_SIZE : KNOWLEDGE_QUIZ_SIZE}
               speechLang={speechLang}
-              onOpenPassage={setRevealCategory}
+              // "본문에서 보기" now has to change face as well as open an
+              // entry: the passage it names lives on a tab the reader is not
+              // looking at. Both go together or the button appears to do
+              // nothing.
+              onOpenPassage={(category) => {
+                setPanelTab("deep");
+                setRevealCategory(category);
+              }}
               onClose={() => setKnowledgeQuiz(false)}
             />
           )}
-          {organ.stories && <Stories entries={organ.stories} speechLang={speechLang} easy={mode === "easy"} />}
+          </>
+          {organ.stories && (
+            <Stories entries={organ.stories} speechLang={speechLang} easy={mode === "easy"} />
+          )}
           {organ.deepDive && (
             <DeepDive
               entries={organ.deepDive}
