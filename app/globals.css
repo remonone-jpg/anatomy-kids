@@ -2534,10 +2534,26 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
    diagram uses and keeps the diagram's drawer, so the only thing new on screen
    is the chart itself. */
 .system-chart .chart-stage {
-  /* One weight for every line in the chart — the arrows down the middle, the
-     rail the senses gather on, the bracket that returns. Set once here so the
-     set cannot drift apart a rule at a time. */
-  --chart-rule: rgba(168, 154, 142, .75);
+  /* One weight and one colour for every line in the chart — the arrows down
+     the middle, the rail the senses gather on, the bracket that returns. Set
+     once here so the set cannot drift apart a rule at a time.
+     The flow is what this drawing is; at 1.5px in a pale warm grey it sat
+     behind the boxes, reading as the ruling of a table rather than as the
+     thing being shown. 2.5px is a stroke no box border has (they are 1px), and
+     the colour is darker than the labels beside it (--muted #8d847c) so the
+     line is read before the words that annotate it — but well short of --ink,
+     which on cream reads as a printed rule and would drown the tints. */
+  --chart-rule: rgba(120, 104, 92, .85);
+  /* A whole number on purpose. Half pixels do not survive the same way in both
+     places this is used: a background of 2.5px renders at 2.5, a *border* of
+     2.5px is floored to the device pixel — so the rail and the returning
+     bracket, which are borders, came out a pixel thinner than the arrows they
+     were meant to match. At 1.5px that gap was the whole point of the
+     complaint: the arrows drew at 2px and the bracket at 1. */
+  --chart-stroke: 3px;
+  /* The head, kept in proportion to the stroke: five strokes across. */
+  --chart-head: 7.5px;
+  --chart-head-len: 11px;
   min-height: 0;
   overflow: auto;
   scrollbar-width: none;
@@ -2577,7 +2593,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
    the boxes read as a list. */
 .chart-line {
   display: block;
-  width: 1.5px;
+  width: var(--chart-stroke);
   height: 30px;
   background: var(--chart-rule);
 }
@@ -2587,9 +2603,9 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   bottom: 3px;
   left: 50%;
   transform: translateX(-50%);
-  border-left: 4.5px solid transparent;
-  border-right: 4.5px solid transparent;
-  border-top: 7px solid var(--chart-rule);
+  border-left: var(--chart-head) solid transparent;
+  border-right: var(--chart-head) solid transparent;
+  border-top: var(--chart-head-len) solid var(--chart-rule);
 }
 /* Beside the line rather than under it: under it the label pushed every row
    apart by its own height, and the line stopped being one line. */
@@ -2674,7 +2690,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   position: absolute;
   top: 100%;
   left: 50%;
-  width: 1.5px;
+  width: var(--chart-stroke);
   height: 15px;
   background: var(--chart-rule);
 }
@@ -2685,7 +2701,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   left: 12%;
   right: 12%;
   margin-top: 15px;
-  border-top: 1.5px solid var(--chart-rule);
+  border-top: var(--chart-stroke) solid var(--chart-rule);
 }
 
 /* The return leg: down one side, along the bottom, back up the other. Drawn as
@@ -2699,8 +2715,10 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   justify-self: stretch;
   margin: 26px 0 6px;
   /* Same weight and colour as the arrows, so the way back is the same kind of
-     line as the way down rather than a second, quieter idea. */
-  border: 1.5px solid var(--chart-rule);
+     line as the way down rather than a second, quieter idea. It needs the
+     weight more than they do, not less: it runs 215px with nothing along it,
+     and a long thin line looks thinner than a short one of the same stroke. */
+  border: var(--chart-stroke) solid var(--chart-rule);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2714,13 +2732,16 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   content: "";
   position: absolute;
   top: -1px;
-  border-left: 4.5px solid transparent;
-  border-right: 4.5px solid transparent;
-  border-bottom: 7px solid var(--chart-rule);
+  border-left: var(--chart-head) solid transparent;
+  border-right: var(--chart-head) solid transparent;
+  border-bottom: var(--chart-head-len) solid var(--chart-rule);
 }
-.chart-loop-left::before { left: -4.5px; }
-.chart-loop-right::before { right: -4.5px; }
-.chart-loop-icon { color: var(--chart-rule); flex: none; }
+/* Centred on the stroke it caps, which is the element's own edge. */
+.chart-loop-left::before { left: calc(var(--chart-stroke) / 2 - var(--chart-head)); }
+.chart-loop-right::before { right: calc(var(--chart-stroke) / 2 - var(--chart-head)); }
+/* Sized up with the bracket. A 13px glyph at lucide's default stroke looked
+   like a note pinned to the line rather than part of it. */
+.chart-loop-icon { color: var(--chart-rule); flex: none; width: 15px; height: 15px; stroke-width: 2.1; }
 .chart-loop-right em {
   writing-mode: vertical-rl;
   max-height: calc(100% - 26px);
