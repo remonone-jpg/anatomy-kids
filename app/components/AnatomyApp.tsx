@@ -37,6 +37,7 @@ import { ConditionsModal } from "./Conditions";
 import { Walkthrough } from "./Walkthrough";
 import { ChildNamePrompt } from "./ChildNamePrompt";
 import { SystemView, SystemOrgans } from "./SystemView";
+import { SystemChart } from "./SystemChart";
 import { SystemQuiz } from "./SystemQuiz";
 import { DiagramViewer } from "./DiagramViewer";
 import type { OrganId } from "../lib/anatomy-data";
@@ -50,6 +51,7 @@ import { conditionsAvailable, getConditions } from "../i18n/conditions";
 import { getSystems, schoolAvailable } from "../i18n/school";
 import { getAllSystemQuiz, getSystemQuiz, systemQuizAvailable } from "../i18n/quiz";
 import { getDiagramLabels, getRelatedHeading } from "../i18n/school/diagrams";
+import { getSystemChart } from "../i18n/school/charts";
 import type { KnowledgeQuizItem } from "../i18n/types";
 import { speak, stopSpeaking } from "../lib/speech";
 import { readMode, serverMode, subscribeMode, writeMode, type Mode } from "../lib/mode";
@@ -458,6 +460,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   const moreFacts = getMoreFacts(locale.code, organId, named);
   // Only school mode can have one open; the organ panel takes over when null.
   const activeSystem = schoolOn && systemId ? getSystems(locale.code).find((s) => s.id === systemId) : undefined;
+  /** The two systems with no diagram show a flow chart instead. Null for the
+   *  five that have one, and for every locale the charts are not written in. */
+  const activeChart = activeSystem ? getSystemChart(locale.code, activeSystem.id) : null;
 
   /**
    * What the quiz card says, or `null` where there is no quiz to offer.
@@ -862,10 +867,43 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                   selectOrgan(id);
                 }}
               />
+            ) : activeChart ? (
+              /* No drawing, but a path: the flow chart takes the stage and the
+                 parts list goes back to the reading column, where the other
+                 five keep theirs. */
+              <SystemChart
+                key={activeSystem.id}
+                chart={activeChart}
+                title={activeSystem.name}
+                subtitle={activeSystem.oneLine}
+                easy={mode === "easy"}
+                copy={{
+                  ...kidsCopy.chart,
+                  tryIt: kidsCopy.diagram.tryIt,
+                  prev: kidsCopy.diagram.prev,
+                  next: kidsCopy.diagram.next,
+                  position: kidsCopy.diagram.position,
+                }}
+                systemNames={Object.fromEntries(getSystems(locale.code).map((s) => [s.id, s.name]))}
+                onOpenSystem={(id) => {
+                  setSystemId(id);
+                  setDiagramLabel(null);
+                  setSystemQuiz(null);
+                  setRevealExam(null);
+                  setSystemTab("basic");
+                }}
+                onOpenOrgan={(id) => {
+                  setSystemId(null);
+                  setSystemQuiz(null);
+                  setRevealExam(null);
+                  selectOrgan(id);
+                }}
+              />
             ) : (
-              /* Senses and together have no drawing. Naming the parts is the
-                 nearest thing to pointing at them, so the list that would
-                 otherwise sit in the reading column stands here instead. No 3D
+              /* Neither a drawing nor a chart — the locales the school layer
+                 has not been written for. Naming the parts is the nearest
+                 thing to pointing at them, so the list that would otherwise
+                 sit in the reading column stands here instead. No 3D
                  stand-in: that would put a second context beside the one the
                  organ view already holds. */
               <div className="system-stage">
@@ -971,6 +1009,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                 <SystemView
                   key={activeSystem.id}
                   system={activeSystem}
+                  showParts={!!activeSystem.image || !!activeChart}
                   copy={{ ...kidsCopy.system }}
                   easy={mode === "easy"}
                   speechLang={speechLang}

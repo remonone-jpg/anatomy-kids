@@ -98,6 +98,12 @@ export const kids: KidsCopy = {
       next: "다음",
       crossSystem: "다른 기관과도 이어져요",
     },
+    chart: {
+      hint: "상자를 눌러보세요",
+      empty: "설명은 곧 채워질 자리예요.",
+      goSystem: "이 기관계로 가기",
+      goOrgan: "이 장기 보기",
+    },
     systemQuiz: {
       title: "기관계 문제",
       paper: "이 기관계 15문제",

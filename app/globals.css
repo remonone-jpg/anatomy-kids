@@ -2530,6 +2530,118 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .system-stage-body .system-organs b { font-size: 17px; }
 .system-stage-body .system-organs small { font-size: 13px; }
 
+/* The flow chart, for the two systems with no drawing. It sits in the card the
+   diagram uses and keeps the diagram's drawer, so the only thing new on screen
+   is the chart itself. */
+.system-chart .chart-stage {
+  min-height: 0;
+  overflow: auto;
+  scrollbar-width: none;
+  padding: 6px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+/* A gutter each side, empty until a chart loops back on itself. The bracket
+   lives there rather than over the boxes, so the return leg is drawn without
+   anything having to move out of its way. */
+.chart-rows {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
+  align-content: start;
+  justify-items: center;
+}
+.chart-row { grid-column: 2; width: 100%; display: flex; flex-direction: column; align-items: center; }
+/* The arrow belongs to the row it points at: written this way a row carries
+   its own way in, and adding a row cannot leave an arrow behind. */
+.chart-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 7px 0 6px;
+  color: #b9ada3;
+}
+.chart-arrow svg { stroke: currentColor; }
+.chart-arrow em {
+  font: 500 11.5px var(--font-serif), serif;
+  font-style: normal;
+  color: var(--muted);
+  text-align: center;
+}
+.chart-boxes { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; }
+.chart-node {
+  position: relative;
+  flex: 0 1 auto;
+  min-width: 116px;
+  max-width: 100%;
+  padding: 11px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: rgba(255,255,255,.6);
+  cursor: pointer;
+}
+.chart-node:hover { border-color: var(--coral); background: rgba(255,255,255,.85); }
+.chart-node.active {
+  border-color: var(--coral);
+  background: rgba(253,234,226,.8);
+  box-shadow: 0 8px 20px rgba(195,91,70,.08);
+}
+.chart-node b { font: 500 16px/1.2 var(--font-serif), serif; }
+.chart-node small { color: var(--muted); font-size: 12px; line-height: 1.4; }
+/* A box that leads somewhere says so quietly. The drawer is where it is
+   actually pressed — the same as a diagram label. */
+.chart-node .chart-go { position: absolute; top: 8px; right: 9px; opacity: .35; }
+.chart-node.active .chart-go { opacity: .6; }
+
+/* The return leg: down one side, along the bottom, back up the other. Drawn as
+   two brackets rather than an arrow so it reads as "and round again" without
+   competing with the arrows down the middle. */
+.chart-loop {
+  align-self: stretch;
+  /* The rows are centred in their column; the brackets are not rows, and a
+     bracket that shrinks to its contents is a line, not a bracket. */
+  justify-self: stretch;
+  margin: 26px 0 6px;
+  border: 1.5px solid rgba(185,173,163,.55);
+  display: flex;
+  align-items: center;
+}
+.chart-loop-left { grid-column: 1; border-right: 0; border-radius: 12px 0 0 12px; }
+.chart-loop-right { grid-column: 3; border-left: 0; border-radius: 0 12px 12px 0; }
+.chart-loop-right em {
+  writing-mode: vertical-rl;
+  margin-left: 4px;
+  max-height: 100%;
+  overflow: hidden;
+  font: 500 11px var(--font-serif), serif;
+  font-style: normal;
+  color: var(--muted);
+}
+
+/* Beside the loop, not in it. The rule is the whole point: these belong to the
+   body but not to the circle above them. */
+.chart-aside {
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+}
+.chart-aside h3 {
+  margin: 0 0 9px;
+  text-align: center;
+  font: 500 13px var(--font-serif), serif;
+  color: var(--muted);
+}
+
+/* Two columns, not the diagram's three: a node has the reading and the way
+   out, and no neighbours to list. */
+.system-chart .diagram-read { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+.system-chart .diagram-col-go { grid-column: 2; }
+
 /* Systems in the left column. No artwork exists for a system and borrowing an
    organ's would name the wrong thing, so the glyph circle keeps its accent
    gradient and carries no image. */

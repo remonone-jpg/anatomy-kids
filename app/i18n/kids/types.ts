@@ -142,6 +142,16 @@ export type KidsUiCopy = {
     /** Heads the link out of this diagram into another system. */
     crossSystem: string;
   };
+  /** The flow chart that stands in for a diagram on the two systems that have
+   *  none. Furniture only — the boxes and their writing are content, and live
+   *  with the charts in i18n/school/charts. */
+  chart: {
+    hint: string;
+    /** Stands in for a node's writing until it is written. */
+    empty: string;
+    goSystem: string;
+    goOrgan: string;
+  };
   systemQuiz: {
     title: string; paper: string; mixed: string; passage: string;
     next: string; finish: string; scoreTitle: string; score: string;

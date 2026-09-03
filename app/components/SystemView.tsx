@@ -121,6 +121,7 @@ export function SystemView({
   tab,
   onBack,
   backLabel,
+  showParts,
 }: {
   system: SystemContent;
   copy: Copy;
@@ -136,6 +137,12 @@ export function SystemView({
   tab: string;
   onBack: () => void;
   backLabel: string;
+  /**
+   * Whether the parts list belongs here. It has two homes and only ever one at
+   * a time: the stage takes it when there is nothing else to put there, and
+   * gives it back as soon as the stage has a drawing or a chart of its own.
+   */
+  showParts?: boolean;
 }) {
   const [openFlow, setOpenFlow] = useState<number | null>(0);
   const [openWhy, setOpenWhy] = useState<number | null>(null);
@@ -186,10 +193,10 @@ export function SystemView({
       <p className="system-intro" data-tab="basic">{intro}</p>
       <span data-tab="basic"><Listen text={intro} label={copy.listen} lang={speechLang} /></span>
 
-      {/* Only when the stage has a diagram to show instead. Senses and
-          together have no drawing, so the parts list is what stands on the
-          stage for them and would otherwise appear twice. */}
-      {system.image && (
+      {/* Only when the stage has something of its own to show. Where it does
+          not — a system with neither drawing nor chart — the parts list is
+          what stands on the stage instead, and would otherwise appear twice. */}
+      {showParts && (
         <SystemOrgans system={system} heading={copy.madeOf} easy={easy} onOpenOrgan={onOpenOrgan} tab="basic" />
       )}
 
