@@ -17,7 +17,6 @@ import {
 import type { OrganId } from "../lib/anatomy-data";
 import type { SystemContent } from "../i18n/school";
 import { speak } from "../lib/speech";
-import { DiagramCard } from "./DiagramViewer";
 
 type Copy = {
   madeOf: string;
@@ -51,6 +50,56 @@ function Listen({ text, label, lang }: { text: string; label: string; lang: stri
 }
 
 /**
+ * What the system is made of.
+ *
+ * Exported because it has two homes and only ever one at a time. A system with
+ * a diagram shows this in the reading column, beside the picture. The two with
+ * no diagram — senses, together — show it on the stage instead, where naming
+ * the parts is the closest thing to pointing at them.
+ */
+export function SystemOrgans({
+  system,
+  heading,
+  easy,
+  onOpenOrgan,
+}: {
+  system: SystemContent;
+  heading: string;
+  easy?: boolean;
+  onOpenOrgan: (id: OrganId) => void;
+}) {
+  return (
+    <section className="system-section">
+      <h3><Sparkles size={15} aria-hidden /> {heading}</h3>
+      <ul className="system-organs">
+        {system.organs.map((organ) => {
+          const body = (
+            <>
+              <b>{organ.name}</b>
+              <small>{easy && organ.roleEasy ? organ.roleEasy : organ.role}</small>
+            </>
+          );
+          // Only the organs this site already has a page for are links; the
+          // rest — blood vessels, bladder, ears — simply read.
+          return (
+            <li key={organ.name}>
+              {organ.organId ? (
+                <button type="button" onClick={() => onOpenOrgan(organ.organId as OrganId)}>
+                  <span>{body}</span>
+                  <ArrowRight size={14} />
+                </button>
+              ) : (
+                <span className="plain">{body}</span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+/**
  * One organ system, laid out the way the chapter is taught.
  *
  * Read aloud is deliberately partial — the introduction, the answers to "why",
@@ -65,7 +114,6 @@ export function SystemView({
   onOpenOrgan,
   revealExam,
   onStartQuiz,
-  onOpenDiagram,
 }: {
   system: SystemContent;
   copy: Copy;
@@ -77,7 +125,6 @@ export function SystemView({
   /** An `exam` point to scroll to, sent by the quiz's "본문에서 보기". */
   revealExam?: string | null;
   onStartQuiz: () => void;
-  onOpenDiagram: () => void;
 }) {
   const [openFlow, setOpenFlow] = useState<number | null>(0);
   const [openWhy, setOpenWhy] = useState<number | null>(null);
@@ -110,50 +157,19 @@ export function SystemView({
 
   return (
     <article className="system-view">
+      {/* The name and the one-liner moved to the stage's title bar, above the
+          picture they belong to. Repeating them here would put the same two
+          lines twice on one screen, side by side. */}
       <p className="system-curriculum"><GraduationCap size={13} aria-hidden /> {system.curriculum}</p>
-      <h2>{system.name}</h2>
-      <p className="system-oneline">{system.oneLine}</p>
       <p className="system-intro">{intro}</p>
       <Listen text={intro} label={copy.listen} lang={speechLang} />
 
-      {/* The diagram sits above the parts list: the list names what the
-          picture shows, and the picture answers "where is that". */}
+      {/* Only when the stage has a diagram to show instead. Senses and
+          together have no drawing, so the parts list is what stands on the
+          stage for them and would otherwise appear twice. */}
       {system.image && (
-        <DiagramCard
-          src={system.image.src}
-          alt={system.image.alt}
-          label={copy.diagramOpen}
-          onOpen={onOpenDiagram}
-        />
+        <SystemOrgans system={system} heading={copy.madeOf} easy={easy} onOpenOrgan={onOpenOrgan} />
       )}
-
-      <section className="system-section">
-        <h3><Sparkles size={15} aria-hidden /> {copy.madeOf}</h3>
-        <ul className="system-organs">
-          {system.organs.map((organ) => {
-            const body = (
-              <>
-                <b>{organ.name}</b>
-                <small>{say(organ.role, organ.roleEasy)}</small>
-              </>
-            );
-            // Only the organs this site already has a page for are links; the
-            // rest — blood vessels, bladder, ears — simply read.
-            return (
-              <li key={organ.name}>
-                {organ.organId ? (
-                  <button type="button" onClick={() => onOpenOrgan(organ.organId as OrganId)}>
-                    <span>{body}</span>
-                    <ArrowRight size={14} />
-                  </button>
-                ) : (
-                  <span className="plain">{body}</span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </section>
 
       <section className="system-section">
         <h3><ListOrdered size={15} aria-hidden /> {copy.order}</h3>

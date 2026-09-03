@@ -1,5 +1,6 @@
 "use client";
 
+import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowRight, ChevronLeft, ChevronRight, Hand, Maximize2, Minus, Plus, RotateCcw, X,
@@ -80,6 +81,8 @@ export function DiagramViewer({
   src,
   alt,
   title,
+  subtitle,
+  inline,
   labels,
   relatedHeading,
   easy,
@@ -94,6 +97,18 @@ export function DiagramViewer({
   alt: string;
   /** Shown in the title bar, so the reader knows which system is open. */
   title: string;
+  /** The system's one-liner, which now rides along under the title. */
+  subtitle?: string;
+  /**
+   * Rendered as a column of the workspace rather than over it.
+   *
+   * The drawing, the panning and the label hits are all inside `.diagram-stage`
+   * and do not care either way — what changes is everything around it. Inline
+   * there is nothing to dismiss, so the dialog role, the modal flag, the
+   * backdrop, the outside-click and the Escape key all come off; keeping them
+   * would announce a dialog that traps a reader who never opened one.
+   */
+  inline?: boolean;
   labels: DiagramLabel[];
   /** Overrides the generic heading for the nearby-labels list. */
   relatedHeading?: string;
@@ -117,10 +132,22 @@ export function DiagramViewer({
   // pick made in another diagram is simply not this diagram's, so switching
   // systems clears the note without anything having to remember to reset it —
   // and leaves `initialLabel` free to say what should be open on arrival.
-  const [pick, setPick] = useState<{ src: string; id: string } | null>(null);
+  const [pick, setPick] = useState<{ src: string; id: string | null } | null>(null);
   const pickedId = pick?.src === src ? pick.id : initialLabel ?? null;
   const picked = labels.find((l) => l.id === pickedId) ?? null;
-  const choosePick = useCallback((id: string) => setPick({ src, id }), [src]);
+  /**
+   * Inline, pressing the open label again puts the note away. That is what
+   * closes the drawer: the panel has no dismiss button of its own, because the
+   * label the reader just pressed is already under their finger.
+   *
+   * The modal keeps its old behaviour — there the note is a fixed column that
+   * is always showing something, and emptying it would leave a hole.
+   */
+  const choosePick = useCallback(
+    (id: string) =>
+      setPick((prev) => (inline && prev?.src === src && prev.id === id ? { src, id: null } : { src, id })),
+    [src, inline],
+  );
 
   useEffect(() => {
     let live = true;
@@ -413,7 +440,9 @@ export function DiagramViewer({
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      // Inline there is nothing to escape from, and stealing the key would
+      // cancel whatever the reader actually meant to dismiss.
+      if (!inline && event.key === "Escape") onClose();
       // Let the arrows do their usual job inside a control.
       const target = event.target as HTMLElement | null;
       if (target && ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)) return;
@@ -422,7 +451,7 @@ export function DiagramViewer({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, step]);
+  }, [onClose, step, inline]);
 
   const parent = picked ? labels.find((l) => l.children?.includes(picked.id)) : undefined;
   const jump = (id: string) => {
@@ -430,37 +459,40 @@ export function DiagramViewer({
     if (found) choosePick(found.id);
   };
 
-  return (
-    <div className="modal-backdrop diagram-backdrop" role="presentation" onMouseDown={onClose}>
-      <section
-        className="diagram-viewer"
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-        onMouseDown={(event) => event.stopPropagation()}
-      >
-        <header className="diagram-bar">
+  const body = (
+    <section
+      className={`diagram-viewer${inline ? " diagram-inline" : ""}`}
+      {...(inline
+        ? { "aria-label": title }
+        : { role: "dialog", "aria-modal": true, "aria-label": title, onMouseDown: (event: ReactMouseEvent) => event.stopPropagation() })}
+    >
+      <header className="diagram-bar">
+        <div className="diagram-title">
           <h2>{title}</h2>
-          <div className="diagram-tools">
-            <button type="button" onClick={() => zoom(1)} aria-label={copy.zoomIn} title={copy.zoomIn}><Plus size={17} /></button>
-            <button type="button" onClick={() => zoom(-1)} aria-label={copy.zoomOut} title={copy.zoomOut}><Minus size={17} /></button>
-            <button type="button" onClick={home} aria-label={copy.reset} title={copy.reset}><RotateCcw size={17} /></button>
+          {subtitle && <p>{subtitle}</p>}
+        </div>
+        <div className="diagram-tools">
+          <button type="button" onClick={() => zoom(1)} aria-label={copy.zoomIn} title={copy.zoomIn}><Plus size={17} /></button>
+          <button type="button" onClick={() => zoom(-1)} aria-label={copy.zoomOut} title={copy.zoomOut}><Minus size={17} /></button>
+          <button type="button" onClick={home} aria-label={copy.reset} title={copy.reset}><RotateCcw size={17} /></button>
+          {!inline && (
             <button type="button" onClick={onClose} aria-label={copy.close} title={copy.close}><X size={18} /></button>
-          </div>
-        </header>
+          )}
+        </div>
+      </header>
 
-        <div className="diagram-body">
-          <div
-            className="diagram-stage"
-            ref={hostRef}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={endDrag}
-            onPointerCancel={endDrag}
-          />
-          {!markup && <p className="diagram-loading">{failed ? alt : copy.loading}</p>}
+      <div className="diagram-body">
+        <div
+          className="diagram-stage"
+          ref={hostRef}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+        />
+        {!markup && <p className="diagram-loading">{failed ? alt : copy.loading}</p>}
 
-          <aside className="diagram-panel">
+          <aside className={`diagram-panel${inline ? (picked ? " open" : " shut") : ""}`}>
             <div className="diagram-read" aria-live="polite">
               {picked ? (
                 <>
@@ -582,8 +614,14 @@ export function DiagramViewer({
               </button>
             </nav>
           </aside>
-        </div>
-      </section>
+      </div>
+    </section>
+  );
+
+  if (inline) return body;
+  return (
+    <div className="modal-backdrop diagram-backdrop" role="presentation" onMouseDown={onClose}>
+      {body}
     </div>
   );
 }

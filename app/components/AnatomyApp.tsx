@@ -33,7 +33,7 @@ import { KidsQuiz } from "./KidsQuiz";
 import { ConditionsModal } from "./Conditions";
 import { Walkthrough } from "./Walkthrough";
 import { ChildNamePrompt } from "./ChildNamePrompt";
-import { SystemView } from "./SystemView";
+import { SystemView, SystemOrgans } from "./SystemView";
 import { SystemQuiz } from "./SystemQuiz";
 import { DiagramViewer } from "./DiagramViewer";
 import type { OrganId } from "../lib/anatomy-data";
@@ -241,7 +241,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // "paper" is one system's fifteen; "mixed" samples the whole unit.
   const [systemQuiz, setSystemQuiz] = useState<"paper" | "mixed" | null>(null);
   const [revealExam, setRevealExam] = useState<string | null>(null);
-  const [diagramOpen, setDiagramOpen] = useState(false);
   // Which label to open on arrival, when a diagram sends the reader to
   // another system. Cleared as soon as that diagram is closed.
   const [diagramLabel, setDiagramLabel] = useState<string | null>(null);
@@ -552,7 +551,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
       <div className="workspace">
         <aside className={`organ-library ${mobileLibrary ? "open" : ""}`}>
           <div className="panel-heading">
-            <span>{t.library.title}</span>
+            <span>{activeSystem && kidsCopy ? kidsCopy.schoolSystems : t.library.title}</span>
             <button aria-label={t.library.close} className="mobile-close" onClick={() => setMobileLibrary(false)}><X size={17} /></button>
           </div>
           {/* The panel used to offer the body map as a second tab. Choosing
@@ -561,7 +560,29 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               contexts holding the same ten models. This is the organ list
               and nothing else. */}
           <div className="organ-list">
-            {filteredOrgans.map((item) => (
+            {/* Reading a system, this column lists systems. The seven pills
+                that used to sit on top of the reading panel said the same
+                thing in a worse place — a chooser belongs beside the other
+                chooser, not above the thing it chose. The search box is left
+                alone: it searches organs, and it still does. */}
+            {activeSystem
+              ? getSystems(locale.code).map((entry) => (
+                  <button
+                    type="button"
+                    key={entry.id}
+                    className={`organ-item system-item ${entry.id === activeSystem.id ? "active" : ""}`}
+                    aria-pressed={entry.id === activeSystem.id}
+                    onClick={() => { setSystemId(entry.id); setDiagramLabel(null); }}
+                  >
+                    {/* No artwork for a system, and a borrowed organ thumb
+                        would name the wrong thing. A dot carries the colour
+                        the list already sorts by. */}
+                    <span className="organ-glyph system-dot" aria-hidden />
+                    <span><b>{entry.name}</b><small>{entry.oneLine}</small></span>
+                    {entry.id === activeSystem.id && <Heart className="favorite" size={14} fill="currentColor" />}
+                  </button>
+                ))
+              : filteredOrgans.map((item) => (
               <button
                 type="button"
                 key={item.id}
@@ -580,7 +601,11 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               </button>
             ))}
           </div>
-          <button className="view-all" onClick={() => setQuery("")}>{t.library.viewAll} <ArrowRight size={14} /></button>
+          {/* "모든 장기 보기" clears the organ search. With systems listed
+              there is no search to clear and nothing it would reveal. */}
+          {!activeSystem && (
+            <button className="view-all" onClick={() => setQuery("")}>{t.library.viewAll} <ArrowRight size={14} /></button>
+          )}
           <blockquote>
             <Sparkles size={18} />
             <p>{t.library.quoteLine1}<br />{t.library.quoteLine2}</p>
@@ -589,9 +614,71 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         </aside>
 
         <div className="stage">
-          {/* The pair of tabs that floated over the stage moved into the
-              header, next to the third view they were never grouped with. */}
-          {stage === "body" && kidsCopy ? (
+          {/* Three siblings, one at a time, and the order of the tests is the
+              rule: a system is a place of its own, so it wins over `stage`,
+              which only ever chose between the two organ views. No fourth
+              `stage` value — `systemId` already says this, and two flags
+              meaning one thing is how the old `panelView` drifted. Exactly one
+              of these mounts, so at most one WebGL context is ever alive. */}
+          {activeSystem && kidsCopy ? (
+            activeSystem.image ? (
+              <DiagramViewer
+                // Remount per system: the drawing, the pan and the chosen
+                // label all belong to one figure and none of them survive a
+                // swap intact.
+                key={activeSystem.id}
+                inline
+                src={activeSystem.image.src}
+                alt={activeSystem.image.alt}
+                title={activeSystem.name}
+                subtitle={activeSystem.oneLine}
+                labels={getDiagramLabels(locale.code, activeSystem.id)}
+                relatedHeading={getRelatedHeading(locale.code, activeSystem.id)}
+                easy={mode === "easy"}
+                initialLabel={diagramLabel ?? undefined}
+                systemNames={Object.fromEntries(getSystems(locale.code).map((s) => [s.id, s.name]))}
+                copy={{ ...kidsCopy.diagram, readingFallback: kidsCopy.readingFallback }}
+                onOpenSystem={(id, labelId) => {
+                  setSystemId(id);
+                  setDiagramLabel(labelId ?? null);
+                }}
+                onOpenOrgan={(id) => {
+                  setSystemId(null);
+                  setSystemQuiz(null);
+                  setRevealExam(null);
+                  selectOrgan(id);
+                }}
+                onClose={() => setDiagramLabel(null)}
+              />
+            ) : (
+              /* Senses and together have no drawing. Naming the parts is the
+                 nearest thing to pointing at them, so the list that would
+                 otherwise sit in the reading column stands here instead. No 3D
+                 stand-in: that would put a second context beside the one the
+                 organ view already holds. */
+              <div className="system-stage">
+                <header className="diagram-bar">
+                  <div className="diagram-title">
+                    <h2>{activeSystem.name}</h2>
+                    <p>{activeSystem.oneLine}</p>
+                  </div>
+                </header>
+                <div className="system-stage-body">
+                  <SystemOrgans
+                    system={activeSystem}
+                    heading={kidsCopy.system.madeOf}
+                    easy={mode === "easy"}
+                    onOpenOrgan={(id) => {
+                      setSystemId(null);
+                      setSystemQuiz(null);
+                      setRevealExam(null);
+                      selectOrgan(id);
+                    }}
+                  />
+                </div>
+              </div>
+            )
+          ) : stage === "body" && kidsCopy ? (
             <BodyScene organs={organById} activeId={organId} onSelect={selectOrgan} copy={kidsCopy} />
           ) : (
             <OrganViewer
@@ -626,23 +713,14 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         </div>
 
         <aside className="info-panel" ref={contentRef}>
-          {/* The systems/organs pair moved into the header too. Choosing which
-              system to read stays here, right above what it opens. */}
+          {/* The seven pills moved to the left column, beside the organ list
+              they replace. 섞어 풀기 stayed: it is not a choice of what to
+              read but an action on all seven, and putting it eighth in a row
+              of seven made it look like the eighth system. */}
           {schoolOn && kidsCopy && activeSystem && (
             <>
-              <nav className="system-picker" aria-label={kidsCopy.schoolSystems}>
-                {getSystems(locale.code).map((entry) => (
-                  <button
-                    key={entry.id}
-                    type="button"
-                    className={entry.id === activeSystem.id ? "on" : ""}
-                    aria-pressed={entry.id === activeSystem.id}
-                    onClick={() => setSystemId(entry.id)}
-                  >
-                    {entry.name}
-                  </button>
-                ))}
-                {systemQuizAvailable(locale.code) && (
+              {systemQuizAvailable(locale.code) && !systemQuiz && (
+                <nav className="system-picker" aria-label={kidsCopy.schoolSystems}>
                   <button
                     type="button"
                     className="system-picker-quiz"
@@ -650,8 +728,8 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                   >
                     {kidsCopy.systemQuiz.mixed}
                   </button>
-                )}
-              </nav>
+                </nav>
+              )}
               {systemQuiz && systemQuizAvailable(locale.code) ? (
                 <SystemQuiz
                   key={`${activeSystem.id}-${systemQuiz}`}
@@ -677,7 +755,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                   speechLang={speechLang}
                   revealExam={revealExam}
                   onStartQuiz={() => setSystemQuiz("paper")}
-                  onOpenDiagram={() => setDiagramOpen(true)}
                   onOpenOrgan={(id) => {
                     setSystemId(null);
                     setSystemQuiz(null);
@@ -920,34 +997,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           onSkip={() => writeChildName(null)}
         />
       )}
-      {diagramOpen && activeSystem?.image && kidsCopy && (
-        <DiagramViewer
-          src={activeSystem.image.src}
-          alt={activeSystem.image.alt}
-          title={activeSystem.name}
-          labels={getDiagramLabels(locale.code, activeSystem.id)}
-          relatedHeading={getRelatedHeading(locale.code, activeSystem.id)}
-          easy={mode === "easy"}
-          initialLabel={diagramLabel ?? undefined}
-          systemNames={Object.fromEntries(getSystems(locale.code).map((s) => [s.id, s.name]))}
-          copy={{ ...kidsCopy.diagram, readingFallback: kidsCopy.readingFallback }}
-          onOpenSystem={(id, labelId) => {
-            setSystemId(id);
-            setDiagramLabel(labelId ?? null);
-          }}
-          onOpenOrgan={(id) => {
-            setDiagramOpen(false);
-            setSystemId(null);
-            setSystemQuiz(null);
-            setRevealExam(null);
-            selectOrgan(id);
-          }}
-          onClose={() => {
-            setDiagramOpen(false);
-            setDiagramLabel(null);
-          }}
-        />
-      )}
+      {/* The full-screen viewer used to open from a card in the reading panel.
+          The drawing lives on the stage now, so nothing opened it any more and
+          an unreachable copy of it is worse than none. `DiagramViewer` keeps
+          its modal branch for whatever wants it next. */}
       {mobileLibrary && <button className="drawer-backdrop" aria-label={t.library.close} onClick={() => setMobileLibrary(false)} />}
     </main>
   );

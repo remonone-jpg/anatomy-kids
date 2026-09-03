@@ -594,6 +594,11 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .info-panel { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px 22px; max-height: none; }
   .info-panel .description, .info-panel .rule, .info-panel h2, .key-facts, .medical-note, .listen-button, .body-sense { grid-column: 2; }
   .info-kicker, .info-title-row { grid-column: 1; }
+  /* Two columns up top, reading underneath — the same shape the organ view
+     folds into, so the systems layer does not invent a second one. The stage
+     needs its height stated here: `.viewer-shell` carries its own, but the
+     drawing and the parts list are sized by the stage. */
+  .stage { height: 650px; }
   .info-panel { height: 330px; }
   .workspace { height: auto; }
   .organ-library, .viewer-shell { height: 650px; }
@@ -627,6 +632,9 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .mobile-library-trigger { display: flex; }
   .workspace { display: block; margin-top: 8px; }
   .viewer-shell { height: 68vh; min-height: 520px; border-radius: 22px; }
+  /* Everything stacks here. The stage matches the 3D viewer's height so the
+     drawing gets the same slice of the phone the model would have. */
+  .stage { height: 68vh; min-height: 520px; }
   .organ-library {
     position: fixed;
     z-index: 42;
@@ -2199,6 +2207,123 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 
 .diagram-prompt { color: var(--muted) !important; }
+
+/* ── The diagram as a column of the workspace ─────────────────────────────
+   Same component, no backdrop. `.stage` is a flex row whose children take the
+   whole box, so all three siblings — 3D viewer, body map, drawing — are sized
+   the same way and the min-0 pair keeps a wide SVG from pushing the column. */
+.stage > .diagram-viewer,
+.stage > .system-stage { flex: 1; min-width: 0; min-height: 0; }
+
+.diagram-viewer.diagram-inline {
+  width: auto;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+.diagram-inline .diagram-bar { padding: 0 4px 12px; }
+.diagram-inline .diagram-bar h2 { font-size: 21px; }
+.diagram-inline .diagram-tools { padding: 3px; border-radius: 14px; box-shadow: none; }
+.diagram-inline .diagram-tools button { width: 34px; height: 34px; }
+
+/* Rows rather than columns. The full-screen split gives the note a 320px
+   sidebar, which out of 620px of centre column would leave the drawing 300 —
+   narrower than the figure itself. Stacked, the picture keeps the whole width
+   and gives up only the height the note is actually using. */
+.diagram-inline .diagram-body {
+  grid-template-columns: minmax(0, 1fr);
+  /* Explicit, for the same reason the modal states its own row: an implicit
+     `auto` row never resolves the percentage height inside, and the SVG then
+     keeps its natural size and walks out of the box. */
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 0;
+}
+
+/* The drawer. Both ends are real numbers because `height: auto` has nothing to
+   transition to; the note scrolls inside its own box instead of pushing the
+   picture. Closed it is one line of invitation. */
+.diagram-inline .diagram-panel {
+  height: 216px;
+  padding: 0 18px;
+  border-radius: 20px;
+  transition: height .28s cubic-bezier(.4, 0, .2, 1);
+}
+.diagram-inline .diagram-panel.shut { height: 48px; }
+.diagram-inline .diagram-read { padding-block: 14px; }
+.diagram-inline .diagram-panel.shut .diagram-read { padding-block: 0; overflow: hidden; }
+.diagram-inline .diagram-panel.shut .diagram-prompt { margin: 0; line-height: 48px; }
+/* The pager is for stepping through a note that is showing. With the drawer
+   shut there is nothing to step through yet. */
+.diagram-inline .diagram-panel.shut .diagram-step { display: none; }
+.diagram-inline .diagram-step { padding-block: 0 12px; }
+@media (prefers-reduced-motion: reduce) {
+  .diagram-inline .diagram-panel { transition: none; }
+}
+
+/* Title and one-liner ride together, so the reading column does not have to
+   say the system's name a second time. */
+.diagram-title { min-width: 0; }
+.diagram-title h2 { margin: 0; }
+.diagram-title p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font: 500 13px var(--font-serif), serif;
+}
+
+/* Senses and together have no drawing. The parts list stands on the stage for
+   them, in the same box the drawing would have used. */
+.system-stage { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.system-stage .diagram-bar { padding: 0 4px 12px; }
+.system-stage .diagram-bar h2 { font-size: 21px; }
+.system-stage-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  scrollbar-width: none;
+  padding: 24px 26px;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: #fffaf2;
+  box-shadow: var(--shadow);
+}
+.system-stage-body .system-section { margin: 0; }
+/* Bigger than the same list in the reading column: here it is the thing being
+   looked at, not a note beside it. */
+.system-stage-body .system-organs b { font-size: 17px; }
+.system-stage-body .system-organs small { font-size: 13px; }
+
+/* Systems in the left column. No artwork exists for a system and borrowing an
+   organ's would name the wrong thing, so the glyph circle keeps its accent
+   gradient and carries no image. */
+.system-item { --item-accent: #d7705b; }
+.system-item:nth-child(1) { --item-accent: #c98a5b; }
+.system-item:nth-child(2) { --item-accent: #cf7d63; }
+.system-item:nth-child(3) { --item-accent: #7fa8c4; }
+.system-item:nth-child(4) { --item-accent: #d06f74; }
+.system-item:nth-child(5) { --item-accent: #86a97f; }
+.system-item:nth-child(6) { --item-accent: #a98cc4; }
+.system-item:nth-child(7) { --item-accent: #c2a05e; }
+.system-item .system-dot { box-shadow: inset 0 0 0 1px rgba(121,86,67,.1); }
+.system-item small { line-height: 1.5; }
+
+/* These have to come after the block above, not up with the other breakpoints.
+   Same specificity, and the later rule wins — the copies that lived in the
+   1040 and 760 blocks were overruled by the base heights sitting further down
+   the file and did nothing at all. */
+@media (max-width: 1040px) {
+  /* A shorter stage gives the note less and keeps the rest for the picture. */
+  .diagram-inline .diagram-panel { height: 180px; }
+}
+@media (max-width: 760px) {
+  .diagram-inline .diagram-stage, .system-stage-body { border-radius: 22px; }
+  .diagram-inline .diagram-bar h2, .system-stage .diagram-bar h2 { font-size: 19px; }
+  /* A phone cannot spare 216px for the note; the rest of a long one scrolls
+     where it sits rather than taking the picture's height. */
+  .diagram-inline .diagram-panel { height: 132px; border-radius: 18px; }
+  /* Back up to a comfortable touch target — 34px is a mouse size. */
+  .diagram-inline .diagram-tools button { width: 40px; height: 40px; }
+}
 .diagram-beyond {
   align-self: flex-start; margin: 0 0 12px; padding: 3px 10px;
   border-radius: 999px; background: rgba(141,107,204,.1);
