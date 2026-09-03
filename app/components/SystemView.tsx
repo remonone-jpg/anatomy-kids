@@ -36,7 +36,6 @@ type Copy = {
   listen: string;
   goal: string;
   quizPaper: string;
-  diagramOpen: string;
 };
 
 /** Declared out here rather than inside the view: a component built during

@@ -1,17 +1,14 @@
 "use client";
 
-import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  ArrowRight, ChevronLeft, ChevronRight, Hand, Maximize2, Minus, Plus, RotateCcw, X,
+  ArrowRight, ChevronLeft, ChevronRight, Hand, Minus, Plus, RotateCcw,
 } from "lucide-react";
 import type { OrganId } from "../lib/anatomy-data";
 import type { DiagramLabel } from "../i18n/school/diagrams";
 import { asset } from "../lib/asset";
 
 type Copy = {
-  open: string;
-  close: string;
   zoomIn: string;
   zoomOut: string;
   reset: string;
@@ -82,7 +79,6 @@ export function DiagramViewer({
   alt,
   title,
   subtitle,
-  inline,
   labels,
   relatedHeading,
   easy,
@@ -91,7 +87,6 @@ export function DiagramViewer({
   copy,
   onOpenOrgan,
   onOpenSystem,
-  onClose,
 }: {
   src: string;
   alt: string;
@@ -99,16 +94,6 @@ export function DiagramViewer({
   title: string;
   /** The system's one-liner, which now rides along under the title. */
   subtitle?: string;
-  /**
-   * Rendered as a column of the workspace rather than over it.
-   *
-   * The drawing, the panning and the label hits are all inside `.diagram-stage`
-   * and do not care either way — what changes is everything around it. Inline
-   * there is nothing to dismiss, so the dialog role, the modal flag, the
-   * backdrop, the outside-click and the Escape key all come off; keeping them
-   * would announce a dialog that traps a reader who never opened one.
-   */
-  inline?: boolean;
   labels: DiagramLabel[];
   /** Overrides the generic heading for the nearby-labels list. */
   relatedHeading?: string;
@@ -121,7 +106,6 @@ export function DiagramViewer({
   copy: Copy;
   onOpenOrgan: (id: OrganId) => void;
   onOpenSystem: (systemId: string, labelId?: string) => void;
-  onClose: () => void;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -136,17 +120,15 @@ export function DiagramViewer({
   const pickedId = pick?.src === src ? pick.id : initialLabel ?? null;
   const picked = labels.find((l) => l.id === pickedId) ?? null;
   /**
-   * Inline, pressing the open label again puts the note away. That is what
-   * closes the drawer: the panel has no dismiss button of its own, because the
-   * label the reader just pressed is already under their finger.
-   *
-   * The modal keeps its old behaviour — there the note is a fixed column that
-   * is always showing something, and emptying it would leave a hole.
+   * Pressing the open label again puts the note away. That is what closes the
+   * drawer below 1200px: the panel has no dismiss button of its own, because
+   * the label the reader just pressed is already under their finger. Wider
+   * than that the panel is a column beside the drawing and stays put — the
+   * classes still change, the CSS just stops sizing on them.
    */
   const choosePick = useCallback(
-    (id: string) =>
-      setPick((prev) => (inline && prev?.src === src && prev.id === id ? { src, id: null } : { src, id })),
-    [src, inline],
+    (id: string) => setPick((prev) => (prev?.src === src && prev.id === id ? { src, id: null } : { src, id })),
+    [src],
   );
 
   useEffect(() => {
@@ -440,9 +422,8 @@ export function DiagramViewer({
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      // Inline there is nothing to escape from, and stealing the key would
-      // cancel whatever the reader actually meant to dismiss.
-      if (!inline && event.key === "Escape") onClose();
+      // No Escape handler: this is a column of the page, not a dialog, and
+      // there is nothing here for the key to dismiss.
       // Let the arrows do their usual job inside a control.
       const target = event.target as HTMLElement | null;
       if (target && ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)) return;
@@ -451,7 +432,7 @@ export function DiagramViewer({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, step, inline]);
+  }, [step]);
 
   const parent = picked ? labels.find((l) => l.children?.includes(picked.id)) : undefined;
   const jump = (id: string) => {
@@ -459,13 +440,8 @@ export function DiagramViewer({
     if (found) choosePick(found.id);
   };
 
-  const body = (
-    <section
-      className={`diagram-viewer${inline ? " diagram-inline" : ""}`}
-      {...(inline
-        ? { "aria-label": title }
-        : { role: "dialog", "aria-modal": true, "aria-label": title, onMouseDown: (event: ReactMouseEvent) => event.stopPropagation() })}
-    >
+  return (
+    <section className="diagram-viewer diagram-inline" aria-label={title}>
       <header className="diagram-bar">
         <div className="diagram-title">
           <h2>{title}</h2>
@@ -475,9 +451,6 @@ export function DiagramViewer({
           <button type="button" onClick={() => zoom(1)} aria-label={copy.zoomIn} title={copy.zoomIn}><Plus size={17} /></button>
           <button type="button" onClick={() => zoom(-1)} aria-label={copy.zoomOut} title={copy.zoomOut}><Minus size={17} /></button>
           <button type="button" onClick={home} aria-label={copy.reset} title={copy.reset}><RotateCcw size={17} /></button>
-          {!inline && (
-            <button type="button" onClick={onClose} aria-label={copy.close} title={copy.close}><X size={18} /></button>
-          )}
         </div>
       </header>
 
@@ -492,7 +465,7 @@ export function DiagramViewer({
         />
         {!markup && <p className="diagram-loading">{failed ? alt : copy.loading}</p>}
 
-          <aside className={`diagram-panel${inline ? (picked ? " open" : " shut") : ""}`}>
+          <aside className={`diagram-panel ${picked ? "open" : "shut"}`}>
             <div className="diagram-read" aria-live="polite">
               {picked ? (
                 <>
@@ -631,35 +604,5 @@ export function DiagramViewer({
           </aside>
       </div>
     </section>
-  );
-
-  if (inline) return body;
-  return (
-    <div className="modal-backdrop diagram-backdrop" role="presentation" onMouseDown={onClose}>
-      {body}
-    </div>
-  );
-}
-
-/** The card in the reading panel that opens the viewer. */
-export function DiagramCard({
-  src,
-  alt,
-  label,
-  onOpen,
-}: {
-  src: string;
-  alt: string;
-  label: string;
-  onOpen: () => void;
-}) {
-  return (
-    <figure className="system-figure">
-      <button type="button" className="system-figure-open" onClick={onOpen}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={asset(src)} alt={alt} loading="lazy" />
-        <span><Maximize2 size={14} /> {label}</span>
-      </button>
-    </figure>
   );
 }

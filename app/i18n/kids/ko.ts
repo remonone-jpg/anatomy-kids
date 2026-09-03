@@ -68,11 +68,8 @@ export const kids: KidsCopy = {
       exam: "시험에 자주 나와요",
       listen: "들어보기",
       quizPaper: "문제 풀기",
-      diagramOpen: "크게 보고 눌러보기",
     },
     diagram: {
-      open: "크게 보기",
-      close: "닫기",
       zoomIn: "확대",
       zoomOut: "축소",
       reset: "처음으로",

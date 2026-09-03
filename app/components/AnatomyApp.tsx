@@ -632,7 +632,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                 // label all belong to one figure and none of them survive a
                 // swap intact.
                 key={activeSystem.id}
-                inline
                 src={activeSystem.image.src}
                 alt={activeSystem.image.alt}
                 title={activeSystem.name}
@@ -653,7 +652,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                   setRevealExam(null);
                   selectOrgan(id);
                 }}
-                onClose={() => setDiagramLabel(null)}
               />
             ) : (
               /* Senses and together have no drawing. Naming the parts is the
@@ -1002,10 +1000,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           onSkip={() => writeChildName(null)}
         />
       )}
-      {/* The full-screen viewer used to open from a card in the reading panel.
-          The drawing lives on the stage now, so nothing opened it any more and
-          an unreachable copy of it is worse than none. `DiagramViewer` keeps
-          its modal branch for whatever wants it next. */}
       {mobileLibrary && <button className="drawer-backdrop" aria-label={t.library.close} onClick={() => setMobileLibrary(false)} />}
     </main>
   );

@@ -110,10 +110,10 @@ export type KidsUiCopy = {
     madeOf: string; order: string; terms: string; experiment: string;
     prepare: string; steps: string; result: string; meaning: string; goal: string;
     why: string; numbers: string; tryIt: string; connection: string;
-    summary: string; exam: string; listen: string; quizPaper: string; diagramOpen: string;
+    summary: string; exam: string; listen: string; quizPaper: string;
   };
   diagram: {
-    open: string; close: string; zoomIn: string; zoomOut: string; reset: string;
+    zoomIn: string; zoomOut: string; reset: string;
     hint: string; detail: string; beyond: string; loading: string;
     /** Heads the list of labels that name parts of the one being read. */
     contains: string;
