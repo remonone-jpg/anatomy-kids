@@ -361,7 +361,11 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 .callout-body {
   position: absolute;
   top: -30px;
-  width: 168px;
+  /* 260, not 168. The notes are being rewritten from nine characters to a
+     hundred and fifty; at the old width that is ten lines and 177px of note
+     hanging off a dot. The stage is over a thousand wide and the figure never
+     fills it. */
+  width: 260px;
   padding: 10px 26px 11px 12px;
   border: 1px solid rgba(116,89,67,.14);
   border-radius: 13px;
@@ -373,6 +377,9 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 }
 .hotspot-callout[data-side="right"] .callout-body { left: 22px; }
 .hotspot-callout[data-side="left"] .callout-body { right: 22px; }
+/* Four corners, not two. `top: -30px` above is the downward default; low dots
+   get the mirror of it so the note grows up out of the frame's reach. */
+.hotspot-callout[data-vside="up"] .callout-body { top: auto; bottom: -30px; }
 .hotspot-callout[data-behind="true"] .callout-body { opacity: .3; }
 .callout-body:before {
   content: "";
@@ -385,6 +392,8 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 }
 .hotspot-callout[data-side="right"] .callout-body:before { right: 100%; }
 .hotspot-callout[data-side="left"] .callout-body:before { left: 100%; }
+/* The connector meets the dot, so it moves to whichever edge is nearest it. */
+.hotspot-callout[data-vside="up"] .callout-body:before { top: auto; bottom: 32px; }
 .callout-body b { display: block; padding-inline-start: 13px; font: 500 13px var(--font-serif), serif; }
 .callout-body b:before { content: ""; position: absolute; left: 12px; top: 15px; width: 7px; height: 7px; border-radius: 50%; background: var(--hotspot-color); }
 .callout-body small { display: block; margin-top: 3px; padding-inline-start: 13px; color: var(--muted); font-size: 10px; line-height: 1.35; }
@@ -717,7 +726,10 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .view-caption { left: 12px; bottom: 84px; }
   .tip-note { width: 130px; min-height: 113px; padding: 11px; }
   .tip-note p { font-size: 12px; }
-  .callout-body { width: 148px; top: -26px; }
+  /* Still most of a 740px stage, and the same reasoning: a narrow note of a
+     long passage is a column of single words. */
+  .callout-body { width: 240px; top: -26px; }
+  .hotspot-callout[data-vside="up"] .callout-body { top: auto; bottom: -26px; }
 }
 
 @media (max-width: 470px) {

@@ -147,7 +147,6 @@ export type KidsUiCopy = {
   daily: string;
   function: string;
   didYouKnow: string;
-  animate: string;
   quizButton: string;
   tip: string;
   tipDrag: string;

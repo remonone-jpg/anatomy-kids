@@ -72,7 +72,6 @@ function mergeUi(base: UiDictionary, copy: KidsUiCopy): UiDictionary {
       daily: copy.daily,
       function: copy.function,
       didYouKnow: copy.didYouKnow,
-      animate: copy.animate,
       quiz: copy.quizButton,
     },
     quiz: { ...base.quiz, ...copy.quiz },

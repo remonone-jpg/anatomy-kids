@@ -188,7 +188,7 @@ export type UiDictionary = {
   info: {
     kicker: string; keyFacts: string; size: string; weight: string; daily: string;
     location: string; bloodSupply: string; function: string; medical: string;
-    didYouKnow: string; viewLesson: string; animate: string; quiz: string;
+    didYouKnow: string; viewLesson: string; quiz: string;
   };
   cards: {
     resources: string; microscopic: string; functionAnimation: string;

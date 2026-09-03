@@ -570,6 +570,11 @@ export class AnatomyViewer {
     if (!point) return;
     this.calloutEl.style.transform = `translate3d(${Math.round(point.x)}px, ${Math.round(point.y)}px, 0)`;
     this.calloutEl.dataset.side = point.x > this.width * 0.6 ? "left" : "right";
+    // Same trick downward. The shell clips its overflow, so a note anchored to
+    // a dot low in the frame used to have its lower half cut off — and the
+    // notes are about to get several times longer. Below the six-tenths line
+    // the note hangs upward from the dot instead.
+    this.calloutEl.dataset.vside = point.y > this.height * 0.6 ? "up" : "down";
     this.calloutEl.dataset.behind = point.opacity < 0.3 ? "true" : "false";
   }
 

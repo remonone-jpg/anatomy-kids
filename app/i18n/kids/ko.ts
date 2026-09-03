@@ -118,7 +118,6 @@ export const kids: KidsCopy = {
     daily: "하루에",
     function: "하는 일",
     didYouKnow: "신기해요! ",
-    animate: "움직여요",
     quizButton: "찾기 놀이",
     tip: "이렇게 해보세요",
     tipDrag: "손가락으로 빙글빙글 돌려요",
