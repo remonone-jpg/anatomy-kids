@@ -74,6 +74,11 @@ export type KidsUiCopy = {
   navConditions: string;
   /** Back out of a long face of the reading panel to the organ's own facts. */
   navBasic: string;
+  /** The systems layer's three faces. Different words from the organ layer's,
+   *  because they divide a different reading. */
+  navFlow: string;
+  navLab: string;
+  navExam: string;
   bodyLoading: string;
   bodyHint: string;
   bodyFocus: string;

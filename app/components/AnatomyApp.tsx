@@ -7,13 +7,16 @@ import {
   ArrowRight,
   BookOpen,
   BrainCircuit,
+  FlaskConical,
   ChevronDown,
   CircleHelp,
   Crosshair,
   FileText,
   Globe,
+  GraduationCap,
   Heart,
   LibraryBig,
+  ListOrdered,
   Microscope,
   Play,
   Search,
@@ -259,6 +262,15 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
    */
   const [panelTab, setPanelTab] = useState<"basic" | "deep" | "stories">("basic");
   /**
+   * The same idea for the systems layer, kept apart from `panelTab`.
+   *
+   * One state for both would have to mean 더 깊이 in one layer and 과정 in the
+   * other, and every reset would need to know which layer it was resetting.
+   * Two names for two vocabularies is cheaper than one name that changes
+   * meaning depending on where you are standing.
+   */
+  const [systemTab, setSystemTab] = useState<"basic" | "flow" | "lab" | "exam">("basic");
+  /**
    * The question banks, held still.
    *
    * Both quizzes deal their round in a `useMemo` keyed on the pool, and these
@@ -294,25 +306,11 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     }, 60);
   };
 
-  /**
-   * Leaves the systems layer if it is open, and says whether it had to.
-   *
-   * The systems view replaces the whole reading panel, so the three content
-   * entries that live in that panel have nothing to scroll to while it is up.
-   * They come back to the organ rather than going grey: a menu whose items
-   * stop working is harder to read than one that always does something.
-   */
-  const backToOrgan = () => {
-    if (systemId === null) return false;
-    setSystemId(null);
-    setSystemQuiz(null);
-    setRevealExam(null);
-    // The systems view has no tabs, so whatever was showing before belongs to
-    // an organ the reader has since left. Arriving back on the deep dive of an
-    // organ they never opened it on reads as the site losing its place.
-    setPanelTab("basic");
-    return true;
-  };
+  /* `backToOrgan` used to live here. It existed because the content menu named
+     three organ-only destinations that had nothing to act on while the systems
+     view was up, so pressing one had to leave that layer first. The menu now
+     names the layer it is standing in, so nothing points out of it and there is
+     nothing to leave. The header's view switch does its own resetting. */
   const organ = organById[organId];
   const reference = organById[organId === "heart" ? "brain" : "heart"];
 
@@ -476,7 +474,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               role="tab"
               aria-selected={systemId === null && stage === "organ"}
               className={systemId === null && stage === "organ" ? "active" : ""}
-              onClick={() => { setSystemId(null); setStage("organ"); setPanelTab("basic"); }}
+              onClick={() => { setSystemId(null); setStage("organ"); setPanelTab("basic"); setSystemTab("basic"); }}
             >
               <Heart size={15} aria-hidden /> <span>{kidsCopy.viewOrgan}</span>
             </button>
@@ -485,7 +483,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               role="tab"
               aria-selected={systemId === null && stage === "body"}
               className={systemId === null && stage === "body" ? "active" : ""}
-              onClick={() => { setSystemId(null); setStage("body"); setPanelTab("basic"); }}
+              onClick={() => { setSystemId(null); setStage("body"); setPanelTab("basic"); setSystemTab("basic"); }}
             >
               <Scan size={15} aria-hidden /> <span>{kidsCopy.viewBody}</span>
             </button>
@@ -495,7 +493,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                 role="tab"
                 aria-selected={systemId !== null}
                 className={systemId !== null ? "active" : ""}
-                onClick={() => setSystemId(systemId ?? getSystems(locale.code)[0]?.id ?? null)}
+                onClick={() => { setSystemId(systemId ?? getSystems(locale.code)[0]?.id ?? null); setSystemTab("basic"); }}
               >
                 <BrainCircuit size={15} aria-hidden /> <span>{kidsCopy.viewSystems}</span>
               </button>
@@ -536,24 +534,67 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
            uniform, and a mark that means "you pressed this a moment ago"
            teaches the wrong thing about what it means. */
         <nav className="content-nav" aria-label={kidsCopy.contentNav}>
-          {/* These two now change the panel's face rather than scroll to a
-              block within it, so no re-arming through null and no waiting a
-              frame for something to exist: the section they name is the only
-              thing on the panel, already at the top. */}
+          {/* The first three entries belong to the layer being read. Each layer
+              divides its panel differently, and naming the other layer's faces
+              would be offering a reader four things where two of them are not
+              there. The quiz keeps the fourth seat in both so the one entry
+              they have in common never moves under the finger. */}
+          {activeSystem ? (
+            <>
+              <button
+                type="button"
+                className={systemTab === "flow" ? "active" : ""}
+                onClick={() => setSystemTab("flow")}
+              >
+                <ListOrdered size={17} aria-hidden /> <span>{kidsCopy.navFlow}</span>
+              </button>
+              <button
+                type="button"
+                className={systemTab === "lab" ? "active" : ""}
+                onClick={() => setSystemTab("lab")}
+              >
+                <FlaskConical size={17} aria-hidden /> <span>{kidsCopy.navLab}</span>
+              </button>
+              <button
+                type="button"
+                className={systemTab === "exam" ? "active" : ""}
+                onClick={() => setSystemTab("exam")}
+              >
+                <GraduationCap size={17} aria-hidden /> <span>{kidsCopy.navExam}</span>
+              </button>
+            </>
+          ) : (
+            <>
+          {/* These two change the panel's face rather than scroll to a block
+              within it, so no re-arming through null and no waiting a frame for
+              something to exist: the section they name is the only thing on the
+              panel, already at the top. */}
           <button
             type="button"
-            className={!activeSystem && panelTab === "deep" ? "active" : ""}
-            onClick={() => { backToOrgan(); setPanelTab("deep"); }}
+            className={panelTab === "deep" ? "active" : ""}
+            onClick={() => setPanelTab("deep")}
           >
             <Microscope size={17} aria-hidden /> <span>{kidsCopy.navDeepDive}</span>
           </button>
           <button
             type="button"
-            className={!activeSystem && panelTab === "stories" ? "active" : ""}
-            onClick={() => { backToOrgan(); setPanelTab("stories"); }}
+            className={panelTab === "stories" ? "active" : ""}
+            onClick={() => setPanelTab("stories")}
           >
             <BookOpen size={17} aria-hidden /> <span>{kidsCopy.navStories}</span>
           </button>
+          {/* Organ-only. The systems layer puts 시험 in this seat. */}
+          {conditionCopy && conditionDetails.length > 0 && (
+            <button
+              type="button"
+              className={conditionView !== null ? "active" : ""}
+              onClick={() => setConditionView("")}
+            >
+              <FileText size={17} aria-hidden /> <span>{kidsCopy.navConditions}</span>
+            </button>
+          )}
+            </>
+          )}
           {/* The one entry that stays where it is: each layer has its own
               question bank, so this opens whichever belongs to the screen.
               The mark asks about the layer being looked at rather than about
@@ -575,15 +616,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           >
             <CircleHelp size={17} aria-hidden /> <span>{kidsCopy.navQuiz}</span>
           </button>
-          {conditionCopy && conditionDetails.length > 0 && (
-            <button
-              type="button"
-              className={conditionView !== null ? "active" : ""}
-              onClick={() => { backToOrgan(); setConditionView(""); }}
-            >
-              <FileText size={17} aria-hidden /> <span>{kidsCopy.navConditions}</span>
-            </button>
-          )}
         </nav>
       )}
 
@@ -616,7 +648,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                     key={entry.id}
                     className={`organ-item system-item ${entry.id === activeSystem.id ? "active" : ""}`}
                     aria-pressed={entry.id === activeSystem.id}
-                    onClick={() => { setSystemId(entry.id); setDiagramLabel(null); }}
+                    onClick={() => { setSystemId(entry.id); setDiagramLabel(null); setSystemTab("basic"); }}
                   >
                     {/* No artwork for a system, and a borrowed organ thumb
                         would name the wrong thing. A dot carries the colour
@@ -755,7 +787,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         </div>
 
         <aside
-          className={`info-panel${activeSystem ? "" : ` tab-${panelTab}`}`}
+          className={`info-panel${activeSystem ? ` stab-${systemTab}` : ` tab-${panelTab}`}`}
           ref={contentRef}
         >
           {/* The seven pills moved to the left column, beside the organ list
@@ -800,6 +832,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                   speechLang={speechLang}
                   revealExam={revealExam}
                   onStartQuiz={() => setSystemQuiz("paper")}
+                  tab={systemTab}
+                  onBack={() => setSystemTab("basic")}
+                  backLabel={kidsCopy.navBasic}
                   onOpenOrgan={(id) => {
                     setSystemId(null);
                     setSystemQuiz(null);

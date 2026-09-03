@@ -117,6 +117,11 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   margin: 4px auto 0;
   display: flex;
   align-items: center;
+  /* Right, not left. Starting on the same vertical line as the logo made the
+     row read as the logo's subtitle rather than as its own thing; the row
+     shares `max-width` with the header, so this ends it exactly under the mode
+     switch instead. */
+  justify-content: flex-end;
   gap: 2px;
 }
 .content-nav button {
@@ -443,6 +448,18 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 .info-panel.tab-deep > .deep-dive,
 .info-panel.tab-stories > .stories,
 .info-panel > .panel-back { grid-column: 1 / -1; }
+
+/* The systems layer divides its own reading four ways. Same arrangement as
+   above — every block stays mounted, CSS hides the faces that are not showing —
+   but the blocks sit inside `.system-view` rather than directly in the panel,
+   and they are told apart by `data-tab` because most of them are the same
+   `.system-section` with nothing else to catch. */
+.info-panel.stab-basic .system-view > :not([data-tab="basic"]),
+.info-panel.stab-flow .system-view > :not([data-tab="flow"]),
+.info-panel.stab-lab .system-view > :not([data-tab="lab"]),
+.info-panel.stab-exam .system-view > :not([data-tab="exam"]) { display: none; }
+/* The way back is not part of any face. */
+.info-panel .system-view > .panel-back { display: inline-flex; }
 .info-kicker { display: flex; align-items: center; gap: 7px; color: #795c55; }
 .info-kicker svg { color: #ee8a7a; }
 .info-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 15px; }

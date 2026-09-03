@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
+  ArrowLeft,
   ArrowRight,
   BookOpen,
   CheckCircle2,
@@ -61,14 +62,18 @@ export function SystemOrgans({
   heading,
   easy,
   onOpenOrgan,
+  tab,
 }: {
   system: SystemContent;
   heading: string;
   easy?: boolean;
   onOpenOrgan: (id: OrganId) => void;
+  /** Which face of the reading panel this belongs to. Absent on the stage,
+   *  where it is the only thing there and has no face to belong to. */
+  tab?: string;
 }) {
   return (
-    <section className="system-section">
+    <section className="system-section" data-tab={tab}>
       <h3><Sparkles size={15} aria-hidden /> {heading}</h3>
       <ul className="system-organs">
         {system.organs.map((organ) => {
@@ -113,6 +118,9 @@ export function SystemView({
   onOpenOrgan,
   revealExam,
   onStartQuiz,
+  tab,
+  onBack,
+  backLabel,
 }: {
   system: SystemContent;
   copy: Copy;
@@ -124,6 +132,10 @@ export function SystemView({
   /** An `exam` point to scroll to, sent by the quiz's "본문에서 보기". */
   revealExam?: string | null;
   onStartQuiz: () => void;
+  /** Which face is showing. The blocks all stay mounted; CSS hides the rest. */
+  tab: string;
+  onBack: () => void;
+  backLabel: string;
 }) {
   const [openFlow, setOpenFlow] = useState<number | null>(0);
   const [openWhy, setOpenWhy] = useState<number | null>(null);
@@ -156,21 +168,32 @@ export function SystemView({
 
   return (
     <article className="system-view">
+      {/* Same arrangement the organ panel uses: every block stays mounted and
+          CSS hides the faces that are not showing, so a flow step left open or
+          a checked-off activity is still there on the way back. The way out is
+          here rather than only in the header — below 1040 this panel sits under
+          the stage and the header has scrolled off by the time anyone reads
+          this far. */}
+      {tab !== "basic" && (
+        <button type="button" className="panel-back" onClick={onBack}>
+          <ArrowLeft size={14} aria-hidden /> {backLabel}
+        </button>
+      )}
       {/* The name and the one-liner moved to the stage's title bar, above the
           picture they belong to. Repeating them here would put the same two
           lines twice on one screen, side by side. */}
-      <p className="system-curriculum"><GraduationCap size={13} aria-hidden /> {system.curriculum}</p>
-      <p className="system-intro">{intro}</p>
-      <Listen text={intro} label={copy.listen} lang={speechLang} />
+      <p className="system-curriculum" data-tab="basic"><GraduationCap size={13} aria-hidden /> {system.curriculum}</p>
+      <p className="system-intro" data-tab="basic">{intro}</p>
+      <span data-tab="basic"><Listen text={intro} label={copy.listen} lang={speechLang} /></span>
 
       {/* Only when the stage has a diagram to show instead. Senses and
           together have no drawing, so the parts list is what stands on the
           stage for them and would otherwise appear twice. */}
       {system.image && (
-        <SystemOrgans system={system} heading={copy.madeOf} easy={easy} onOpenOrgan={onOpenOrgan} />
+        <SystemOrgans system={system} heading={copy.madeOf} easy={easy} onOpenOrgan={onOpenOrgan} tab="basic" />
       )}
 
-      <section className="system-section">
+      <section className="system-section" data-tab="flow">
         <h3><ListOrdered size={15} aria-hidden /> {copy.order}</h3>
         <ol className="system-flow">
           {system.flow.map((entry, i) => (
@@ -186,7 +209,7 @@ export function SystemView({
         </ol>
       </section>
 
-      <section className="system-section">
+      <section className="system-section" data-tab="flow">
         <h3><BookOpen size={15} aria-hidden /> {copy.terms}</h3>
         <dl className="system-terms">
           {system.terms.map((term) => (
@@ -202,7 +225,7 @@ export function SystemView({
         const result = say(exp.result, exp.easy?.result);
         const meaning = say(exp.meaning, exp.easy?.meaning);
         return (
-        <section className="system-section system-experiment" key={exp.title}>
+        <section className="system-section system-experiment" data-tab="lab" key={exp.title}>
           <h3><FlaskConical size={15} aria-hidden /> {copy.experiment}</h3>
           <b className="experiment-title">{exp.title}</b>
           <p className="experiment-goal"><em>{copy.goal}</em> {exp.goal}</p>
@@ -228,7 +251,7 @@ export function SystemView({
         );
       })}
 
-      <section className="system-section">
+      <section className="system-section" data-tab="exam">
         <h3>{copy.why}</h3>
         <ul className="system-why">
           {system.whyQuestions.map((entry, i) => (
@@ -248,7 +271,7 @@ export function SystemView({
         </ul>
       </section>
 
-      <section className="system-section">
+      <section className="system-section" data-tab="lab">
         <h3><Hash size={15} aria-hidden /> {copy.numbers}</h3>
         <ul className="system-numbers">
           {system.numbers.map((n) => (
@@ -261,7 +284,7 @@ export function SystemView({
         </ul>
       </section>
 
-      <section className="system-section">
+      <section className="system-section" data-tab="lab">
         <h3>{copy.tryIt}</h3>
         <ul className="system-tryit">
           {system.tryIt.map((t) => (
@@ -274,13 +297,13 @@ export function SystemView({
         </ul>
       </section>
 
-      <section className="system-section system-connection">
+      <section className="system-section system-connection" data-tab="flow">
         <h3><Link2 size={15} aria-hidden /> {copy.connection}</h3>
         <p>{connection}</p>
         <Listen text={connection} label={copy.listen} lang={speechLang} />
       </section>
 
-      <section className="system-section">
+      <section className="system-section" data-tab="exam">
         <h3>{copy.summary}</h3>
         <ul className="system-summary">
           {summary.map((line, i) => (
@@ -307,7 +330,7 @@ export function SystemView({
       </section>
 
       {/* The reason this layer exists, so it gets the strongest box on screen. */}
-      <section className="system-exam" ref={examRef}>
+      <section className="system-exam" data-tab="exam" ref={examRef}>
         <h3>{copy.exam}</h3>
         <ul>
           {system.exam.map((entry) => (
@@ -319,7 +342,7 @@ export function SystemView({
         </ul>
       </section>
 
-      <button type="button" className="system-quiz-start" onClick={onStartQuiz}>
+      <button type="button" className="system-quiz-start" data-tab="exam" onClick={onStartQuiz}>
         <GraduationCap size={16} /> {copy.quizPaper}
       </button>
     </article>
