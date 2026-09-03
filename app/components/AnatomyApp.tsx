@@ -556,10 +556,13 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           </button>
           {/* The one entry that stays where it is: each layer has its own
               question bank, so this opens whichever belongs to the screen.
-              Three banks, one mark — whichever is up, this is what opened it. */}
+              The mark asks about the layer being looked at rather than about
+              all three at once — an organ quiz left open stays open, but while
+              the systems layer is up there is no paper on screen, and a mark
+              pointing at something the reader cannot see is worse than none. */}
           <button
             type="button"
-            className={kidsQuiz || knowledgeQuiz || systemQuiz !== null ? "active" : ""}
+            className={(activeSystem ? systemQuiz !== null : kidsQuiz || knowledgeQuiz) ? "active" : ""}
             onClick={() => {
               setQuizActive(false);
               if (systemId !== null) { setSystemQuiz("paper"); return; }
