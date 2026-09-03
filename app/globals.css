@@ -2543,17 +2543,23 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
      the colour is darker than the labels beside it (--muted #8d847c) so the
      line is read before the words that annotate it — but well short of --ink,
      which on cream reads as a printed rule and would drown the tints. */
-  --chart-rule: rgba(120, 104, 92, .85);
+  /* Slightly darker than the 3px version was, because the stroke is thinner:
+     ink on the page is thickness times contrast, and 2px needs the depth back.
+     Still short of --ink, which reads as a printed rule on cream. */
+  --chart-rule: rgba(106, 92, 80, .9);
   /* A whole number on purpose. Half pixels do not survive the same way in both
      places this is used: a background of 2.5px renders at 2.5, a *border* of
-     2.5px is floored to the device pixel — so the rail and the returning
-     bracket, which are borders, came out a pixel thinner than the arrows they
-     were meant to match. At 1.5px that gap was the whole point of the
-     complaint: the arrows drew at 2px and the bracket at 1. */
-  --chart-stroke: 3px;
-  /* The head, kept in proportion to the stroke: five strokes across. */
-  --chart-head: 7.5px;
-  --chart-head-len: 11px;
+     2.5px is floored to the device pixel — so a rail or bracket drawn as a
+     border came out a pixel thinner than the arrows it was meant to match. */
+  --chart-stroke: 2px;
+  /* Three strokes across the base and five long: a slim head that reads as the
+     end of a line. Wider than that and it is a nail with a line behind it. */
+  --chart-head: 3px;
+  --chart-head-len: 10px;
+  /* The arrow's own length, named because the returning bracket has to line
+     itself up against it — and against the height of a box. */
+  --chart-arrow-len: 34px;
+  --chart-node-h: 90px;
   min-height: 0;
   overflow: auto;
   scrollbar-width: none;
@@ -2581,12 +2587,15 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .chart-row { grid-column: 2; width: 100%; display: flex; flex-direction: column; align-items: center; }
 /* The arrow belongs to the row it points at: written this way a row carries
    its own way in, and adding a row cannot leave an arrow behind. */
+/* No padding. The 4px above and 3px below left the line hanging in space at
+   both ends, which is most of what read as "the line is in pieces": with them
+   gone the line leaves the box above it and its head touches the box below. */
 .chart-arrow {
   position: relative;
   align-self: stretch;
   display: flex;
   justify-content: center;
-  padding: 4px 0 3px;
+  padding: 0;
 }
 /* Drawn, not suggested. A line with a head on it is what makes a column of
    boxes a flow; the chevron that stood here before was floating in the gap and
@@ -2594,13 +2603,13 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .chart-line {
   display: block;
   width: var(--chart-stroke);
-  height: 30px;
+  height: var(--chart-arrow-len);
   background: var(--chart-rule);
 }
 .chart-line::after {
   content: "";
   position: absolute;
-  bottom: 3px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   border-left: var(--chart-head) solid transparent;
@@ -2619,7 +2628,22 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   font-style: normal;
   color: var(--muted);
 }
-.chart-boxes { position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; }
+/* Hugs its boxes rather than filling the row. The rail below has to run from
+   the first box's centre to the last box's, and that is only expressible in
+   `calc()` if the container is exactly as wide as the boxes: 100% is then
+   N boxes and N-1 gaps, and half a box is (100% - gaps) / 2N. Filling the row
+   instead, the rail was inset by a flat 12% — 16px short of the outer stubs on
+   the five senses, and 151px past them on the two that feed 순환. */
+.chart-boxes {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
 /* Every box carries its own colour, set from the data as `--node-accent`: the
    four systems in the loop take the colours the list on the left already gives
    them, and the eye and the skin take their own organ's. A tint this light is
@@ -2684,25 +2708,37 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 /* Where several boxes carry on into one: a stub under each, a rail across
    them, and the arrow below takes all of them on together. Without it the
    five senses looked like five endings rather than five ways in. */
+/* 15px of stub, then the rail, then the next row's arrow starts on the rail —
+   the three meet rather than nearly meet. Every number below is one of those
+   three joins, so none of them can be nudged on its own. */
 .chart-boxes.gather { margin-bottom: 15px; }
 .chart-boxes.gather .chart-node::after {
   content: "";
   position: absolute;
+  /* Percentages resolve against the padding box, so this begins level with the
+     inside of the box's own border — 16px carries it to the rail's top edge. */
   top: 100%;
-  left: 50%;
+  left: calc(50% - var(--chart-stroke) / 2);
   width: var(--chart-stroke);
-  height: 15px;
+  height: 16px;
   background: var(--chart-rule);
 }
+/* A background, not a border: a border can be floored to the device pixel and
+   would come out a hair thinner than the stubs feeding it. */
 .chart-boxes.gather::after {
   content: "";
   position: absolute;
   top: 100%;
-  left: 12%;
-  right: 12%;
   margin-top: 15px;
-  border-top: var(--chart-stroke) solid var(--chart-rule);
+  height: var(--chart-stroke);
+  background: var(--chart-rule);
 }
+/* Half a box in from each end — see the note on `.chart-boxes` for why this
+   is exact. One rule per count, because `calc()` cannot count children. */
+.chart-boxes.gather[data-count="2"]::after { left: calc((100% - 8px) / 4); right: calc((100% - 8px) / 4); }
+.chart-boxes.gather[data-count="3"]::after { left: calc((100% - 16px) / 6); right: calc((100% - 16px) / 6); }
+.chart-boxes.gather[data-count="4"]::after { left: calc((100% - 24px) / 8); right: calc((100% - 24px) / 8); }
+.chart-boxes.gather[data-count="5"]::after { left: calc((100% - 32px) / 10); right: calc((100% - 32px) / 10); }
 
 /* The return leg: down one side, along the bottom, back up the other. Drawn as
    two brackets rather than an arrow so it reads as "and round again" without
@@ -2713,7 +2749,11 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   /* The rows are centred in their column; the brackets are not rows, and a
      bracket that shrinks to its contents is a line, not a bracket. */
   justify-self: stretch;
-  margin: 26px 0 6px;
+  /* Level with the middle of the box at each end, so the path leaves 세포 and
+     arrives at 순환 rather than starting and stopping in the gaps around them.
+     It was 26px and 6px, which put the top arm below the box it comes back to
+     and the bottom arm under the one it leaves — the arms looked cut. */
+  margin: calc(var(--chart-arrow-len) + var(--chart-node-h) / 2) 0 calc(var(--chart-node-h) / 2);
   /* Same weight and colour as the arrows, so the way back is the same kind of
      line as the way down rather than a second, quieter idea. It needs the
      weight more than they do, not less: it runs 215px with nothing along it,
@@ -2726,29 +2766,35 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 }
 .chart-loop-left { grid-column: 1; border-right: 0; border-radius: 12px 0 0 12px; }
 .chart-loop-right { grid-column: 3; border-left: 0; border-radius: 0 12px 12px 0; }
-/* The head goes at the top of both sides: the return runs upward, and a
-   bracket with no head is a brace rather than a route. */
+/* The head caps the end of the path, not its corner: the return runs down the
+   side, along the bottom and back up, and finishes by pointing in at the row
+   it feeds. Pointing up at the outer corner — where it was — it read as an
+   arrow into the frame's edge. */
 .chart-loop::before {
   content: "";
   position: absolute;
-  top: -1px;
-  border-left: var(--chart-head) solid transparent;
-  border-right: var(--chart-head) solid transparent;
-  border-bottom: var(--chart-head-len) solid var(--chart-rule);
+  /* Centred on the top arm, which is the element's own top border. */
+  top: calc(-1px - var(--chart-head));
+  border-top: var(--chart-head) solid transparent;
+  border-bottom: var(--chart-head) solid transparent;
 }
-/* Centred on the stroke it caps, which is the element's own edge. */
-.chart-loop-left::before { left: calc(var(--chart-stroke) / 2 - var(--chart-head)); }
-.chart-loop-right::before { right: calc(var(--chart-stroke) / 2 - var(--chart-head)); }
-/* Sized up with the bracket. A 13px glyph at lucide's default stroke looked
-   like a note pinned to the line rather than part of it. */
+.chart-loop-left::before { left: 0; border-left: var(--chart-head-len) solid var(--chart-rule); }
+.chart-loop-right::before { right: 0; border-right: var(--chart-head-len) solid var(--chart-rule); }
 .chart-loop-icon { color: var(--chart-rule); flex: none; width: 15px; height: 15px; stroke-width: 2.1; }
+/* Kept for anyone reading the page aloud, taken off the drawing.
+   A 21-character sentence has no home in a 34px gutter: set vertically it
+   stacks one letter per line and collides with the icon, and laid flat it runs
+   into the arrow labels in the middle of the chart at the narrower widths. The
+   bracket and its icon already say "and round again"; what comes back is said
+   by the arrow it leaves from (걸러야 할 찌꺼기) and by 순서 in the panel. */
 .chart-loop-right em {
-  writing-mode: vertical-rl;
-  max-height: calc(100% - 26px);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
   overflow: hidden;
-  font: 500 11px var(--font-serif), serif;
-  font-style: normal;
-  color: var(--muted);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* Beside the loop, not in it. The rule is the whole point: these belong to the
@@ -2873,8 +2919,15 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .chart-boxes[data-count="5"] .chart-node { padding: 13px 8px; gap: 4px; }
   .chart-node b { font-size: 16px; }
   .chart-node small { font-size: 12px; }
-  .chart-line { height: 24px; }
-  .chart-loop { margin-top: 20px; }
+  /* The bracket lines itself up against these two, so both are re-stated here
+     rather than the line length alone. */
+  .system-chart .chart-stage { --chart-arrow-len: 24px; --chart-node-h: 73px; }
+  /* The only width where the five senses wrap. A rail across a row that has
+     become two rows would run under the second line of boxes and the stubs
+     would point into them, so this one keeps the arrow and drops the gather. */
+  .chart-boxes.gather[data-count="5"] { margin-bottom: 0; }
+  .chart-boxes.gather[data-count="5"]::after,
+  .chart-boxes.gather[data-count="5"] .chart-node::after { content: none; }
 }
 
 /* Seven systems in a column sized for ten organs leaves a hole at the bottom,
