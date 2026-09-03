@@ -10,7 +10,6 @@ import {
   FlaskConical,
   ChevronDown,
   CircleHelp,
-  Crosshair,
   FileText,
   Globe,
   GraduationCap,
@@ -373,20 +372,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
    * questions and handing over five would be a small lie printed in the
    * biggest type on the card, so the bank size goes in the line underneath.
    */
-  const quizCard = useMemo(() => {
-    const copy = t.cards;
-    if (!copy.quizLabel || !copy.quizFormat || !copy.quizBank || !copy.quizStart) return null;
-    const pool = kidsOn ? getKidsQuiz(locale.code, organId, childName) : getOrganQuiz(locale.code, organId);
-    if (pool.length === 0) return null;
-    const asked = kidsOn ? pool.length : Math.min(KNOWLEDGE_QUIZ_SIZE, pool.length);
-    const choices = pool[0].options.length;
-    return {
-      label: copy.quizLabel,
-      format: format(copy.quizFormat, { count: String(asked), choices: String(choices) }),
-      note: format(copy.quizBank, { organ: organ.name, total: String(pool.length) }),
-      start: copy.quizStart,
-    };
-  }, [t.cards, kidsOn, locale.code, organId, childName, organ.name]);
+  /* `quizCard` used to be computed here — the count, the number of choices
+     and the size of the bank, for a card in the footer that offered both
+     quizzes. 문제 풀기 is a tab of its own now and 찾기 놀이 moved into the
+     viewer's toolbar, so the card had nothing left to open. */
 
   /** Everything a child would want read out for the organ on screen. */
   const readAloud = (target: Organ) => {
@@ -767,6 +756,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               compare={compare}
               onCompare={() => setCompare(!compare)}
               quizActive={quizActive}
+              onQuizStart={() => { setQuizActive(true); setModal(null); setKnowledgeQuiz(false); setKidsQuiz(false); }}
               onQuizExit={() => setQuizActive(false)}
               kids={kidsOn}
               speechLang={speechLang}
@@ -1026,33 +1016,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           </button>
           <button onClick={() => (walkable ? setWalking(true) : setModal("animation"))}>{t.cards.playAnimation} <ArrowRight size={14} /></button>
         </article>
-        {/* Two ways of being asked, on one card because both are guessing:
-            find the part on the model, or answer questions about it. There is
-            no artwork — the count and the shape of the questions is what a
-            reader wants to know before starting, and a picture of the organ
-            would say nothing the card above it has not already said.
-            Korean-only, like the question banks themselves. */}
-        {quizCard && (
-          <article className="quiz-card">
-            <header><div><em>{quizCard.label}</em><h3>{quizCard.format}</h3></div><CircleHelp size={17} /></header>
-            <p className="quiz-card-note">{quizCard.note}</p>
-            <div className="quiz-card-actions">
-              <button onClick={() => { setQuizActive(true); setModal(null); setKnowledgeQuiz(false); setKidsQuiz(false); }}>
-                <Crosshair size={14} /> {t.info.quiz}
-              </button>
-              <button
-                className="primary"
-                onClick={() => {
-                  setQuizActive(false);
-                  if (kidsOn) setKidsQuiz(true);
-                  else { setKnowledgeQuiz(true); setRevealCategory(null); }
-                }}
-              >
-                {quizCard.start} <ArrowRight size={14} />
-              </button>
-            </div>
-          </article>
-        )}
         {/* A list of the eight ways an organ can fail is the last thing a child
             should meet — and disease is outside the school syllabus too, so
             only the grown-up view carries this card. */}

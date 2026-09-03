@@ -28,6 +28,7 @@ type Props = {
   compare: boolean;
   onCompare: () => void;
   quizActive: boolean;
+  onQuizStart: () => void;
   onQuizExit: () => void;
   /** Narrates every label and trims the toolbar for pre-readers. */
   kids: boolean;
@@ -189,7 +190,7 @@ function useAuthoringFlag() {
   );
 }
 
-export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCompare, quizActive, onQuizExit, kids, speechLang, focusRef }: Props) {
+export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCompare, quizActive, onQuizStart, onQuizExit, kids, speechLang, focusRef }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<AnatomyViewer | null>(null);
   const organRef = useRef(organ);
@@ -330,6 +331,7 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
     if (tool === "section") setActiveTool(viewer.toggleCrossSection() ? tool : null);
     if (tool === "layers") setActiveTool(viewer.toggleLayers() ? tool : null);
     if (tool === "compare") onCompare();
+    if (tool === "quiz") { if (quizActive) onQuizExit(); else onQuizStart(); }
     if (tool === "reset") {
       viewer.reset();
       setActiveTool(null);
@@ -344,10 +346,16 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
     { id: "layers", label: t.tools.layers, icon: Layers3 },
     { id: "compare", label: t.tools.compare, icon: Box },
     { id: "reset", label: t.tools.reset, icon: RotateCcw },
+    // Find-the-part belongs with the other things that change what the canvas
+    // is doing — isolate, cross-section, peel — rather than on a card below
+    // the fold. It is the only one of them a five-year-old reaches for, so it
+    // stays in the shortened kids toolbar too. Hidden without a model: the
+    // game is clicking dots on one.
+    ...(modelled ? [{ id: "quiz", label: t.info.quiz, icon: Crosshair }] : []),
   ];
   // Cross-section and layer peeling need a mental model of what is being cut
   // away. Kids mode keeps the three tools whose effect is visible immediately.
-  const KIDS_TOOLS = ["rotate", "zoom", "reset"];
+  const KIDS_TOOLS = ["rotate", "zoom", "reset", "quiz"];
   const tools = kids ? allTools.filter((tool) => KIDS_TOOLS.includes(tool.id)) : allTools;
 
   return (
@@ -368,9 +376,9 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
           <button
             key={id}
             type="button"
-            className={`tool-button ${(activeTool === id || (id === "compare" && compare)) ? "active" : ""}`}
+            className={`tool-button ${(activeTool === id || (id === "compare" && compare) || (id === "quiz" && quizActive)) ? "active" : ""}`}
             onClick={() => handleTool(id)}
-            aria-pressed={activeTool === id || (id === "compare" && compare)}
+            aria-pressed={activeTool === id || (id === "compare" && compare) || (id === "quiz" && quizActive)}
             title={label}
           >
             <Icon size={19} strokeWidth={1.65} />

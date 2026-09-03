@@ -196,18 +196,6 @@ export type UiDictionary = {
     clinicalNotes: string; whereItWorks: string; commonConditions: string;
     exploreTissue: string; openComparison: string; playAnimation: string; seeAll: string; seeSystem: string;
     playAria: string; systemAria: string;
-    /**
-     * The quiz card. Optional because the question banks are Korean-only —
-     * a locale without them never reaches the card, so blank labels in the
-     * other eleven files would be eleven lies about what exists.
-     *
-     * `quizFormat` takes `{count}` and `{choices}`; `quizBank` takes
-     * `{organ}` and `{total}`.
-     */
-    quizLabel?: string;
-    quizFormat?: string;
-    quizBank?: string;
-    quizStart?: string;
   };
   quiz: {
     find: string; progress: string; correct: string; wrong: string;

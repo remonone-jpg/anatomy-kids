@@ -47,8 +47,6 @@ export const ui: UiDictionary = {
     exploreTissue: "조직 살펴보기", openComparison: "비교 열기", playAnimation: "과정 따라가기",
     seeAll: "전체 보기", seeSystem: "계통 보기",
     playAria: "{organ}이(가) 어떻게 움직이는지 따라가기", systemAria: "몸에서 {organ}의 위치 보기",
-    quizLabel: "퀴즈", quizFormat: "{count}문항 · {choices}지선다",
-    quizBank: "{organ} 문제 {total}개 중에서", quizStart: "문제 풀기",
   },
   quiz: { find: "찾아보세요:", progress: "{total}문제 중 {current}번",
     correct: "정답", wrong: "아쉬워요", reveal: "여기가 {label}이에요", answer: "{label}이 초록색으로 표시돼 있어요",
