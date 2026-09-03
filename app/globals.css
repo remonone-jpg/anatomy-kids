@@ -2231,13 +2231,35 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
    The learning cards below simply move down; the page has always scrolled. */
 .workspace-systems { height: min(1400px, calc(100vh - 177px)); }
 
+/* One card per column, the same card the other two use.
+   The title bar has no box of its own, so the drawing and the note started
+   55px below the panels either side of them and the three columns read as a
+   staircase — level at the bottom, stepped at the top. Making the whole
+   column the card puts the title inside it, and all three now run 151→974.
+   The two inside it stop being cards and become areas of this one. */
 .diagram-viewer.diagram-inline {
   width: auto;
   height: 100%;
   min-width: 0;
   min-height: 0;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: var(--paper);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.75);
 }
-.diagram-inline .diagram-bar { padding: 0 4px 12px; }
+/* Tight, because every pixel the bar takes comes off the drawing. The card's
+   own border now supplies the frame the bar used to stand outside of. */
+.diagram-inline .diagram-bar { padding: 4px 20px 8px; }
+.diagram-inline .diagram-stage,
+.diagram-inline .diagram-panel {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+/* A hairline where two cards used to meet, so the note is still told apart
+   from the drawing without a second frame inside the first. */
+.diagram-inline .diagram-panel { border-top: 1px solid var(--line); }
 .diagram-inline .diagram-bar h2 { font-size: 21px; }
 .diagram-inline .diagram-tools { padding: 3px; border-radius: 14px; box-shadow: none; }
 .diagram-inline .diagram-tools button { width: 34px; height: 34px; }
@@ -2252,9 +2274,17 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
      `auto` row never resolves the percentage height inside, and the SVG then
      keeps its natural size and walks out of the box. */
   grid-template-rows: minmax(0, 1fr) auto;
-  gap: 10px;
+  /* No gap and no padding now that this sits inside the card — the divider
+     between drawing and note should run the full width, the way a rule inside
+     a panel does, rather than floating with a margin either side. */
+  gap: 0;
   padding: 0;
 }
+/* No padding at all. Vertical padding comes off the height every figure is
+   bound by, and the side padding is not free either: 호흡 and 배설 are nearly
+   square and run out of width first, so 12px each side cost them 6px of
+   drawing. The card's own border is the frame; the figure can meet it. */
+.diagram-inline .diagram-stage { padding: 0; }
 
 /* The drawer. Both ends are real numbers because `height: auto` has nothing to
    transition to; the note scrolls inside its own box instead of pushing the
@@ -2267,8 +2297,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
    479px it had, and the note holds all 154 easy labels without scrolling. */
 .diagram-inline .diagram-panel {
   height: clamp(240px, 28vh, 300px);
-  padding: 0 18px;
-  border-radius: 20px;
+  padding: 0 20px;
   transition: height .28s cubic-bezier(.4, 0, .2, 1);
 }
 .diagram-inline .diagram-panel.shut { height: 48px; }
@@ -2393,6 +2422,10 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
      the stage has, and at 650 that left the drawing 336 — smaller than before
      this change. The page already scrolls at this width; the cards move down. */
   .workspace-systems .stage { height: 820px; }
+  /* The list stands beside the stage on this row, so it takes the same height
+     — 650 against 820 left a 170px step between the two cards. The organ view
+     keeps its own 650; this is scoped to the systems layer. */
+  .workspace-systems .organ-library { height: 820px; }
   /* A fixed share of a fixed stage, rather than following the screen. */
   .diagram-inline .diagram-panel { height: 250px; }
 }
@@ -2419,7 +2452,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
        height it was moved here to avoid. */
     grid-template-columns: minmax(0, 1fr) clamp(300px, 20vw, 340px);
     grid-template-rows: minmax(0, 1fr);
-    column-gap: 18px;
+    column-gap: 0;
   }
   /* The row sizes it now, not a fixed height, so `.shut`/`.open` stop meaning
      anything — which is why there is no transition left to run. */
@@ -2427,8 +2460,13 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .diagram-inline .diagram-panel.shut,
   .diagram-inline .diagram-panel.open {
     height: auto;
-    padding: 22px 20px 14px;
+    padding: 4px 20px 14px;
     transition: none;
+  }
+  /* Side by side here, so the hairline stands between them rather than over. */
+  .diagram-inline .diagram-panel {
+    border-top: 0;
+    border-inline-start: 1px solid var(--line);
   }
   /* One column in a 340px panel; the three-column split was for a box that ran
      the width of the screen. */
@@ -2439,8 +2477,15 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .diagram-inline .diagram-read { padding-block: 0; }
 }
 
+/* Seven systems in a column sized for ten organs leaves a hole at the bottom,
+   and the hole grows with the screen. The rows share the surplus instead —
+   capped, because a row two fingers tall stops reading as a list item and the
+   remainder is quieter as space than as stretched furniture. */
+.organ-list { flex: 1 1 auto; }
+.system-item { flex: 1 1 auto; max-height: 128px; }
+
 @media (max-width: 760px) {
-  .diagram-inline .diagram-stage, .system-stage-body { border-radius: 22px; }
+  .system-stage-body { border-radius: 22px; }
   .diagram-inline .diagram-bar h2, .system-stage .diagram-bar h2 { font-size: 19px; }
   /* One column again: at 740px the two would be 350px each, and the jump
      lists wrap to nothing useful at that width. Stacked it needs the height
@@ -2448,7 +2493,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .diagram-inline .diagram-read { grid-template-columns: minmax(0, 1fr); }
   .diagram-inline .diagram-col-do,
   .diagram-inline .diagram-col-go { grid-column: 1; grid-row: auto; }
-  .diagram-inline .diagram-panel { height: 208px; border-radius: 18px; }
+  .diagram-inline .diagram-panel { height: 208px; }
   /* Back up to a comfortable touch target — 34px is a mouse size. */
   .diagram-inline .diagram-tools button { width: 40px; height: 40px; }
   /* The 900px block caps this at 34dvh for the modal. On a 844-tall phone
