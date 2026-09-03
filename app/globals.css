@@ -2228,7 +2228,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
      · cap 1180   — a figure taller than this stops being readable as a whole
                     and starts needing a scroll of the eye instead.
    The learning cards below simply move down; the page has always scrolled. */
-.workspace-systems { height: min(1180px, calc(100vh - 177px)); }
+.workspace-systems { height: min(1400px, calc(100vh - 177px)); }
 
 .diagram-viewer.diagram-inline {
   width: auto;
@@ -2395,6 +2395,49 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   /* A fixed share of a fixed stage, rather than following the screen. */
   .diagram-inline .diagram-panel { height: 250px; }
 }
+/* ── Wide screens: the note moves off the picture's height ────────────────
+   A drawer under the drawing can only grow by taking the drawing's height,
+   and the arithmetic runs out. At 1800×1000 there are 841px below the header;
+   the bar and gap take 65, leaving 776 to share. A figure half again as tall
+   as today's needs 620 of that, which leaves the note 156 — less than the
+   cross-system block (122) and the pager (43) come to on their own.
+
+   The width is where the room is. Every figure is portrait, so all five are
+   height-bound and none of them can use the full column: 뼈와 근육 draws 247px
+   wide in a 1069px box and leaves 822 empty. Moving the note into that empty
+   band costs the drawing nothing — it stays height-bound at 729px of width —
+   and hands back the whole 786px of height.
+
+   No collapse here. Closing it would give the stage back width it cannot use,
+   so the picture would not change by a pixel; the drawer stays where the width
+   is genuinely scarce, below 1500. */
+@media (min-width: 1200px) {
+  .diagram-inline .diagram-body {
+    /* Narrower on a narrower screen, but never under 300 — below that the
+       cross-system reason wraps to five lines and the panel starts costing
+       height it was moved here to avoid. */
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 20vw, 340px);
+    grid-template-rows: minmax(0, 1fr);
+    column-gap: 18px;
+  }
+  /* The row sizes it now, not a fixed height, so `.shut`/`.open` stop meaning
+     anything — which is why there is no transition left to run. */
+  .diagram-inline .diagram-panel,
+  .diagram-inline .diagram-panel.shut,
+  .diagram-inline .diagram-panel.open {
+    height: auto;
+    padding: 22px 20px 14px;
+    transition: none;
+  }
+  /* One column in a 340px panel; the three-column split was for a box that ran
+     the width of the screen. */
+  .diagram-inline .diagram-read { display: block; }
+  .diagram-inline .diagram-panel.shut .diagram-read { padding-block: 0; overflow: hidden; }
+  .diagram-inline .diagram-panel.shut .diagram-prompt { margin: 0; line-height: normal; }
+  .diagram-inline .diagram-panel.shut .diagram-step { display: flex; }
+  .diagram-inline .diagram-read { padding-block: 0; }
+}
+
 @media (max-width: 760px) {
   .diagram-inline .diagram-stage, .system-stage-body { border-radius: 22px; }
   .diagram-inline .diagram-bar h2, .system-stage .diagram-bar h2 { font-size: 19px; }
