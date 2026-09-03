@@ -2544,11 +2544,13 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   padding: 6px 20px 18px;
   display: flex;
   flex-direction: column;
-  /* Centred in what is left over, the way the five diagrams fill their stage —
-     pinned to the top, the chart read as though the bottom had been cut off.
-     `safe` so that a chart taller than the box still starts at the top instead
-     of hiding its first row above the scroll. */
-  justify-content: safe center;
+  /* Top, like everything else on this row. Centred, the chart left 63-79px
+     above its first box and started halfway down the screen — and the two
+     things it stands beside both begin at the top: the five diagrams put their
+     picture against the title bar (measured: the stage meets the bar, and the
+     ink starts 0-36px below it, 7 at the median), and the drawer's invitation
+     sits on its first line. The 6px above is that same distance. */
+  justify-content: flex-start;
   gap: 16px;
 }
 /* A gutter each side, empty until a chart loops back on itself. The bracket
