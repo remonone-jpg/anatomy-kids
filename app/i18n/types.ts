@@ -173,7 +173,7 @@ export type UiDictionary = {
     title: string; open: string; close: string; viewAll: string;
     quoteLine1: string; quoteLine2: string; quoteSign: string;
   };
-  tools: { label: string; rotate: string; zoom: string; isolate: string; section: string; layers: string; compare: string; reset: string };
+  tools: { label: string; rotate: string; zoom: string; reset: string };
   viewer: {
     title: string; canvas: string; tip: string; tipDrag: string; tipScroll: string; tipClick: string;
     loading: string; autoRotate: string; caption: string; structures: string;
@@ -188,13 +188,12 @@ export type UiDictionary = {
   info: {
     kicker: string; keyFacts: string; size: string; weight: string; daily: string;
     location: string; bloodSupply: string; function: string; medical: string;
-    didYouKnow: string; viewLesson: string; animate: string; quiz: string; compare: string;
+    didYouKnow: string; viewLesson: string; animate: string; quiz: string;
   };
-  compare: { title: string; comparing: string; reference: string; primaryRole: string; scale: string; vs: string; close: string };
   cards: {
-    resources: string; microscopic: string; compareOrgans: string; functionAnimation: string;
+    resources: string; microscopic: string; functionAnimation: string;
     clinicalNotes: string; whereItWorks: string; commonConditions: string;
-    exploreTissue: string; openComparison: string; playAnimation: string; seeAll: string; seeSystem: string;
+    exploreTissue: string; playAnimation: string; seeAll: string; seeSystem: string;
     playAria: string; systemAria: string;
   };
   quiz: {

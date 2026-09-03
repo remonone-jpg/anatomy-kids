@@ -17,8 +17,7 @@ export const ui: UiDictionary = {
     quoteLine1: "배움은", quoteLine2: "궁금해하는 데서 시작됩니다.", quoteSign: "계속 탐색해 보세요!",
   },
   tools: {
-    label: "3D 뷰어 도구", rotate: "회전", zoom: "확대", isolate: "단독 보기",
-    section: "단면", layers: "레이어", compare: "비교", reset: "초기화",
+    label: "3D 뷰어 도구", rotate: "회전", zoom: "확대", reset: "초기화",
   },
   viewer: {
     title: "{organ} 3D 뷰어",
@@ -34,17 +33,13 @@ export const ui: UiDictionary = {
     kicker: "{organ}", keyFacts: "핵심 정보", size: "크기", weight: "무게", daily: "하루",
     location: "위치", bloodSupply: "혈액 공급", function: "기능",
     medical: "의학적 의의", didYouKnow: "알고 계셨나요", viewLesson: "조직 살펴보기",
-    animate: "과정 보기", quiz: "찾기 놀이", compare: "비교",
-  },
-  compare: {
-    title: "장기 비교", comparing: "비교 중", reference: "기준",
-    primaryRole: "주요 역할", scale: "규모", vs: "대", close: "비교 닫기",
+    animate: "과정 보기", quiz: "찾기 놀이",
   },
   cards: {
     resources: "{organ} 학습 자료",
-    microscopic: "현미경 소견", compareOrgans: "장기 비교", functionAnimation: "움직이는 과정",
+    microscopic: "현미경 소견", functionAnimation: "움직이는 과정",
     clinicalNotes: "임상 노트", whereItWorks: "작용하는 곳", commonConditions: "흔한 질환",
-    exploreTissue: "조직 살펴보기", openComparison: "비교 열기", playAnimation: "과정 따라가기",
+    exploreTissue: "조직 살펴보기", playAnimation: "과정 따라가기",
     seeAll: "전체 보기", seeSystem: "계통 보기",
     playAria: "{organ}이(가) 어떻게 움직이는지 따라가기", systemAria: "몸에서 {organ}의 위치 보기",
   },

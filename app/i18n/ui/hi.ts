@@ -17,8 +17,7 @@ export const ui: UiDictionary = {
     quoteLine1: "सीखना", quoteLine2: "जिज्ञासा का कार्य है।", quoteSign: "खोजते रहिए!",
   },
   tools: {
-    label: "3D दर्शक उपकरण", rotate: "घुमाएँ", zoom: "ज़ूम", isolate: "अलग करें",
-    section: "अनुप्रस्थ काट", layers: "परतें", compare: "तुलना", reset: "रीसेट",
+    label: "3D दर्शक उपकरण", rotate: "घुमाएँ", zoom: "ज़ूम", reset: "रीसेट",
   },
   viewer: {
     title: "{organ} — संवादात्मक दर्शक",
@@ -32,17 +31,13 @@ export const ui: UiDictionary = {
     kicker: "{organ}", keyFacts: "मुख्य तथ्य", size: "आकार", weight: "भार", daily: "प्रतिदिन",
     location: "स्थिति", bloodSupply: "रक्त आपूर्ति", function: "कार्य",
     medical: "चिकित्सकीय महत्व", didYouKnow: "क्या आप जानते हैं", viewLesson: "पाठ देखें",
-    animate: "एनिमेशन", quiz: "प्रश्नोत्तरी", compare: "तुलना",
-  },
-  compare: {
-    title: "अंगों की तुलना", comparing: "तुलना", reference: "संदर्भ",
-    primaryRole: "मुख्य भूमिका", scale: "मात्रा", vs: "बनाम", close: "तुलना बंद करें",
+    animate: "एनिमेशन", quiz: "प्रश्नोत्तरी",
   },
   cards: {
     resources: "{organ} — अध्ययन सामग्री",
-    microscopic: "सूक्ष्मदर्शी दृश्य", compareOrgans: "अंगों की तुलना", functionAnimation: "कार्य एनिमेशन",
+    microscopic: "सूक्ष्मदर्शी दृश्य", functionAnimation: "कार्य एनिमेशन",
     clinicalNotes: "नैदानिक टिप्पणियाँ", whereItWorks: "कहाँ कार्य करता है", commonConditions: "सामान्य रोग",
-    exploreTissue: "ऊतक देखें", openComparison: "तुलना खोलें", playAnimation: "एनिमेशन चलाएँ",
+    exploreTissue: "ऊतक देखें", playAnimation: "एनिमेशन चलाएँ",
     seeAll: "सभी देखें", seeSystem: "तंत्र देखें",
     playAria: "{organ} का कार्य एनिमेशन चलाएँ", systemAria: "शरीर में {organ} की स्थिति देखें",
   },

@@ -17,8 +17,7 @@ export const ui: UiDictionary = {
     quoteLine1: "التعلّم", quoteLine2: "فعلٌ من أفعال الفضول.", quoteSign: "واصل الاستكشاف!",
   },
   tools: {
-    label: "أدوات العارض ثلاثي الأبعاد", rotate: "تدوير", zoom: "تكبير", isolate: "عزل",
-    section: "مقطع عرضي", layers: "طبقات", compare: "مقارنة", reset: "إعادة ضبط",
+    label: "أدوات العارض ثلاثي الأبعاد", rotate: "تدوير", zoom: "تكبير", reset: "إعادة ضبط",
   },
   viewer: {
     title: "العارض التفاعلي: {organ}",
@@ -32,17 +31,13 @@ export const ui: UiDictionary = {
     kicker: "{organ}", keyFacts: "حقائق أساسية", size: "الحجم", weight: "الوزن", daily: "يوميًا",
     location: "الموضع", bloodSupply: "التروية الدموية", function: "الوظيفة",
     medical: "الأهمية الطبية", didYouKnow: "هل تعلم", viewLesson: "عرض الدرس",
-    animate: "تحريك", quiz: "اختبار", compare: "مقارنة",
-  },
-  compare: {
-    title: "مقارنة الأعضاء", comparing: "قيد المقارنة", reference: "مرجع",
-    primaryRole: "الدور الأساسي", scale: "المقياس", vs: "مقابل", close: "إغلاق المقارنة",
+    animate: "تحريك", quiz: "اختبار",
   },
   cards: {
     resources: "مصادر تعلّم: {organ}",
-    microscopic: "منظر مجهري", compareOrgans: "مقارنة الأعضاء", functionAnimation: "رسم متحرك للوظيفة",
+    microscopic: "منظر مجهري", functionAnimation: "رسم متحرك للوظيفة",
     clinicalNotes: "ملاحظات سريرية", whereItWorks: "أين يعمل", commonConditions: "الأمراض الشائعة",
-    exploreTissue: "استكشاف النسيج", openComparison: "فتح المقارنة", playAnimation: "تشغيل الرسم المتحرك",
+    exploreTissue: "استكشاف النسيج", playAnimation: "تشغيل الرسم المتحرك",
     seeAll: "عرض الكل", seeSystem: "عرض الجهاز",
     playAria: "تشغيل الرسم المتحرك لوظيفة {organ}", systemAria: "شاهد موضع {organ} في الجسم",
   },

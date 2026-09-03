@@ -41,11 +41,8 @@ export class AnatomyViewer {
   private clock = new THREE.Clock();
   private resizeObserver: ResizeObserver;
   private intersectionObserver: IntersectionObserver;
-  private clipPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0);
   /** Writes depth only — used to resolve a fading organ to one surface. */
   private depthMaterial = new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: true, depthTest: true });
-  private crossSection = false;
-  private isolated = false;
 
   private width = 1;
   private height = 1;
@@ -100,7 +97,6 @@ export class AnatomyViewer {
     // Shadow mapping would render every organ twice per frame; a baked contact
     // shadow gives the same read for free.
     this.renderer.shadowMap.enabled = false;
-    this.renderer.localClippingEnabled = true;
     // Localised by the React layer via setCanvasLabel once the dictionary is known.
     this.renderer.domElement.setAttribute("aria-label", "Interactive 3D anatomy model");
     this.renderer.domElement.tabIndex = 0;
@@ -291,7 +287,6 @@ export class AnatomyViewer {
     // Anchor the dots while the organ is still invisible, then play the intro.
     this.hotspots.attach(organ.pivot, hotspots, organ.meshes);
     this.hotspots.setPixelSize(DOT_PIXELS, this.height, CAMERA_FOV);
-    if (this.crossSection) this.applyClipping(true);
 
     const glow = this.scene.getObjectByName("organ-glow") as THREE.PointLight | undefined;
     glow?.color.set(accent);
@@ -641,54 +636,10 @@ export class AnatomyViewer {
     });
   }
 
-  toggleIsolate() {
-    this.isolated = !this.isolated;
-    const plinth = this.plinth.material as THREE.MeshStandardMaterial;
-    plinth.transparent = true;
-    this.tween(plinth, { opacity: this.isolated ? 0.15 : 1, duration: 0.45 });
-    this.tween(this.contactShadow.material, { opacity: this.isolated ? 0.08 : 0.55, duration: 0.45 });
-    return this.isolated;
-  }
-
-  toggleCrossSection() {
-    this.crossSection = !this.crossSection;
-    this.applyClipping(this.crossSection);
-    gsap.fromTo(
-      this.clipPlane,
-      { constant: -1.8 },
-      {
-        constant: this.crossSection ? 0 : -1.8,
-        duration: 0.85,
-        ease: "power2.inOut",
-        onUpdate: () => (this.dirty = true),
-      },
-    );
-    this.busy(0.95);
-    return this.crossSection;
-  }
-
-  private applyClipping(enabled: boolean) {
-    if (!this.organ) return;
-    const planes = enabled ? [this.clipPlane] : null;
-    [...this.materials(this.organ), this.depthMaterial].forEach((material) => {
-      material.clippingPlanes = planes;
-      material.needsUpdate = true;
-    });
-    this.dirty = true;
-  }
-
-  toggleLayers() {
-    if (!this.organ) return false;
-    let enabled = false;
-    this.materials(this.organ).forEach((material) => {
-      if (material instanceof THREE.MeshStandardMaterial) {
-        material.wireframe = !material.wireframe;
-        enabled = material.wireframe;
-      }
-    });
-    this.dirty = true;
-    return enabled;
-  }
+  /* `toggleIsolate`, `toggleCrossSection`, `applyClipping` and `toggleLayers`
+     lived here. Their four toolbar buttons have gone: the models are hollow
+     shells, so a cross-section showed an empty inside, and isolate, layers and
+     compare had no structure to separate. Nothing else called them. */
 
   dispose() {
     this.disposed = true;

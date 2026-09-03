@@ -17,8 +17,7 @@ export const ui: UiDictionary = {
     quoteLine1: "Учение —", quoteLine2: "это акт любопытства.", quoteSign: "Продолжайте исследовать!",
   },
   tools: {
-    label: "Инструменты 3D-просмотра", rotate: "Вращать", zoom: "Масштаб", isolate: "Изолировать",
-    section: "Срез", layers: "Слои", compare: "Сравнить", reset: "Сброс",
+    label: "Инструменты 3D-просмотра", rotate: "Вращать", zoom: "Масштаб", reset: "Сброс",
   },
   viewer: {
     title: "Интерактивный просмотр: {organ}",
@@ -32,17 +31,13 @@ export const ui: UiDictionary = {
     kicker: "{organ}", keyFacts: "Ключевые факты", size: "Размер", weight: "Масса", daily: "За сутки",
     location: "Расположение", bloodSupply: "Кровоснабжение", function: "Функция",
     medical: "Клиническое значение", didYouKnow: "А вы знали", viewLesson: "Открыть урок",
-    animate: "Анимация", quiz: "Тест", compare: "Сравнить",
-  },
-  compare: {
-    title: "Сравнение органов", comparing: "Сравнение", reference: "Эталон",
-    primaryRole: "Основная роль", scale: "Масштаб", vs: "и", close: "Закрыть сравнение",
+    animate: "Анимация", quiz: "Тест",
   },
   cards: {
     resources: "Учебные материалы: {organ}",
-    microscopic: "Микроскопия", compareOrgans: "Сравнить органы", functionAnimation: "Анимация функции",
+    microscopic: "Микроскопия", functionAnimation: "Анимация функции",
     clinicalNotes: "Клинические заметки", whereItWorks: "Где работает", commonConditions: "Частые заболевания",
-    exploreTissue: "Изучить ткань", openComparison: "Открыть сравнение", playAnimation: "Запустить анимацию",
+    exploreTissue: "Изучить ткань", playAnimation: "Запустить анимацию",
     seeAll: "Показать все", seeSystem: "Открыть систему",
     playAria: "Запустить анимацию функции: {organ}", systemAria: "Посмотреть, где в теле находится {organ}",
   },

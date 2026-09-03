@@ -17,8 +17,7 @@ export const ui: UiDictionary = {
     quoteLine1: "学习", quoteLine2: "是一种好奇心。", quoteSign: "继续探索吧！",
   },
   tools: {
-    label: "3D 查看器工具", rotate: "旋转", zoom: "缩放", isolate: "单独显示",
-    section: "剖面", layers: "分层", compare: "对比", reset: "重置",
+    label: "3D 查看器工具", rotate: "旋转", zoom: "缩放", reset: "重置",
   },
   viewer: {
     title: "{organ}互动查看器",
@@ -32,17 +31,13 @@ export const ui: UiDictionary = {
     kicker: "{organ}", keyFacts: "关键数据", size: "大小", weight: "重量", daily: "每日",
     location: "位置", bloodSupply: "血液供应", function: "功能",
     medical: "医学意义", didYouKnow: "你知道吗", viewLesson: "查看课程",
-    animate: "动画", quiz: "测验", compare: "对比",
-  },
-  compare: {
-    title: "器官对比", comparing: "正在对比", reference: "参照",
-    primaryRole: "主要作用", scale: "尺度", vs: "对比", close: "关闭对比",
+    animate: "动画", quiz: "测验",
   },
   cards: {
     resources: "{organ}学习资源",
-    microscopic: "显微视图", compareOrgans: "器官对比", functionAnimation: "功能动画",
+    microscopic: "显微视图", functionAnimation: "功能动画",
     clinicalNotes: "临床要点", whereItWorks: "工作部位", commonConditions: "常见疾病",
-    exploreTissue: "探索组织", openComparison: "打开对比", playAnimation: "播放动画",
+    exploreTissue: "探索组织", playAnimation: "播放动画",
     seeAll: "查看全部", seeSystem: "查看该系统",
     playAria: "播放{organ}的功能动画", systemAria: "查看{organ}在人体中的位置",
   },

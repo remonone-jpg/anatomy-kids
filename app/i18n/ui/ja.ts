@@ -17,8 +17,7 @@ export const ui: UiDictionary = {
     quoteLine1: "学びとは", quoteLine2: "好奇心のいとなみ。", quoteSign: "探索を続けよう！",
   },
   tools: {
-    label: "3D ビューアのツール", rotate: "回転", zoom: "ズーム", isolate: "単独表示",
-    section: "断面", layers: "レイヤー", compare: "比較", reset: "リセット",
+    label: "3D ビューアのツール", rotate: "回転", zoom: "ズーム", reset: "リセット",
   },
   viewer: {
     title: "{organ}のインタラクティブビューア",
@@ -32,17 +31,13 @@ export const ui: UiDictionary = {
     kicker: "{organ}", keyFacts: "基本データ", size: "大きさ", weight: "重さ", daily: "1日あたり",
     location: "位置", bloodSupply: "血液供給", function: "はたらき",
     medical: "医学的意義", didYouKnow: "豆知識", viewLesson: "レッスンを見る",
-    animate: "アニメーション", quiz: "クイズ", compare: "比較",
-  },
-  compare: {
-    title: "臓器の比較", comparing: "比較中", reference: "基準",
-    primaryRole: "おもな役割", scale: "スケール", vs: "対", close: "比較を閉じる",
+    animate: "アニメーション", quiz: "クイズ",
   },
   cards: {
     resources: "{organ}の学習リソース",
-    microscopic: "顕微鏡像", compareOrgans: "臓器を比較", functionAnimation: "はたらきのアニメーション",
+    microscopic: "顕微鏡像", functionAnimation: "はたらきのアニメーション",
     clinicalNotes: "臨床メモ", whereItWorks: "はたらく場所", commonConditions: "おもな疾患",
-    exploreTissue: "組織を見る", openComparison: "比較を開く", playAnimation: "アニメーションを再生",
+    exploreTissue: "組織を見る", playAnimation: "アニメーションを再生",
     seeAll: "すべて見る", seeSystem: "この系統を見る",
     playAria: "{organ}のはたらきのアニメーションを再生", systemAria: "{organ}が体のどこにあるかを見る",
   },

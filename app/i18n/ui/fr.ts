@@ -17,8 +17,7 @@ export const ui: UiDictionary = {
     quoteLine1: "Apprendre est", quoteLine2: "un acte de curiosité.", quoteSign: "Continuez à explorer !",
   },
   tools: {
-    label: "Outils de la visionneuse 3D", rotate: "Pivoter", zoom: "Zoom", isolate: "Isoler",
-    section: "Coupe transversale", layers: "Couches", compare: "Comparer", reset: "Réinitialiser",
+    label: "Outils de la visionneuse 3D", rotate: "Pivoter", zoom: "Zoom", reset: "Réinitialiser",
   },
   viewer: {
     title: "Visionneuse interactive : {organ}",
@@ -32,17 +31,13 @@ export const ui: UiDictionary = {
     kicker: "{organ}", keyFacts: "Repères", size: "Taille", weight: "Poids", daily: "Chaque jour",
     location: "Situation", bloodSupply: "Vascularisation", function: "Fonction",
     medical: "Importance médicale", didYouKnow: "Le saviez-vous", viewLesson: "Voir la leçon",
-    animate: "Animer", quiz: "Quiz", compare: "Comparer",
-  },
-  compare: {
-    title: "Comparaison d'organes", comparing: "Comparaison", reference: "Référence",
-    primaryRole: "Rôle principal", scale: "Échelle", vs: "vs", close: "Fermer la comparaison",
+    animate: "Animer", quiz: "Quiz",
   },
   cards: {
     resources: "Ressources d'apprentissage : {organ}",
-    microscopic: "Vue microscopique", compareOrgans: "Comparer les organes", functionAnimation: "Animation fonctionnelle",
+    microscopic: "Vue microscopique", functionAnimation: "Animation fonctionnelle",
     clinicalNotes: "Notes cliniques", whereItWorks: "Où il agit", commonConditions: "Affections fréquentes",
-    exploreTissue: "Explorer le tissu", openComparison: "Ouvrir la comparaison", playAnimation: "Lancer l'animation",
+    exploreTissue: "Explorer le tissu", playAnimation: "Lancer l'animation",
     seeAll: "Tout voir", seeSystem: "Voir le système",
     playAria: "Lancer l'animation fonctionnelle : {organ}", systemAria: "Voir où se situe {organ} dans le corps",
   },

@@ -17,8 +17,7 @@ export const ui: UiDictionary = {
     quoteLine1: "Belajar adalah", quoteLine2: "sebuah tindakan rasa ingin tahu.", quoteSign: "Teruslah menjelajah!",
   },
   tools: {
-    label: "Alat penampil 3D", rotate: "Putar", zoom: "Perbesar", isolate: "Isolasi",
-    section: "Potongan melintang", layers: "Lapisan", compare: "Bandingkan", reset: "Atur ulang",
+    label: "Alat penampil 3D", rotate: "Putar", zoom: "Perbesar", reset: "Atur ulang",
   },
   viewer: {
     title: "Penampil interaktif: {organ}",
@@ -32,17 +31,13 @@ export const ui: UiDictionary = {
     kicker: "{organ}", keyFacts: "Fakta utama", size: "Ukuran", weight: "Berat", daily: "Setiap hari",
     location: "Letak", bloodSupply: "Pasokan darah", function: "Fungsi",
     medical: "Arti klinis", didYouKnow: "Tahukah kamu", viewLesson: "Lihat pelajaran",
-    animate: "Animasi", quiz: "Kuis", compare: "Bandingkan",
-  },
-  compare: {
-    title: "Perbandingan organ", comparing: "Membandingkan", reference: "Acuan",
-    primaryRole: "Peran utama", scale: "Skala", vs: "vs.", close: "Tutup perbandingan",
+    animate: "Animasi", quiz: "Kuis",
   },
   cards: {
     resources: "Sumber belajar: {organ}",
-    microscopic: "Tampilan mikroskopis", compareOrgans: "Bandingkan organ", functionAnimation: "Animasi fungsi",
+    microscopic: "Tampilan mikroskopis", functionAnimation: "Animasi fungsi",
     clinicalNotes: "Catatan klinis", whereItWorks: "Tempat bekerjanya", commonConditions: "Penyakit umum",
-    exploreTissue: "Jelajahi jaringan", openComparison: "Buka perbandingan", playAnimation: "Putar animasi",
+    exploreTissue: "Jelajahi jaringan", playAnimation: "Putar animasi",
     seeAll: "Lihat semua", seeSystem: "Lihat sistemnya",
     playAria: "Putar animasi fungsi: {organ}", systemAria: "Lihat letak {organ} di dalam tubuh",
   },

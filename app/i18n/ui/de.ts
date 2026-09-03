@@ -17,8 +17,7 @@ export const ui: UiDictionary = {
     quoteLine1: "Lernen ist", quoteLine2: "ein Akt der Neugier.", quoteSign: "Weiter entdecken!",
   },
   tools: {
-    label: "Werkzeuge des 3D-Betrachters", rotate: "Drehen", zoom: "Zoom", isolate: "Isolieren",
-    section: "Querschnitt", layers: "Schichten", compare: "Vergleichen", reset: "Zurücksetzen",
+    label: "Werkzeuge des 3D-Betrachters", rotate: "Drehen", zoom: "Zoom", reset: "Zurücksetzen",
   },
   viewer: {
     title: "Interaktiver Betrachter: {organ}",
@@ -32,17 +31,13 @@ export const ui: UiDictionary = {
     kicker: "{organ}", keyFacts: "Eckdaten", size: "Größe", weight: "Gewicht", daily: "Täglich",
     location: "Lage", bloodSupply: "Blutversorgung", function: "Funktion",
     medical: "Medizinische Bedeutung", didYouKnow: "Wusstest du", viewLesson: "Lektion ansehen",
-    animate: "Animieren", quiz: "Quiz", compare: "Vergleichen",
-  },
-  compare: {
-    title: "Organvergleich", comparing: "Im Vergleich", reference: "Referenz",
-    primaryRole: "Hauptaufgabe", scale: "Maßstab", vs: "vs.", close: "Vergleich schließen",
+    animate: "Animieren", quiz: "Quiz",
   },
   cards: {
     resources: "Lernmaterial: {organ}",
-    microscopic: "Mikroskopische Ansicht", compareOrgans: "Organe vergleichen", functionAnimation: "Funktionsanimation",
+    microscopic: "Mikroskopische Ansicht", functionAnimation: "Funktionsanimation",
     clinicalNotes: "Klinische Notizen", whereItWorks: "Wo es wirkt", commonConditions: "Häufige Erkrankungen",
-    exploreTissue: "Gewebe erkunden", openComparison: "Vergleich öffnen", playAnimation: "Animation abspielen",
+    exploreTissue: "Gewebe erkunden", playAnimation: "Animation abspielen",
     seeAll: "Alle ansehen", seeSystem: "System ansehen",
     playAria: "Funktionsanimation abspielen: {organ}", systemAria: "Sehen, wo {organ} im Körper liegt",
   },

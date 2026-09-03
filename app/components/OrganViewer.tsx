@@ -2,12 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import {
-  Box,
-  CircleDashed,
-  Layers3,
   Maximize2,
   RotateCcw,
-  ScanLine,
   Search,
   Check,
   Crosshair,
@@ -25,8 +21,6 @@ type Props = {
   t: UiDictionary;
   autoRotate: boolean;
   onAutoRotate: (enabled: boolean) => void;
-  compare: boolean;
-  onCompare: () => void;
   quizActive: boolean;
   onQuizStart: () => void;
   onQuizExit: () => void;
@@ -190,7 +184,7 @@ function useAuthoringFlag() {
   );
 }
 
-export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCompare, quizActive, onQuizStart, onQuizExit, kids, speechLang, focusRef }: Props) {
+export function OrganViewer({ organ, t, autoRotate, onAutoRotate, quizActive, onQuizStart, onQuizExit, kids, speechLang, focusRef }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<AnatomyViewer | null>(null);
   const organRef = useRef(organ);
@@ -200,7 +194,6 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [slowLoad, setSlowLoad] = useState(false);
-  const [activeTool, setActiveTool] = useState<string | null>(null);
 
   // Opt-in coordinate probe for placing hotspots — not a user-facing feature.
   const authoring = useAuthoringFlag();
@@ -327,36 +320,24 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
     if (!viewer) return;
     if (tool === "rotate") onAutoRotate(!autoRotate);
     if (tool === "zoom") viewer.zoom(-1);
-    if (tool === "isolate") setActiveTool(viewer.toggleIsolate() ? tool : null);
-    if (tool === "section") setActiveTool(viewer.toggleCrossSection() ? tool : null);
-    if (tool === "layers") setActiveTool(viewer.toggleLayers() ? tool : null);
-    if (tool === "compare") onCompare();
     if (tool === "quiz") { if (quizActive) onQuizExit(); else onQuizStart(); }
-    if (tool === "reset") {
-      viewer.reset();
-      setActiveTool(null);
-    }
+    if (tool === "reset") viewer.reset();
   };
 
   const allTools = [
     { id: "rotate", label: t.tools.rotate, icon: RotateCcw },
     { id: "zoom", label: t.tools.zoom, icon: Search },
-    { id: "isolate", label: t.tools.isolate, icon: CircleDashed },
-    { id: "section", label: t.tools.section, icon: ScanLine },
-    { id: "layers", label: t.tools.layers, icon: Layers3 },
-    { id: "compare", label: t.tools.compare, icon: Box },
     { id: "reset", label: t.tools.reset, icon: RotateCcw },
-    // Find-the-part belongs with the other things that change what the canvas
-    // is doing — isolate, cross-section, peel — rather than on a card below
-    // the fold. It is the only one of them a five-year-old reaches for, so it
-    // stays in the shortened kids toolbar too. Hidden without a model: the
-    // game is clicking dots on one.
+    // A mode of the canvas rather than something to read, which is why it
+    // sits with the other controls instead of on a card below the fold.
+    // Hidden without a model: the game is clicking dots on one.
     ...(modelled ? [{ id: "quiz", label: t.info.quiz, icon: Crosshair }] : []),
   ];
-  // Cross-section and layer peeling need a mental model of what is being cut
-  // away. Kids mode keeps the three tools whose effect is visible immediately.
-  const KIDS_TOOLS = ["rotate", "zoom", "reset", "quiz"];
-  const tools = kids ? allTools.filter((tool) => KIDS_TOOLS.includes(tool.id)) : allTools;
+  /* Kids mode used to filter this list down. Cross-section, isolate, layers
+     and compare have all gone — cutting a model open showed a hollow shell,
+     and the other three had no structure to divide — so what is left is what
+     kids mode was already keeping. One list for both readings. */
+  const tools = allTools;
 
   return (
     <section className="viewer-shell" aria-label={format(t.viewer.title, { organ: organ.name })}>
@@ -376,9 +357,9 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, compare, onCom
           <button
             key={id}
             type="button"
-            className={`tool-button ${(activeTool === id || (id === "compare" && compare) || (id === "quiz" && quizActive)) ? "active" : ""}`}
+            className={`tool-button ${id === "quiz" && quizActive ? "active" : ""}`}
             onClick={() => handleTool(id)}
-            aria-pressed={activeTool === id || (id === "compare" && compare) || (id === "quiz" && quizActive)}
+            aria-pressed={id === "quiz" && quizActive}
             title={label}
           >
             <Icon size={19} strokeWidth={1.65} />

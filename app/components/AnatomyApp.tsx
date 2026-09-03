@@ -217,7 +217,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
 
   const [organId, setOrganId] = useState<OrganId>("heart");
   const [autoRotate, setAutoRotate] = useState(true);
-  const [compare, setCompare] = useState(false);
   const [modal, setModal] = useState<Modal>(null);
   const [query, setQuery] = useState("");
   const [mobileLibrary, setMobileLibrary] = useState(false);
@@ -311,7 +310,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
      names the layer it is standing in, so nothing points out of it and there is
      nothing to leave. The header's view switch does its own resetting. */
   const organ = organById[organId];
-  const reference = organById[organId === "heart" ? "brain" : "heart"];
 
   // Kids mode shows the five organs a child can point to on their own body.
   const listedOrgans = useMemo(
@@ -417,7 +415,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     }
     setOrganId(id);
     setMobileLibrary(false);
-    setCompare(false);
     setQuizActive(false);
     // The open condition belongs to the organ being left behind.
     setConditionView(null);
@@ -753,8 +750,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               t={t}
               autoRotate={autoRotate}
               onAutoRotate={setAutoRotate}
-              compare={compare}
-              onCompare={() => setCompare(!compare)}
               quizActive={quizActive}
               onQuizStart={() => { setQuizActive(true); setModal(null); setKnowledgeQuiz(false); setKidsQuiz(false); }}
               onQuizExit={() => setQuizActive(false)}
@@ -981,15 +976,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
         </aside>
       </div>
 
-      {compare && (
-        <section className="compare-strip" aria-label={t.compare.title}>
-          <div className="compare-organ"><OrganArt organ={organ} kind="thumb" alt="" /><span>{t.compare.comparing}</span><strong>{organ.name}</strong><small>{organ.system}</small></div>
-          <b>{t.compare.vs}</b>
-          <div className="compare-organ"><OrganArt organ={reference} kind="thumb" alt="" /><span>{t.compare.reference}</span><strong>{reference.name}</strong><small>{reference.system}</small></div>
-          <dl><div><dt>{t.compare.primaryRole}</dt><dd><Measure>{organ.function}</Measure></dd></div><div><dt>{t.compare.scale}</dt><dd><Measure>{organ.size}</Measure></dd></div></dl>
-          <button onClick={() => setCompare(false)} aria-label={t.compare.close}><X size={16} /></button>
-        </section>
-      )}
+      {/* The compare strip lived here. Its only door was the 비교 tool in the
+          viewer's toolbar, and that tool has gone — two organs side by side
+          needs a second model to put beside the first, which this never had.
+          Unreachable UI is worse than none. */}
 
       <section className="learning-cards" aria-label={format(t.cards.resources, { organ: organ.name })}>
         <article className="curiosity-card">

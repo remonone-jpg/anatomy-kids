@@ -18,8 +18,7 @@ export const ui: UiDictionary = {
     quoteLine1: "Learning is", quoteLine2: "an act of curiosity.", quoteSign: "Keep exploring!",
   },
   tools: {
-    label: "3D viewer tools", rotate: "Rotate", zoom: "Zoom", isolate: "Isolate",
-    section: "Cross-section", layers: "Layers", compare: "Compare", reset: "Reset",
+    label: "3D viewer tools", rotate: "Rotate", zoom: "Zoom", reset: "Reset",
   },
   viewer: {
     title: "{organ} interactive viewer",
@@ -32,17 +31,13 @@ export const ui: UiDictionary = {
     kicker: "The {organ}", keyFacts: "Key facts", size: "Size", weight: "Weight", daily: "Daily",
     location: "Location", bloodSupply: "Blood supply", function: "Function",
     medical: "Medical importance", didYouKnow: "Did you know", viewLesson: "View lesson",
-    animate: "Animate", quiz: "Quiz", compare: "Compare",
-  },
-  compare: {
-    title: "Organ comparison", comparing: "Comparing", reference: "Reference",
-    primaryRole: "Primary role", scale: "Scale", vs: "vs.", close: "Close comparison",
+    animate: "Animate", quiz: "Quiz",
   },
   cards: {
     resources: "{organ} learning resources",
-    microscopic: "Microscopic view", compareOrgans: "Compare organs", functionAnimation: "Function animation",
+    microscopic: "Microscopic view", functionAnimation: "Function animation",
     clinicalNotes: "Clinical notes", whereItWorks: "Where it works", commonConditions: "Common conditions",
-    exploreTissue: "Explore tissue", openComparison: "Open comparison", playAnimation: "Play animation",
+    exploreTissue: "Explore tissue", playAnimation: "Play animation",
     seeAll: "See all", seeSystem: "See the system",
     playAria: "Play the {organ} function animation", systemAria: "See where the {organ} sits in the body",
   },
