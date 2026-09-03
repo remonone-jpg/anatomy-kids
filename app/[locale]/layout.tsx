@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
+import { preload } from "react-dom";
 import { notFound } from "next/navigation";
 import { getLocale, isLocale, localeCodes, locales } from "../i18n/config";
-import { fontClassName } from "../i18n/fonts";
+import { KOREAN_FONT_FILES, fontClassName, koreanFontFaces } from "../i18n/fonts";
 import { getDictionary } from "../i18n/dictionaries";
 import { asset } from "../lib/asset";
 import "../globals.css";
@@ -88,8 +89,21 @@ export default async function LocaleLayout({
   if (!isLocale(locale)) notFound();
   const config = getLocale(locale);
 
+  // Korean brings its own faces; every other script is served by `next/font`,
+  // which writes its own head tags. Preloading here rather than there is what
+  // keeps each page's font requests to the ones it will actually render.
+  const korean = config.script === "kr";
+  // React's own preload rather than a <link> of ours: it hoists the tag into
+  // the head and keeps one record per URL. Written as an element it came out
+  // twice — the one we wrote, and the one React made from it.
+  if (korean) for (const file of KOREAN_FONT_FILES) preload(asset(file), { as: "font", type: "font/woff2", crossOrigin: "" });
+
   return (
     <html lang={config.code} dir={config.dir}>
+      {/* The faces themselves. Inline, so the first paint already knows where
+          they are — a stylesheet would be one more round trip before the
+          browser could even ask for them. */}
+      {korean && <style>{koreanFontFaces(asset)}</style>}
       <body className={fontClassName(config.script)}>{children}</body>
     </html>
   );

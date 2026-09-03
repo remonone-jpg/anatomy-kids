@@ -253,3 +253,25 @@ diagrams are public domain. These images alone have neither.
 Ways to settle it, none of them taken yet: ask the upstream author directly —
 the repository is public and accepts issues — or run a reverse image search on
 one of the files.
+
+## Type — `public/fonts/*.woff2`
+
+Both faces are subset here to KS X 1001's 2,350 Hangul syllables plus Latin,
+digits and the punctuation this site uses. Subsetting is what the licence calls
+a Modified Version; neither file is renamed, and both keep the reserved names
+and the licence text in their `name` table.
+
+| File | Family | Weight | Source |
+| --- | --- | --- | --- |
+| `pretendard-400.woff2` | Pretendard | 400 | https://github.com/orioncactus/pretendard (v1.3.9) |
+| `pretendard-600.woff2` | Pretendard | 600 | 〃 |
+| `pretendard-700.woff2` | Pretendard | 700 | 〃 |
+| `gowunbatang-400.woff2` | Gowun Batang | 400 | https://github.com/google/fonts/tree/main/ofl/gowunbatang (v2.000) |
+
+- Pretendard © Kil Hyung-jin. Licensed under the SIL Open Font License 1.1.
+- Gowun Batang © Yoon Design Group. Licensed under the SIL Open Font License 1.1.
+- OFL 1.1: https://openfontlicense.org
+
+Korean is the only script served its own files. Every other one is fetched by
+`next/font` from Google Fonts at build time and served from the same origin —
+see `app/i18n/fonts.ts`.
