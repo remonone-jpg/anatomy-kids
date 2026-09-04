@@ -96,7 +96,12 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   color: var(--ink);
   cursor: pointer;
   white-space: nowrap;
-  font: 600 13px var(--font-serif), serif;
+  /* The line box is stated because the shorthand would otherwise leave it at
+     the font's own `normal`, and the two faces disagree about that by a
+     quarter of an em. This row's height sets where the three columns below it
+     start, so it cannot be the font's to decide: at `normal` the reading face
+     put the workspace four pixels lower than the design was measured at. */
+  font: 600 13px/1.2 var(--font-serif), serif;
 }
 .view-switch button svg { flex: none; stroke: currentColor; }
 /* Colour cannot carry the hover any more — resting is already the body
@@ -152,6 +157,8 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   background: transparent;
   cursor: pointer;
   white-space: nowrap;
+  /* Same reason as the view switch beside it. */
+  line-height: 1.2;
 }
 /* Lucide icons are flex children here; without this they get squeezed before
    the label does when the row runs short. */
@@ -207,7 +214,7 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   color: var(--lavender);
   font-family: var(--font-display), serif;
   /* `em` is italic by the browser's own rules, so dropping the declaration
-     was not enough — it has to be said. */
+     was not enough — it has to be said. Neither face has an italic cut. */
   font-style: normal;
   letter-spacing: .01em;
 }
@@ -555,9 +562,14 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 .info-title-row em { display: block; margin-top: 8px; font-size: 13px; }
 .specimen-stamp { width: 86px; height: 86px; display: grid; place-items: center; border-radius: 50%; overflow: hidden; background: radial-gradient(circle, #fff 25%, rgba(237,142,120,.12)); }
 .specimen-stamp img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; animation: card-art-in .45s cubic-bezier(.2,.8,.3,1); }
-.description { margin: 22px 0 16px; font: 400 15px/1.42 var(--font-serif), serif; }
+/* 1.42 → 1.5. The reading face draws its Hangul 6% taller on the same em
+   (36.7px against 34.6 at 40px), which took the gap between lines from 8.3px
+   down to 7.5. This puts it back, and lands on the same figure the modal's
+   prose already uses. */
+.description { margin: 22px 0 16px; font: 400 15px/1.5 var(--font-serif), serif; }
 .rule { height: 1px; background: var(--line); }
-/* Upright: Pretendard has no italic cut and the browser would shear it. The
+/* Upright: the reading face has no italic cut and the browser would shear
+   it. The
    heading is already told apart by its weight and the space above it. */
 .info-panel h2 { margin: 17px 0 10px; font-weight: 600; }
 .key-facts { margin: 0; display: flex; flex-direction: column; gap: 11px; }
@@ -948,16 +960,18 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
    on every platform, and macOS's AppleMyungjo has exactly one weight, so the
    500s and 600s this stylesheet is full of were being thickened by the
    rasteriser rather than drawn.
-     Reading face — Pretendard, a sans. A myeongjo's thin horizontals fall
-   below a pixel at the 13–15px this page reads at, and a child learning to
-   read meets a gothic in every textbook. Its Latin is Inter-derived, so the
-   digits and English inside a Korean line finally match it in size.
+     Reading face — IBM Plex Sans KR, a sans. A myeongjo's thin horizontals
+   fall below a pixel at the 13–15px this page reads at, and a child learning
+   to read meets a gothic in every textbook. This one is drawn tall for its
+   width, which is what keeps a Korean line from reading as a flat band, and
+   its digits are one width by default, so figures column up without asking
+   for `tabular-nums`.
      Display face — Gowun Batang, kept for the few places that name the thing
    on screen. The atelier voice survives where the type is big enough to
    carry it. */
 .font-stack-kr {
-  --font-serif: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans CJK KR", sans-serif;
-  --font-sans: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans CJK KR", sans-serif;
+  --font-serif: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans CJK KR", sans-serif;
+  --font-sans: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans CJK KR", sans-serif;
   --font-display: "Gowun Batang", "AppleMyungjo", "Nanum Myeongjo", "Batang", serif;
 }
 
@@ -1966,8 +1980,14 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 }
 .experiment-title { display: block; margin-bottom: 5px; font: 600 15px var(--font-serif), serif; }
 .experiment-goal, .experiment-result { margin: 0 0 12px; font-size: 13.5px; line-height: 1.7; }
+/* These two are labels in front of a sentence — "알아볼 것", "결과" — not the
+   lavender aside `.info-panel em` is written for, and they ask for 600, which
+   the display face does not have. Said plainly here so the browser is never
+   asked to thicken a weight that was not drawn. */
 .experiment-goal em, .experiment-result em {
-  margin-right: 5px; color: var(--muted); font-size: 12px; font-style: normal; font-weight: 600;
+  margin-right: 5px; color: var(--muted);
+  font: 600 12px var(--font-serif), serif;
+  font-style: normal;
 }
 .experiment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 .experiment-grid h4 { margin: 0 0 6px; font: 600 12.5px var(--font-serif), serif; color: var(--muted); }

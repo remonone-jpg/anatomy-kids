@@ -54,9 +54,9 @@ const webFonts: Partial<Record<ScriptGroup, { serif: { variable: string }; sans:
  * covers anything written later without a rebuild.
  */
 export const KOREAN_FONT_FILES = [
-  "/fonts/pretendard-400.woff2",
-  "/fonts/pretendard-600.woff2",
-  "/fonts/pretendard-700.woff2",
+  "/fonts/ibmplexsanskr-400.woff2",
+  "/fonts/ibmplexsanskr-600.woff2",
+  "/fonts/ibmplexsanskr-700.woff2",
   "/fonts/gowunbatang-400.woff2",
 ];
 
@@ -69,9 +69,9 @@ export function koreanFontFaces(base: (path: string) => string) {
   const face = (family: string, weight: number, file: string) =>
     `@font-face{font-family:"${family}";font-style:normal;font-weight:${weight};font-display:swap;src:url("${base(file)}") format("woff2")}`;
   return [
-    face("Pretendard", 400, "/fonts/pretendard-400.woff2"),
-    face("Pretendard", 600, "/fonts/pretendard-600.woff2"),
-    face("Pretendard", 700, "/fonts/pretendard-700.woff2"),
+    face("IBM Plex Sans KR", 400, "/fonts/ibmplexsanskr-400.woff2"),
+    face("IBM Plex Sans KR", 600, "/fonts/ibmplexsanskr-600.woff2"),
+    face("IBM Plex Sans KR", 700, "/fonts/ibmplexsanskr-700.woff2"),
     face("Gowun Batang", 400, "/fonts/gowunbatang-400.woff2"),
   ].join("");
 }

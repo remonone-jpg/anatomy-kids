@@ -263,12 +263,13 @@ and the licence text in their `name` table.
 
 | File | Family | Weight | Source |
 | --- | --- | --- | --- |
-| `pretendard-400.woff2` | Pretendard | 400 | https://github.com/orioncactus/pretendard (v1.3.9) |
-| `pretendard-600.woff2` | Pretendard | 600 | 〃 |
-| `pretendard-700.woff2` | Pretendard | 700 | 〃 |
+| `ibmplexsanskr-400.woff2` | IBM Plex Sans KR | 400 | https://github.com/google/fonts/tree/main/ofl/ibmplexsanskr |
+| `ibmplexsanskr-600.woff2` | IBM Plex Sans KR | 600 | 〃 |
+| `ibmplexsanskr-700.woff2` | IBM Plex Sans KR | 700 | 〃 |
 | `gowunbatang-400.woff2` | Gowun Batang | 400 | https://github.com/google/fonts/tree/main/ofl/gowunbatang (v2.000) |
 
-- Pretendard © Kil Hyung-jin. Licensed under the SIL Open Font License 1.1.
+- IBM Plex Sans KR © IBM Corp., with the Korean drawn by Sandoll. Licensed
+  under the SIL Open Font License 1.1.
 - Gowun Batang © Yoon Design Group. Licensed under the SIL Open Font License 1.1.
 - OFL 1.1: https://openfontlicense.org
 
