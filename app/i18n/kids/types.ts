@@ -19,9 +19,9 @@ export const KIDS_ORGAN_IDS: OrganId[] = [
 ];
 
 /**
- * Child-facing copy layered over an organ's adult entry. Only the fields a
- * child hears are overridden — clinical text (weight, blood supply, medical
- * note, conditions) is hidden by kids mode rather than rewritten.
+ * Child-facing copy layered over an organ's adult entry. Conditions and the
+ * long-form reading are dropped by kids mode; everything the panel still shows
+ * is rewritten here, the key facts and the medical note included.
  */
 export type KidsOrganCopy = {
   poetic: string;
@@ -30,6 +30,16 @@ export type KidsOrganCopy = {
   function: string;
   dailyFact: string;
   funFact: string;
+  /**
+   * The four the key-facts panel and the note underneath it show without ever
+   * hiding them. Optional so an organ can be rewritten a field at a time —
+   * where one is missing the adult sentence stands, which is what a child was
+   * reading before any of these existed.
+   */
+  weight?: string;
+  location?: string;
+  bloodSupply?: string;
+  medical?: string;
   /**
    * Extra one-liners, surfaced one at a time behind a button. A child who has
    * heard the description once still wants more, and a wall of ten facts is
@@ -161,8 +171,13 @@ export type KidsUiCopy = {
   modeLabel: string;
   keyFacts: string;
   size: string;
+  weight: string;
   daily: string;
+  location: string;
+  bloodSupply: string;
   function: string;
+  /** Heads the note under the key facts — 의학적 의의 is not a child's phrase. */
+  medical: string;
   didYouKnow: string;
   quizButton: string;
   tip: string;

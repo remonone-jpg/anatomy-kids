@@ -1089,8 +1089,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             <div data-reveal><dt><span>❋</span> {t.info.bloodSupply}</dt><dd><Measure>{organ.bloodSupply}</Measure></dd></div>
             <div data-reveal><dt><span>◈</span> {t.info.function}</dt><dd><Measure>{organ.function}</Measure></dd></div>
           </dl>
-          {/* Clinical framing has nothing to offer a five-year-old, so kids mode
-              drops the note rather than trying to simplify it. */}
+          {/* Shown in both modes. Kids mode retitles it 몸속 비밀 and swaps in a
+              child's sentence rather than dropping it: the note is the one place
+              that says why the organ is remarkable, and a five-year-old wants
+              that more than a grown-up does. */}
           <div className="medical-note" data-reveal><Stethoscope size={16} /><p><b>{t.info.medical}</b>{organ.medical}</p></div>
           <div className="fun-note" data-reveal><Sparkles size={15} /><p><b>{t.info.didYouKnow}</b>{organ.funFact}</p></div>
           {kidsCopy && moreFacts.length > 0 && (

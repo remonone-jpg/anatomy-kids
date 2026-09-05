@@ -21,8 +21,9 @@ export function kidsAvailable(locale: string): boolean {
 const childName = (name: string | null) => (text: string) => applyChild(text, name);
 
 /**
- * Child copy layered over one organ. Clinical fields are left untouched rather
- * than blanked, so switching kids mode off restores the original entry intact.
+ * Child copy layered over one organ. Nothing is blanked — a field with no child
+ * rewrite keeps the adult sentence, so switching kids mode off restores the
+ * original entry intact and a half-written organ still reads.
  */
 function mergeOrgan(base: OrganContent, copy: KidsOrganCopy, withChild: (t: string) => string): OrganContent {
   return {
@@ -33,6 +34,10 @@ function mergeOrgan(base: OrganContent, copy: KidsOrganCopy, withChild: (t: stri
     function: withChild(copy.function),
     dailyFact: withChild(copy.dailyFact),
     funFact: withChild(copy.funFact),
+    weight: copy.weight ? withChild(copy.weight) : base.weight,
+    location: copy.location ? withChild(copy.location) : base.location,
+    bloodSupply: copy.bloodSupply ? withChild(copy.bloodSupply) : base.bloodSupply,
+    medical: copy.medical ? withChild(copy.medical) : base.medical,
     hotspots: Object.fromEntries(
       Object.entries(base.hotspots).map(([id, hotspot]) => [
         id,
@@ -69,8 +74,12 @@ function mergeUi(base: UiDictionary, copy: KidsUiCopy): UiDictionary {
       ...base.info,
       keyFacts: copy.keyFacts,
       size: copy.size,
+      weight: copy.weight,
       daily: copy.daily,
+      location: copy.location,
+      bloodSupply: copy.bloodSupply,
       function: copy.function,
+      medical: copy.medical,
       didYouKnow: copy.didYouKnow,
       quiz: copy.quizButton,
     },
