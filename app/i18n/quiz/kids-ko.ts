@@ -791,10 +791,10 @@ export const kidsQuizStomach: KidsQuizItem[] = [
   {
     id: "kt5",
     organ: "stomach",
-    question: "소는 위가 몇 개일까요?",
-    options: ["네 개", "반 개"],
+    question: "소의 위는 어떻게 생겼을까요?",
+    options: ["방이 네 개로 나뉘어 있어요", "위가 통째로 네 개예요"],
     answer: 0,
-    explain: "신기하죠? {child}는 하나로 충분해요.",
+    explain: "위는 하나인데 방이 네 개예요. {child}는 방 하나로 충분해요.",
   },
   {
     id: "kt6",
