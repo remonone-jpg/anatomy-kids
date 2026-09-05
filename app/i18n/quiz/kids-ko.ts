@@ -112,7 +112,7 @@ export const kidsQuizBrain: KidsQuizItem[] = [
     id: "kb3",
     organ: "brain",
     question: "뇌가 보내는 신호는 얼마나 빠를까요?",
-    options: ["제일 빠른 기차보다 빨라요", "달팽이보다 느려요"],
+    options: ["고속 열차보다 빨라요", "달팽이보다 느려요"],
     answer: 0,
     explain: "쌩! 아주 빠르게 온몸에 신호를 보내요.",
   },
