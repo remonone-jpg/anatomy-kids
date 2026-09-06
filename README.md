@@ -120,9 +120,9 @@ actions tied to the current ChatGPT user. Leave public content anonymous.
 
 이 저장소는 부분마다 조건이 다릅니다.
 
-- **콘텐츠** — `app/i18n/`의 `conditions/`·`kids/`·`quiz/`·`school/`과
-  `docs/`. Creative Commons Attribution-ShareAlike 4.0
-  ([LICENSE](./LICENSE)).
+- **콘텐츠** — `app/i18n/`의 `conditions/`·`kids/`·`quiz/`·`school/`과 `docs/`,
+  그리고 `public/anatomy/systems/` 도해의 한국어 라벨. Creative Commons
+  Attribution-ShareAlike 4.0 ([LICENSE](./LICENSE)).
 - **코드** — 라이선스가 정해지지 않은 상태입니다. 원본 저장소가 라이선스를
   선언하지 않았기 때문이며, 경위와 파일 목록은
   [LICENSE-CODE](./LICENSE-CODE)에 적어두었습니다.
