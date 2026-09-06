@@ -106,7 +106,7 @@ export const kidsQuizBrain: KidsQuizItem[] = [
     question: "뇌는 무엇으로 거의 다 되어 있을까요?",
     options: ["물", "모래"],
     answer: 0,
-    explain: "맞아요! 뇌는 거의 다 물이에요.",
+    explain: "뇌는 4분의 3쯤이 물이에요.",
   },
   {
     id: "kb3",
@@ -333,10 +333,10 @@ export const kidsQuizLiver: KidsQuizItem[] = [
   {
     id: "kv10",
     organ: "liver",
-    question: "{child}가 자는 동안 간은?",
-    options: ["낮에 먹은 걸 정리해요", "같이 쉬어요"],
+    question: "{child}가 자는 동안 간은 무얼 할까요?",
+    options: ["쉬지 않고 몸에 필요한 걸 만들어요", "간도 같이 푹 자요"],
     answer: 0,
-    explain: "맞아요! 밤에도 부지런히 일해요.",
+    explain: "간은 {child}가 자는 동안에도 쉬지 않고 일해요.",
   },
 ];
 
@@ -409,7 +409,7 @@ export const kidsQuizKidneys: KidsQuizItem[] = [
     id: "kk9",
     organ: "kidneys",
     question: "{child}의 피는 하루에 콩팥을 몇 번 지날까요?",
-    options: ["몇십 번씩", "딱 한 번"],
+    options: ["수백 번씩", "딱 한 번"],
     answer: 0,
     explain: "맞아요! 계속계속 지나가면서 깨끗해져요.",
   },
@@ -435,10 +435,10 @@ export const kidsQuizEyeball: KidsQuizItem[] = [
   {
     id: "ke2",
     organ: "eyeball",
-    question: "{child}가 크는 동안 눈은?",
-    options: ["아주 조금만 자라요", "몸만큼 쑥쑥 자라요"],
+    question: "{child}가 크는 동안 눈은 어떻게 될까요?",
+    options: ["자라긴 하지만 몸만큼 크지는 않아요", "몸보다 훨씬 빨리 자라요"],
     answer: 0,
-    explain: "맞아요! 그래서 아기 눈이 커 보인답니다.",
+    explain: "눈도 자라요. 다만 몸만큼 많이 크지는 않아서, 아기는 눈이 얼굴에 비해 커 보여요.",
   },
   {
     id: "ke3",
