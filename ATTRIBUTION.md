@@ -254,9 +254,15 @@ This differs from every other asset listed above, each of which names its
 source and its licence — the Z-Anatomy meshes are CC BY-SA, the Commons
 diagrams are public domain. These images alone have neither.
 
-Ways to settle it, none of them taken yet: ask the upstream author directly —
-the repository is public and accepts issues — or run a reverse image search on
-one of the files.
+Ways to settle it: ask the upstream author directly — the repository is public
+and accepts issues — or run a reverse image search on one of the files.
+
+The first was tried on **2026-09-06**: a comment on the upstream repository's
+existing licensing issue asks whether these 45 images were drawn there or taken
+from somewhere else, and the same about the organ models —
+https://github.com/thebuggeddev/anatomy/issues/23#issuecomment-5557784271.
+Nothing is settled until there is an answer; this line records that the question
+has been put, not that it has been resolved.
 
 ## Type — `public/fonts/*.woff2`
 
