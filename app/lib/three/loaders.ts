@@ -112,6 +112,19 @@ export class AnatomyAssetManager {
           material.envMapIntensity = 0.32;
           material.emissive.set(0x000000);
           material.emissiveIntensity = 0;
+          // Tripo-generated organs carry colour/normal/roughness maps; the stomach is a
+          // bare Z-Anatomy mesh with a single baked colour and no UVs. Without surface
+          // detail to break up the highlight, the default lobe reads as moulded
+          // plastic, so push bare materials further toward matte.
+          const bare =
+            !material.map &&
+            !material.normalMap &&
+            !material.roughnessMap &&
+            !material.metalnessMap;
+          if (bare) {
+            material.roughness = 0.78;
+            material.envMapIntensity = 0.18;
+          }
           if ("clearcoat" in material) {
             const physical = material as THREE.MeshPhysicalMaterial;
             // A second, sharper specular lobe is the main source of crawling
