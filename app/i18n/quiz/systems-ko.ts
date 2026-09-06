@@ -317,7 +317,7 @@ export const quizExcretion: SystemQuizItem[] = [
     question:"콩팥이 걸러 낸 것 중 대부분은 어떻게 될까요?",
     options:["전부 오줌으로 나간다","필요한 물과 영양분은 다시 흡수된다","땀으로 나간다","대변으로 나간다"], answer:1,
     explain:"하루 약 180L를 거르지만 오줌은 1~2L뿐입니다. 나머지 99%는 다시 흡수해요." },
-  { id:"x15", systemId:"excretion", type:"cause", examPoint:"이산화탄소의 배출 경로",
+  { id:"x15", systemId:"excretion", type:"cause",
     question:"노폐물이 콩팥까지 어떻게 올까요?",
     options:["혈액에 실려 온다","소화관을 따라 온다","공기를 타고 온다","신경을 타고 온다"], answer:0,
     explain:"순환 기관이 노폐물을 콩팥까지 실어 오고, 걸러진 깨끗한 혈액은 다시 온몸을 돕니다." },
