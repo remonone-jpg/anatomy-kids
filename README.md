@@ -15,6 +15,22 @@
 > Z-Anatomy(CC BY-SA 4.0)에서 온 것이며 [ATTRIBUTION.md](./ATTRIBUTION.md)에
 > 출처를 적어두었습니다.
 
+## License
+
+이 저장소는 부분마다 조건이 다릅니다.
+
+- **콘텐츠** — `app/i18n/`의 `conditions/`·`kids/`·`quiz/`·`school/`과
+  `docs/`. Creative Commons Attribution-ShareAlike 4.0
+  ([LICENSE](./LICENSE)).
+- **코드** — 라이선스가 정해지지 않은 상태입니다. 원본 저장소가 라이선스를
+  선언하지 않았기 때문이며, 경위와 파일 목록은
+  [LICENSE-CODE](./LICENSE-CODE)에 적어두었습니다.
+- **제3자 에셋** — 3D 모형·도해·글꼴·장기 일러스트. 각각 출처와 라이선스가
+  다르고 일부는 확인되지 않았습니다. [ATTRIBUTION.md](./ATTRIBUTION.md).
+
+`app/i18n/organs/ko.ts`만 원본 위에 덧쓴 파일이라 권리가 섞여 있습니다.
+파일 상단 주석을 보세요.
+
 ---
 
 # vinext-starter

@@ -1,3 +1,19 @@
+/**
+ * 권리 관계가 섞인 유일한 콘텐츠 파일입니다.
+ *
+ * 이 저장소의 다른 한국어 콘텐츠는 전부 새로 쓴 것이라 `LICENSE`(CC BY-SA
+ * 4.0)가 그대로 적용되지만, 이 파일은 upstream(`thebuggeddev/anatomy`)에
+ * 있던 파일 위에 덧쓴 것입니다.
+ *
+ *   upstream    210줄 / 10,987 bytes
+ *   현재      1,711줄 / 212,452 bytes   (+1,549 −48 줄)
+ *
+ * upstream의 210줄 가운데 일부가 형태를 유지한 채 남아 있고 나머지는 새로
+ * 쓴 것입니다. 바이트로 보면 upstream 몫이 약 5%입니다.
+ *
+ * upstream은 라이선스를 선언하지 않았으므로 이 파일 전체에 `LICENSE`를
+ * 적용할 수 없습니다. 경위는 `LICENSE-CODE`를 보세요.
+ */
 import type { OrganContentDictionary } from "../types";
 
 export const organs: OrganContentDictionary = {
