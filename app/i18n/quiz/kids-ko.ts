@@ -103,7 +103,7 @@ export const kidsQuizBrain: KidsQuizItem[] = [
   {
     id: "kb2",
     organ: "brain",
-    question: "뇌는 무엇으로 거의 다 되어 있을까요?",
+    question: "뇌의 4분의 3쯤을 차지하는 것은 무엇일까요?",
     options: ["물", "모래"],
     answer: 0,
     explain: "뇌는 4분의 3쯤이 물이에요.",
