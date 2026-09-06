@@ -119,6 +119,10 @@ kept in `docs/content/images-source/` so these can be rebuilt.
 Public domain carries no legal obligation to credit, but these are somebody's
 work and the table is the least that is owed.
 
+The drawings themselves are public domain and stay that way; the Korean labels
+in the "Changes made" column were written here, and those — the wording, not the
+artwork — are covered by this repository's `LICENSE` (CC BY-SA 4.0).
+
 ### Colours changed at display time
 
 Some of the original colours are overridden by the stylesheet when a diagram is

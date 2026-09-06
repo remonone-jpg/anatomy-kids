@@ -8,6 +8,8 @@ This licence applies to the content of this repository.
   app/i18n/quiz/          아래 모든 파일
   app/i18n/school/        아래 모든 파일
   docs/                   아래 모든 파일
+  public/anatomy/systems/ 아래 SVG 도해의 한국어 라벨 작업
+                          (도해 원작은 퍼블릭 도메인 — ATTRIBUTION.md 참조)
 
 적용되지 않는 것 / Not covered:
 
