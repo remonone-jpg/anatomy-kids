@@ -129,7 +129,7 @@ export const organStructures: OrganStructure[] = [
     model: "/models/atlas/stomach.glb",
     icon: "◗",
     accent: "#d98a5c",
-    illustrated: false,
+    illustrated: true,
     scientificName: "Gaster",
     hotspots: [
       // Read off Z-Anatomy's own label anchors — the `j`-suffixed markers the

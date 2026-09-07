@@ -216,12 +216,15 @@ below because the three sub-colons start only 26 units down.
 Shipped with the upstream `thebuggeddev/anatomy` repository; generated with
 Tripo. Not modified here. They are what the single-organ viewer shows.
 
-## Organ illustrations — `public/anatomy/{organ}/*.webp` — ⚠ needs checking
+## Organ illustrations — the nine from upstream — ⚠ needs checking
 
 Forty-five images: nine organs — brain, eyeball, heart, intestine, kidneys,
 liver, lungs, pancreas, skin — each with `location`, `thumb`, `organ`,
-`microscopic` and `compare`. All 720×720. They are most of what the organ
-pages show, including the "몸속의 {organ}" panel.
+`microscopic` and `compare`. 720×720, except `thumb` at 180×180. They are most
+of what the organ pages show, including the "몸속의 {organ}" panel.
+
+The stomach's four are **not** part of this entry and carry none of its doubt —
+see the section after this one.
 
 **Where they come from is not established, and this entry records only what
 was verified.**
@@ -263,6 +266,33 @@ from somewhere else, and the same about the organ models —
 https://github.com/thebuggeddev/anatomy/issues/23#issuecomment-5557784271.
 Nothing is settled until there is an answer; this line records that the question
 has been put, not that it has been resolved.
+
+## Organ illustrations — the stomach's four, made here
+
+Added **2026-09-07**. The stomach was the one organ the upstream set never
+covered, so its panels fell back to a glyph on a tinted circle while the other
+nine showed artwork. These four were drawn for this repository to close that
+gap.
+
+| File | Size | Bytes |
+|---|---|---|
+| `public/anatomy/stomach/organ.webp` | 720×720 | 83,366 |
+| `public/anatomy/stomach/location.webp` | 720×720 | 48,602 |
+| `public/anatomy/stomach/microscopic.webp` | 720×720 | 128,116 |
+| `public/anatomy/stomach/thumb.webp` | 180×180 | 5,918 |
+
+- **Made with** ChatGPT image generation, then matched to the existing nine —
+  same dimensions, same square framing, and a webp quality chosen so each file
+  lands inside the byte range its nine counterparts occupy.
+- **`compare.webp` was not made.** That slot is preloaded by `AnatomyApp.tsx`
+  but never rendered — no `<OrganArt kind="compare">` exists anywhere — so the
+  file would be downloaded and discarded. The `comparison` string it pairs with
+  (`"위와 장"`) is likewise carried in `organs/ko.ts` and never shown.
+- **Copyright** © 2026 Soo. Licensed under CC BY-SA 4.0 — see `LICENSE`.
+
+This entry stands apart from the one above deliberately. The nine from upstream
+have no stated source and no stated licence; these four have both. The ⚠ on that
+section does not reach them.
 
 ## Type — `public/fonts/*.woff2`
 
