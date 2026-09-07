@@ -127,7 +127,7 @@ export class AnatomyAssetManager {
             // The baked colour doubles as this organ's accent, which also tints the
             // key light — the two stack into something closer to apricot than tissue.
             // Cooling the material lets the warm light land on top without oversaturating.
-            material.color.set("#c07a6b");
+            material.color.set("#b56a5e");
           }
           if ("clearcoat" in material) {
             const physical = material as THREE.MeshPhysicalMaterial;
