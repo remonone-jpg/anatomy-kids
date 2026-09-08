@@ -511,7 +511,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
 
   const selectOrgan = (id: OrganId) => {
     if (organById[id].illustrated) {
-      ["organ", "microscopic", "compare", "location"].forEach((kind) => {
+      // `compare` is in the kind union but has no place that renders it, so
+      // fetching it warms nothing. The nine files stay on disk (~459KB) in case
+      // a panel is ever given to them; they are only no longer downloaded.
+      ["organ", "microscopic", "location"].forEach((kind) => {
         const image = new Image();
         image.src = asset(`/anatomy/${id}/${kind}.webp`);
       });
