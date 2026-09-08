@@ -359,6 +359,12 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
 /* The narrow-screen entrance. Base state is the wide screen, where the header
    still has its own box and these two do not exist. */
 .search-toggle { display: none; }
+/* Written twice on purpose. The line above loses to `.content-nav button`, one
+   class and one element against one class, so on its own the toggle was drawn
+   at every width — a 285px button in the empty first column that opened a row
+   `display: none` keeps invisible. This one matches that weight; the narrow
+   screens turn it back on further down, after this. */
+.content-nav > .search-toggle { display: none; }
 .mobile-search { display: none; }
 
 .viewer-shell {
