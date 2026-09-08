@@ -382,7 +382,11 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   pointer-events: none;
   box-shadow: inset 0 0 90px rgba(124,82,51,.04);
 }
-.viewer-glow { position: absolute; width: 420px; height: 420px; left: 50%; top: 47%; transform: translate(-50%,-50%); border-radius: 50%; background: color-mix(in srgb, var(--organ-accent), transparent 94%); filter: blur(72px); opacity: .55; }
+/* `min()` rather than a flat 420: on a 370px stage the circle hung 15px off
+   each side, clipped rather than drawn but still sized for a screen that is
+   not there. `aspect-ratio` keeps it round once the width starts following
+   the stage — `border-radius: 50%` only draws a circle while the two match. */
+.viewer-glow { position: absolute; width: min(420px, 100%); aspect-ratio: 1; left: 50%; top: 47%; transform: translate(-50%,-50%); border-radius: 50%; background: color-mix(in srgb, var(--organ-accent), transparent 94%); filter: blur(72px); opacity: .55; }
 .three-mount { position: absolute; inset: 0; }
 .three-mount canvas { width: 100%; height: 100%; display: block; touch-action: none; }
 
