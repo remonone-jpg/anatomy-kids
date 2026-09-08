@@ -39,6 +39,7 @@ export const ui: UiDictionary = {
     exploreTissue: "Explorer le tissu", playAnimation: "Go through them",
     seeAll: "Tout voir", seeSystem: "Voir le système",
     playAria: "Go through the key parts of the {organ}", systemAria: "Voir où se situe {organ} dans le corps",
+    urgentLegend: "Marks a condition that can turn serious quickly and needs prompt care",
   },
   quiz: { find: "Trouvez", progress: "{current} sur {total}",
     correct: "Correct", wrong: "Pas tout à fait", reveal: "C'est : {label}", answer: "{label} est indiqué en vert",

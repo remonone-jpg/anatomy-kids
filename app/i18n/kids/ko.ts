@@ -172,6 +172,7 @@ export const kids: KidsCopy = {
       clinicalNotes: "몸이 아플 때",
       commonConditions: "자주 생기는 일",
       seeAll: "다 보기",
+      urgentLegend: "이 표시가 있으면 어른에게 바로 말해요",
     },
     conditions: {
       listTitle: "{organ}에 자주 생기는 일",

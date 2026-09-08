@@ -217,6 +217,7 @@ export type KidsUiCopy = {
     clinicalNotes: string;
     commonConditions: string;
     seeAll: string;
+    urgentLegend: string;
   };
   /**
    * The headings on the conditions list and one condition's page. The writing

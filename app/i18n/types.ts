@@ -195,6 +195,9 @@ export type UiDictionary = {
     clinicalNotes: string; whereItWorks: string; commonConditions: string;
     exploreTissue: string; playAnimation: string; seeAll: string; seeSystem: string;
     playAria: string; systemAria: string;
+    /** What the dot beside a condition means. The list draws it with no words,
+     *  and a 5px circle explains nothing on its own. */
+    urgentLegend: string;
   };
   quiz: {
     find: string; progress: string; correct: string; wrong: string;

@@ -39,6 +39,7 @@ export const ui: UiDictionary = {
     exploreTissue: "استكشاف النسيج", playAnimation: "Go through them",
     seeAll: "عرض الكل", seeSystem: "عرض الجهاز",
     playAria: "Go through the key parts of the {organ}", systemAria: "شاهد موضع {organ} في الجسم",
+    urgentLegend: "Marks a condition that can turn serious quickly and needs prompt care",
   },
   quiz: { find: "حدِّد", progress: "{current} من {total}",
     correct: "صحيح", wrong: "ليس تمامًا", reveal: "هذا هو {label}", answer: "{label} معلَّم باللون الأخضر",

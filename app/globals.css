@@ -1691,6 +1691,14 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   width: 5px; height: 5px; border-radius: 50%;
   background: #b4452f; flex-shrink: 0;
 }
+/* The key to that dot, between the list and the card's footer button. Smaller
+   and paler than the names it explains — it is read once and then ignored, and
+   at the list's own 13px it would read as a ninth entry. */
+.urgent-legend {
+  display: flex; align-items: center; gap: 6px;
+  margin: 0 0 9px; padding: 0 1px;
+  color: var(--muted); font-size: 10.5px; line-height: 1.35;
+}
 
 .conditions-modal { max-width: 620px; text-align: left; }
 .conditions-modal h2 { text-align: left; }

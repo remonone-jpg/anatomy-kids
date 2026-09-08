@@ -39,6 +39,7 @@ export const ui: UiDictionary = {
     exploreTissue: "ऊतक देखें", playAnimation: "Go through them",
     seeAll: "सभी देखें", seeSystem: "तंत्र देखें",
     playAria: "Go through the key parts of the {organ}", systemAria: "शरीर में {organ} की स्थिति देखें",
+    urgentLegend: "Marks a condition that can turn serious quickly and needs prompt care",
   },
   quiz: { find: "खोजें", progress: "{total} में से {current}",
     correct: "सही", wrong: "बिलकुल नहीं", reveal: "वह है {label}", answer: "{label} हरे रंग में चिह्नित है",

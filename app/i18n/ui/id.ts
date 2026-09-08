@@ -39,6 +39,7 @@ export const ui: UiDictionary = {
     exploreTissue: "Jelajahi jaringan", playAnimation: "Go through them",
     seeAll: "Lihat semua", seeSystem: "Lihat sistemnya",
     playAria: "Go through the key parts of the {organ}", systemAria: "Lihat letak {organ} di dalam tubuh",
+    urgentLegend: "Marks a condition that can turn serious quickly and needs prompt care",
   },
   quiz: { find: "Temukan", progress: "{current} dari {total}",
     correct: "Benar", wrong: "Belum tepat", reveal: "Itu adalah {label}", answer: "{label} ditandai dengan warna hijau",

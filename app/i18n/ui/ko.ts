@@ -41,6 +41,7 @@ export const ui: UiDictionary = {
     exploreTissue: "조직 살펴보기", playAnimation: "하나씩 보기",
     seeAll: "전체 보기", seeSystem: "계통 보기",
     playAria: "{organ}의 중요한 곳 하나씩 보기", systemAria: "몸에서 {organ}의 위치 보기",
+    urgentLegend: "갑자기 나빠질 수 있어 빠른 진료가 필요한 경우예요",
   },
   quiz: { find: "찾아보세요:", progress: "{total}문제 중 {current}번",
     correct: "정답", wrong: "아쉬워요", reveal: "여기가 {label}이에요", answer: "{label}이 초록색으로 표시돼 있어요",

@@ -1235,6 +1235,15 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               );
             })}
           </ul>
+          {/* The dot is 5px of colour and says nothing on its own. Only where
+              one is actually drawn — an organ whose eight all read as things to
+              watch rather than to act on would get a key to a mark it never
+              shows. */}
+          {organ.conditions.some((name) => conditionDetails.find((item) => item.name === name)?.urgent) && (
+            <p className="urgent-legend">
+              <em className="urgent-dot" aria-hidden /> {t.cards.urgentLegend}
+            </p>
+          )}
           <button onClick={() => (conditionDetails.length > 0 ? setConditionView("") : setModal("lesson"))}>
             {t.cards.seeAll} <ArrowRight size={14} />
           </button>
