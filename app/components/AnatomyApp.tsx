@@ -1182,9 +1182,18 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           </button>
           <button onClick={() => (walkable ? setWalking(true) : setModal("animation"))}>{t.cards.playAnimation} <ArrowRight size={14} /></button>
         </article>
-        {/* A list of the eight ways an organ can fail is the last thing a child
-            should meet — and disease is outside the school syllabus too, so
-            only the grown-up view carries this card. */}
+        {/* Both readings get this card. It was the grown-up view's alone —
+            eight ways an organ can fail is a heavy thing to hand a child, and
+            disease is outside the school syllabus besides — until the writing
+            was rewritten rather than withheld: the headings say 몸이 아플 때
+            and 어떤 거예요?, and every passage under them has its own plain
+            version in `conditions/ko.ts`. A child who has noticed something
+            about their own body is better served by words they can follow than
+            by a card that is not there.
+
+            `seeDoctor` is the exception and stays in its full wording in both:
+            it names the signs that mean fetch a grown-up now, and shortening it
+            would mean dropping one of them. */}
         <article>
           <header><div><em>{t.cards.clinicalNotes}</em><h3>{t.cards.commonConditions}</h3></div><FileText size={17} /></header>
           <ul className="condition-names">
