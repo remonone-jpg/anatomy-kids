@@ -1049,8 +1049,10 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           </div>
           <p className="description" data-reveal>{organ.description}</p>
           {/* Turns the screen into something to do with their own body, which
-              is how a child this age actually locates an organ. */}
-          {kidsCopy && bodySense && (
+              is how a child this age actually locates an organ.
+              `kidsOn`, not `kidsCopy`: this line has no grown-up twin, and the
+              `{child}` in it falls back to a placeholder outside kids mode. */}
+          {kidsOn && kidsCopy && bodySense && (
             <div className="body-sense" data-reveal>
               <PersonStanding size={17} />
               <p><b>{kidsCopy.bodySenseTitle}</b>{bodySense}</p>
@@ -1072,11 +1074,15 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               that more than a grown-up does. */}
           <div className="medical-note" data-reveal><Stethoscope size={16} /><p><b>{t.info.medical}</b>{organ.medical}</p></div>
           <div className="fun-note" data-reveal><Sparkles size={15} /><p><b>{t.info.didYouKnow}</b>{organ.funFact}</p></div>
-          {kidsCopy && moreFacts.length > 0 && (
+          {/* Same as `body-sense`: ten lines written for a child, with no fuller
+              version behind them, so they belong to the easy reading alone. */}
+          {kidsOn && kidsCopy && moreFacts.length > 0 && (
             <MoreFacts key={organId} facts={moreFacts} copy={kidsCopy} />
           )}
-          {/* Long-form reading is for the grown-up view. In kids mode it is not
-              hidden behind a control — it is simply not there. */}
+          {/* Both readings get these. They were the grown-up view's alone until
+              every one of the forty stories and two hundred deep-dive entries
+              was given a plain rewrite; now the switch changes the wording
+              rather than whether the passage is there at all. */}
           {/* The whole-body stage draws from every organ; a single organ on the
               stage asks only about itself. */}
           {/* Its own face now. It used to sit under the facts and the menu only
