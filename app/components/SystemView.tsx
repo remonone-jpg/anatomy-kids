@@ -13,11 +13,9 @@ import {
   Link2,
   ListOrdered,
   Sparkles,
-  Volume2,
 } from "lucide-react";
 import type { OrganId } from "../lib/anatomy-data";
 import type { SystemContent } from "../i18n/school";
-import { speak } from "../lib/speech";
 
 type Copy = {
   madeOf: string;
@@ -34,20 +32,9 @@ type Copy = {
   connection: string;
   summary: string;
   exam: string;
-  listen: string;
   goal: string;
   quizPaper: string;
 };
-
-/** Declared out here rather than inside the view: a component built during
- *  render is a new component every time, and loses its state with it. */
-function Listen({ text, label, lang }: { text: string; label: string; lang: string }) {
-  return (
-    <button type="button" className="system-listen" onClick={() => speak(text, lang)}>
-      <Volume2 size={14} /> {label}
-    </button>
-  );
-}
 
 /**
  * What the system is made of.
@@ -114,7 +101,6 @@ export function SystemView({
   system,
   copy,
   easy,
-  speechLang,
   onOpenOrgan,
   revealExam,
   onStartQuiz,
@@ -128,7 +114,6 @@ export function SystemView({
   /** The easy reading. Every passage falls back to its full version where no
    *  plain one has been written, so a partly-filled system still reads. */
   easy?: boolean;
-  speechLang: string;
   onOpenOrgan: (id: OrganId) => void;
   /** An `exam` point to scroll to, sent by the quiz's "본문에서 보기". */
   revealExam?: string | null;
@@ -191,7 +176,6 @@ export function SystemView({
           lines twice on one screen, side by side. */}
       <p className="system-curriculum" data-tab="basic"><GraduationCap size={13} aria-hidden /> {system.curriculum}</p>
       <p className="system-intro" data-tab="basic">{intro}</p>
-      <span data-tab="basic"><Listen text={intro} label={copy.listen} lang={speechLang} /></span>
 
       {/* Only when the stage has something of its own to show. Where it does
           not — a system with neither drawing nor chart — the parts list is
@@ -252,7 +236,6 @@ export function SystemView({
           <div className="experiment-meaning">
             <h4>{copy.meaning}</h4>
             <p>{meaning}</p>
-            <Listen text={meaning} label={copy.listen} lang={speechLang} />
           </div>
         </section>
         );
@@ -270,7 +253,6 @@ export function SystemView({
               {openWhy === i && (
                 <div>
                   <p>{say(entry.a, entry.aEasy)}</p>
-                  <Listen text={say(entry.a, entry.aEasy)} label={copy.listen} lang={speechLang} />
                 </div>
               )}
             </li>
@@ -307,7 +289,6 @@ export function SystemView({
       <section className="system-section system-connection" data-tab="flow">
         <h3><Link2 size={15} aria-hidden /> {copy.connection}</h3>
         <p>{connection}</p>
-        <Listen text={connection} label={copy.listen} lang={speechLang} />
       </section>
 
       <section className="system-section" data-tab="exam">

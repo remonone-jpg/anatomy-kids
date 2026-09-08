@@ -1,17 +1,14 @@
 "use client";
 
-import { BookOpen, Volume2 } from "lucide-react";
-import { speak } from "../lib/speech";
+import { BookOpen } from "lucide-react";
 
 /** Longer reads for the grown-up view. Open by default — unlike the deep dive,
  *  these are the point of the panel rather than an extra layer under it. */
 export function Stories({
   entries,
-  speechLang,
   easy,
 }: {
   entries: { title: string; body: string; bodyEasy?: string }[];
-  speechLang: string;
   /** The easy reading. Titles have no plain twin; only the body changes. */
   easy?: boolean;
 }) {
@@ -19,18 +16,12 @@ export function Stories({
   return (
     <section className="stories" aria-label="이야기">
       <h2><BookOpen size={16} aria-hidden /> 이야기</h2>
-      {entries.map((entry) => {
-        const passage = easy && entry.bodyEasy ? entry.bodyEasy : entry.body;
-        return (
+      {entries.map((entry) => (
         <article key={entry.title}>
           <h3>{entry.title}</h3>
-          <p>{passage}</p>
-          <button type="button" onClick={() => speak(`${entry.title}. ${passage}`, speechLang)}>
-            <Volume2 size={15} /> 들어보기
-          </button>
+          <p>{easy && entry.bodyEasy ? entry.bodyEasy : entry.body}</p>
         </article>
-        );
-      })}
+      ))}
     </section>
   );
 }

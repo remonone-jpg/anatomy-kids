@@ -5,10 +5,9 @@ import {
   Boxes, Cog, Hash, Sprout, Users, HelpCircle, ScrollText, PawPrint,
   Clock, Activity, Apple, Hourglass, Microscope, GitBranch, Rocket,
   CloudSun, Languages, MessageSquareQuote, FlaskConical, Waves,
-  ChevronDown, Volume2,
+  ChevronDown,
 } from "lucide-react";
 import type { DeepDive as DeepDiveEntry, DeepDiveCategory } from "../i18n/types";
-import { speak } from "../lib/speech";
 
 /**
  * Twenty headings in one column is a scroll, not a menu. Grouped, the panel
@@ -62,12 +61,10 @@ const META: Record<DeepDiveCategory, { label: string; Icon: typeof Boxes }> = {
  */
 export function DeepDive({
   entries,
-  speechLang,
   easy,
   reveal,
 }: {
   entries: DeepDiveEntry[];
-  speechLang: string;
   /** The easy reading. Falls back per entry where no plain version exists. */
   easy?: boolean;
   /** A category the quiz asked to show. Opens its group and its entry. */
@@ -159,13 +156,6 @@ export function DeepDive({
                       {isOpen && (
                         <div className="deep-dive-body">
                           <p>{passage}</p>
-                          <button
-                            type="button"
-                            className="deep-dive-listen"
-                            onClick={() => speak(`${heading}. ${passage}`, speechLang)}
-                          >
-                            <Volume2 size={15} /> 들어보기
-                          </button>
                         </div>
                       )}
                     </article>

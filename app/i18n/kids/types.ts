@@ -106,8 +106,6 @@ export type KidsUiCopy = {
   quoteLine1: string;
   quoteLine2: string;
   quoteSign: string;
-  listen: string;
-  listenStop: string;
   moreFactsTitle: string;
   moreFactsButton: string;
   moreFactsRestart: string;
@@ -134,7 +132,7 @@ export type KidsUiCopy = {
     madeOf: string; order: string; terms: string; experiment: string;
     prepare: string; steps: string; result: string; meaning: string; goal: string;
     why: string; numbers: string; tryIt: string; connection: string;
-    summary: string; exam: string; listen: string; quizPaper: string;
+    summary: string; exam: string; quizPaper: string;
   };
   diagram: {
     zoomIn: string; zoomOut: string; reset: string;

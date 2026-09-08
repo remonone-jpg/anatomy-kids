@@ -13,7 +13,6 @@ import {
 import type { Hotspot, Organ } from "../i18n/merge";
 import { format, type UiDictionary } from "../i18n/types";
 import type { AnatomyViewer } from "../lib/three/viewer";
-import { speak } from "../lib/speech";
 
 
 type Props = {
@@ -25,9 +24,7 @@ type Props = {
   onQuizStart: () => void;
   onQuizExit: () => void;
   /** Narrates every label and trims the toolbar for pre-readers. */
-  kids: boolean;
   /** BCP-47 tag the narration is spoken in. */
-  speechLang: string;
   /** Filled in with a handle the walkthrough uses to drive the model: a
    *  structure id turns to face it, null returns to the resting view. */
   focusRef?: { current: (id: string | null) => boolean };
@@ -50,7 +47,7 @@ type PickRef = { current: (hotspot: Hotspot) => void };
  * organ, so switching specimens restarts it without a resetting effect.
  */
 function LabelQuiz({
-  hotspots, t, pickRef, flash, screenY, onExit, kids, speechLang,
+  hotspots, t, pickRef, flash, screenY, onExit,
 }: {
   hotspots: Hotspot[];
   t: UiDictionary;
@@ -58,8 +55,6 @@ function LabelQuiz({
   flash: (id: string, correct: boolean) => void;
   screenY: (id: string) => number | null;
   onExit: () => void;
-  kids: boolean;
-  speechLang: string;
 }) {
   const [seed, setSeed] = useState(0);
   const [step, setStep] = useState(0);
@@ -70,14 +65,6 @@ function LabelQuiz({
   const order = useMemo(() => shuffle(hotspots), [hotspots, seed]);
   const target = order[step];
   const finished = step >= order.length;
-
-  // A child who cannot read the prompt cannot play, so the question is asked
-  // out loud. The quiz is always entered by tapping a button, which satisfies
-  // the browser's user-gesture requirement for speech.
-  useEffect(() => {
-    if (!kids || !target) return;
-    speak(`${t.quiz.find} ${target.label}`, speechLang);
-  }, [kids, target, t.quiz.find, speechLang]);
 
   // Refreshed after every render so the viewer's long-lived callback always
   // sees the current question. Writing a ref in an effect is safe; writing one
@@ -94,14 +81,6 @@ function LabelQuiz({
       // otherwise the panel hides the dot it is telling the learner to look at.
       const revealed = screenY(correct ? hotspot.id : target.id);
       setAnswer({ correct, picked: hotspot.label, target: target.label, atTop: (revealed ?? 0) > 0.55 });
-      if (kids) {
-        speak(
-          correct
-            ? `${t.quiz.correct} ${target.label}`
-            : `${t.quiz.wrong} ${format(t.quiz.answer, { label: target.label })}`,
-          speechLang,
-        );
-      }
       setResults((list) => [...list, correct]);
       if (correct) setScore((value) => value + 1);
       window.setTimeout(() => {
@@ -184,7 +163,7 @@ function useAuthoringFlag() {
   );
 }
 
-export function OrganViewer({ organ, t, autoRotate, onAutoRotate, quizActive, onQuizStart, onQuizExit, kids, speechLang, focusRef }: Props) {
+export function OrganViewer({ organ, t, autoRotate, onAutoRotate, quizActive, onQuizStart, onQuizExit, focusRef }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<AnatomyViewer | null>(null);
   const organRef = useRef(organ);
@@ -302,14 +281,6 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, quizActive, on
   }, [focusRef]);
 
 
-  // Tapping a dot is the main thing a child does here, and the callout it opens
-  // is two lines of text they cannot read — so it is spoken as well. Skipped
-  // during the quiz, where the answer must not be given away.
-  useEffect(() => {
-    if (!kids || !selected || quizActive) return;
-    speak(`${selected.label}. ${selected.detail}`, speechLang);
-  }, [kids, selected, quizActive, speechLang]);
-
   // The viewer drives the callout's position directly, so a spinning model
   // never costs a React render.
   const calloutRef = useCallback((node: HTMLDivElement | null) => {
@@ -404,8 +375,6 @@ export function OrganViewer({ organ, t, autoRotate, onAutoRotate, quizActive, on
           flash={(id, correct) => viewerRef.current?.flash(id, correct)}
           screenY={(id) => viewerRef.current?.hotspotScreenY(id) ?? null}
           onExit={onQuizExit}
-          kids={kids}
-          speechLang={speechLang}
         />
       )}
 

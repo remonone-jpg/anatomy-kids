@@ -3,7 +3,6 @@
 import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 import { Check, X, BookOpen, RotateCcw, CircleHelp } from "lucide-react";
 import type { KnowledgeQuizItem } from "../i18n/types";
-import { speak } from "../lib/speech";
 
 /** Fisher–Yates, same as the label quiz and the kids facts. */
 function shuffle<T>(items: T[]): T[] {
@@ -29,13 +28,11 @@ type Round = { item: KnowledgeQuizItem; options: string[]; answer: number }[];
 export function KnowledgeQuiz({
   pool,
   size,
-  speechLang,
   onOpenPassage,
   onClose,
 }: {
   pool: KnowledgeQuizItem[];
   size: number;
-  speechLang: string;
   /** Opens the deep-dive entry a question came from. */
   onOpenPassage: (category: KnowledgeQuizItem["category"]) => void;
   onClose: () => void;
@@ -72,9 +69,8 @@ export function KnowledgeQuiz({
       setPicked(index);
       const right = index === current.answer;
       if (right) setScore((s) => s + 1);
-      speak(right ? `정답입니다. ${current.item.explain}` : `아쉬워요. ${current.item.explain}`, speechLang);
     },
-    [picked, current, speechLang],
+    [picked, current],
   );
 
   const next = useCallback(() => {

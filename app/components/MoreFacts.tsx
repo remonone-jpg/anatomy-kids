@@ -1,9 +1,8 @@
 "use client";
 
 import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
-import { Sparkles, RotateCcw, Volume2 } from "lucide-react";
+import { Sparkles, RotateCcw } from "lucide-react";
 import type { KidsUiCopy } from "../i18n/kids/types";
-import { speak } from "../lib/speech";
 
 /** Fisher–Yates. A fresh order every session, so the tenth fact is not always
  *  the one nobody reaches. */
@@ -26,11 +25,9 @@ function shuffle(items: string[]): string[] {
 export function MoreFacts({
   facts,
   copy,
-  speechLang,
 }: {
   facts: string[];
   copy: KidsUiCopy;
-  speechLang: string;
 }) {
   // The caller mounts this with a `key` per organ, so switching organs remounts
   // it and the round restarts on its own — no effect resetting state.
@@ -54,13 +51,9 @@ export function MoreFacts({
     const next = index + 1;
     if (next >= order.length) return;
     setIndex(next);
-    speak(order[next], speechLang);
-  }, [index, order, speechLang]);
+  }, [index, order.length]);
 
-  const restart = useCallback(() => {
-    setIndex(0);
-    speak(order[0], speechLang);
-  }, [order, speechLang]);
+  const restart = useCallback(() => setIndex(0), []);
 
   if (order.length === 0) return null;
 
@@ -79,9 +72,6 @@ export function MoreFacts({
       <p aria-live="polite">{current}</p>
 
       <div className="more-facts-actions">
-        <button type="button" onClick={() => speak(current, speechLang)}>
-          <Volume2 size={16} /> {copy.listen}
-        </button>
         {done ? (
           <button type="button" className="primary" onClick={restart}>
             <RotateCcw size={16} /> {copy.moreFactsRestart}

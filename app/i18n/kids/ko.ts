@@ -44,8 +44,6 @@ export const kids: KidsCopy = {
     quoteLine1: "궁금한 걸 눌러보세요.",
     quoteLine2: "몸속이 보여요!",
     quoteSign: "천천히 구경해요",
-    listen: "들어보기",
-    listenStop: "그만 듣기",
     moreFactsTitle: "이것도 알아요?",
     moreFactsButton: "또 있어요!",
     moreFactsRestart: "처음부터 다시 보기",
@@ -78,7 +76,6 @@ export const kids: KidsCopy = {
       connection: "다른 기관과 어떻게 이어질까요?",
       summary: "정리해 볼까요?",
       exam: "시험에 자주 나와요",
-      listen: "들어보기",
       quizPaper: "문제 풀기",
     },
     diagram: {

@@ -789,7 +789,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .content-menu { grid-column: 2; grid-row: 1; }
   .workspace { grid-template-columns: 210px minmax(450px,1fr); height: 690px; }
   .info-panel { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px 22px; max-height: none; }
-  .info-panel .description, .info-panel .rule, .info-panel h2, .key-facts, .medical-note, .listen-button, .body-sense { grid-column: 2; }
+  .info-panel .description, .info-panel .rule, .info-panel h2, .key-facts, .medical-note, .body-sense { grid-column: 2; }
   .info-kicker, .info-title-row { grid-column: 1; }
   /* Two columns up top, reading underneath — the same shape the organ view
      folds into, so the systems layer does not invent a second one. The stage
@@ -1198,26 +1198,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .kids .fun-note { padding: 13px; border-radius: 16px; }
 .kids .fun-note p { font-size: 14px; line-height: 1.5; }
 
-/* The single most-used control in kids mode, so it gets the most weight. */
-.listen-button {
-  width: 100%;
-  min-height: 56px;
-  margin-top: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  border: 2px solid color-mix(in srgb, var(--sage), transparent 52%);
-  border-radius: 18px;
-  background: color-mix(in srgb, var(--sage), transparent 88%);
-  color: #4d6a4c;
-  cursor: pointer;
-  font: 600 17px var(--font-serif), serif;
-}
-.listen-button:active { transform: scale(.98); }
-
-/* Two actions rather than three, so the spanning rule for the third would
-   otherwise leave the first button stranded in a half-width column. */
 
 .kids .tool-button { height: 68px; font-size: 11px; }
 .kids .tip-note p { font-size: 16px; line-height: 1.6; }
@@ -1233,7 +1213,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 @media (max-width: 760px) {
   /* Thumbs, not fingertips, and a much narrower column to spend. */
   .kids .organ-item b { font-size: 19px; }
-  .kids .listen-button { min-height: 60px; font-size: 18px; }
 }
 
 /* Try-it-on-yourself prompt, weighted like the fun note it sits beside. */
@@ -1412,7 +1391,10 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .more-facts-dots li.seen { background: rgba(123,98,184,.5); }
 .more-facts-dots li.now { background: var(--lavender); transform: scale(1.35); }
 .more-facts > p { margin: 10px 0 12px; font: 400 15px/1.6 var(--font-serif), serif; }
-.more-facts-actions { display: grid; grid-template-columns: auto 1fr; gap: 7px; }
+/* One column since the listen button went. Two tracks left the remaining
+   button in the `auto` one, sized to its own words with the rest of the row
+   empty beside it. */
+.more-facts-actions { display: grid; grid-template-columns: 1fr; gap: 7px; }
 .more-facts-actions button {
   min-height: 46px;
   display: flex;
@@ -1437,21 +1419,10 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .stories article { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
 .stories article:last-child { border-bottom: 0; }
 .stories h3 { margin: 0 0 6px; font: 600 16px var(--font-serif), serif; }
-.stories p { margin: 0 0 8px; color: #5d554e; font: 400 14px/1.72 var(--font-serif), serif; }
-
-.stories button, .deep-dive-listen {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 32px;
-  padding: 0 11px;
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  background: rgba(255,255,255,.3);
-  color: var(--muted);
-  cursor: pointer;
-  font: 600 11px var(--font-serif), serif;
-}
+/* No bottom margin on any of these four: each was the last thing above a
+   listen button, and with the button gone the margin is a pocket of nothing
+   between the words and the box they sit in. */
+.stories p { margin: 0; color: #5d554e; font: 400 14px/1.72 var(--font-serif), serif; }
 
 /* Twenty headings in one column is a scroll, not a menu. Two levels: pick a
    direction, then a piece. Both start closed so the panel above stays the
@@ -1519,7 +1490,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .deep-dive-chevron { color: var(--muted); transition: transform .2s; }
 .deep-dive-items article.open .deep-dive-chevron { transform: rotate(180deg); }
 .deep-dive-body { padding: 0 0 14px 35px; }
-.deep-dive-body p { margin: 0 0 9px; color: #5d554e; font: 400 14px/1.72 var(--font-serif), serif; }
+.deep-dive-body p { margin: 0; color: #5d554e; font: 400 14px/1.72 var(--font-serif), serif; }
 
 @media (max-width: 1040px) {
   .info-panel .stories, .info-panel .deep-dive { grid-column: 2; }
@@ -1609,15 +1580,9 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .kids-quiz-dots li.seen { background: rgba(123,98,184,.5); }
 .kids-quiz-dots li.now { background: var(--lavender); transform: scale(1.3); }
 
-.kids-quiz-question { margin: 13px 0 9px; font: 400 19px/1.5 var(--font-serif), serif; }
-.kids-quiz-listen {
-  display: inline-flex; align-items: center; gap: 6px;
-  min-height: 36px; padding: 0 12px; margin-bottom: 12px;
-  border: 1px solid color-mix(in srgb, var(--lavender), transparent 62%);
-  border-radius: 12px; background: rgba(255,255,255,.5);
-  color: #6d5892; cursor: pointer; font: 600 13px var(--font-serif), serif;
-}
-
+/* The 9px under this used to be the top of a listen button; without it the
+   question sat on the first option. */
+.kids-quiz-question { margin: 13px 0 18px; font: 400 19px/1.5 var(--font-serif), serif; }
 .kids-quiz-options { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
 .kids-quiz-options button {
   width: 100%;
@@ -1663,6 +1628,9 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   font: 600 15px var(--font-serif), serif;
 }
 .kids-quiz-actions button.primary { background: color-mix(in srgb, var(--lavender), transparent 76%); color: #503c78; }
+/* One button in the round, two on the score screen. Alone it read as a chip
+   stranded at the left, so in the round it takes the row. */
+.kids-quiz-explain .kids-quiz-actions button { flex: 1; }
 
 .kids-quiz.done { text-align: center; }
 .kids-quiz-score { margin: 6px 0 16px; font: 600 18px var(--font-serif), serif; }
@@ -1954,14 +1922,6 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .system-oneline { margin: 0 0 12px; color: var(--muted); font-size: 15px; }
 .system-intro { margin: 0 0 8px; font-size: 15px; line-height: 1.75; }
 
-.system-listen {
-  display: inline-flex; align-items: center; gap: 5px;
-  min-height: 30px; padding: 0 10px;
-  border: 1px solid var(--line); border-radius: 10px;
-  background: rgba(255,255,255,.5); color: var(--muted);
-  cursor: pointer; font: 600 12px var(--font-serif), serif;
-}
-.system-listen:hover { color: var(--ink); }
 
 .system-section { margin-top: 26px; }
 .system-section > h3 {
@@ -2057,7 +2017,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   background: color-mix(in srgb, var(--coral), transparent 90%);
 }
 .experiment-meaning h4 { margin: 0 0 6px; font: 700 13px var(--font-serif), serif; color: var(--coral); }
-.experiment-meaning p { margin: 0 0 9px; font-size: 14px; line-height: 1.7; }
+.experiment-meaning p { margin: 0; font-size: 14px; line-height: 1.7; }
 
 .system-why { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; }
 .system-why li { border-bottom: 1px solid var(--line); }
@@ -2070,7 +2030,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .system-why li button > svg { margin-left: auto; opacity: .4; transition: transform .18s; flex-shrink: 0; }
 .system-why li.open button > svg { transform: rotate(180deg); }
 .system-why li > div { padding: 0 0 13px; }
-.system-why p { margin: 0 0 9px; color: var(--muted); font-size: 13.5px; line-height: 1.75; }
+.system-why p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.75; }
 
 .system-numbers { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
 .system-numbers li {

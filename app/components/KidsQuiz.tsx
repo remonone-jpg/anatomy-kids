@@ -1,9 +1,8 @@
 "use client";
 
 import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
-import { Sparkles, RotateCcw, Volume2, X } from "lucide-react";
+import { Sparkles, RotateCcw, X } from "lucide-react";
 import type { KidsQuizItem } from "../i18n/types";
-import { speak } from "../lib/speech";
 
 /** Fisher–Yates, same as everywhere else in the app. */
 function shuffle<T>(items: T[]): T[] {
@@ -27,14 +26,12 @@ const ROUND = 5;
 
 export function KidsQuiz({
   pool,
-  speechLang,
   copy,
   childName,
   onClose,
 }: {
   pool: KidsQuizItem[];
-  speechLang: string;
-  copy: { title: string; again: string; listen: string; wrong: string[] };
+  copy: { title: string; again: string; wrong: string[] };
   /** Null when no name has been given; the score line reads without one. */
   childName: string | null;
   onClose: () => void;
@@ -78,9 +75,8 @@ export function KidsQuiz({
       // handler, never during render, so hydration stays put.
       const line = right ? null : (copy.wrong[Math.floor(Math.random() * copy.wrong.length)] ?? null);
       setLead(line);
-      speak(line ? `${line} ${current.item.explain}` : current.item.explain, speechLang);
     },
-    [picked, current, speechLang, copy.wrong],
+    [picked, current, copy.wrong],
   );
 
   const next = useCallback(() => {
@@ -128,13 +124,6 @@ export function KidsQuiz({
       </header>
 
       <p className="kids-quiz-question" aria-live="polite">{current.item.question}</p>
-      <button
-        type="button"
-        className="kids-quiz-listen"
-        onClick={() => speak(current.item.question, speechLang)}
-      >
-        <Volume2 size={16} /> {copy.listen}
-      </button>
 
       <ol className="kids-quiz-options">
         {current.options.map((option, index) => {
@@ -157,12 +146,6 @@ export function KidsQuiz({
             {current.item.explain}
           </p>
           <div className="kids-quiz-actions">
-            <button
-              type="button"
-              onClick={() => speak(lead ? `${lead} ${current.item.explain}` : current.item.explain, speechLang)}
-            >
-              <Volume2 size={16} /> {copy.listen}
-            </button>
             <button type="button" className="primary" onClick={next}>
               {step + 1 === round.length ? "다 했어요!" : "다음 문제"}
             </button>

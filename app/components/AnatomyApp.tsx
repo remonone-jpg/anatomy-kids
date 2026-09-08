@@ -23,7 +23,6 @@ import {
   Scan,
   Sparkles,
   Stethoscope,
-  Volume2,
   X,
 } from "lucide-react";
 import { OrganViewer } from "./OrganViewer";
@@ -53,7 +52,6 @@ import { getAllSystemQuiz, getSystemQuiz, systemQuizAvailable } from "../i18n/qu
 import { getDiagramLabels, getRelatedHeading } from "../i18n/school/diagrams";
 import { getSystemChart } from "../i18n/school/charts";
 import type { KnowledgeQuizItem } from "../i18n/types";
-import { speak, stopSpeaking } from "../lib/speech";
 import { readMode, serverMode, subscribeMode, writeMode, type Mode } from "../lib/mode";
 import {
   clearChildName,
@@ -206,9 +204,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
   // The organ systems are no longer a mode of their own; both readings get
   // them wherever the locale has them.
   const schoolOn = schoolAvailable(locale.code);
-
-  // BCP-47 for speech synthesis; `intl` is stored in the underscore form.
-  const speechLang = locale.intl.replace("_", "-");
 
   const activeDictionary = useMemo(
     () => (kidsOn ? applyKids(dictionary, locale.code, childName) : dictionary),
@@ -424,10 +419,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     }
   };
 
-  // Speech outlives the component otherwise — it belongs to the browser, not
-  // to React, so navigating away would leave a sentence still being read.
-  useEffect(() => stopSpeaking, []);
-
   useEffect(() => {
     if (!contentRef.current) return;
     gsap.fromTo(contentRef.current.querySelectorAll("[data-reveal]"),
@@ -478,12 +469,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
      quizzes. 문제 풀기 is a tab of its own now and 찾기 놀이 moved into the
      viewer's toolbar, so the card had nothing left to open. */
 
-  /** Everything a child would want read out for the organ on screen. */
-  const readAloud = (target: Organ) => {
-    const lines = [target.name, target.description, target.funFact, bodySense ?? ""];
-    speak(lines.filter(Boolean).join(" "), speechLang);
-  };
-
   /**
    * Switching between the two readings keeps the screen exactly as it is.
    *
@@ -500,8 +485,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
    */
   const changeMode = (next: Mode) => {
     writeMode(next);
-    // The voice is mid-sentence in wording that is about to be replaced.
-    stopSpeaking();
     // The two organ quizzes are the panels that still belong to one reading
     // each. Left open, either would vanish on the way across and reappear on
     // the way back. Everything else on screen is carried by both.
@@ -525,10 +508,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     // The open condition belongs to the organ being left behind.
     setConditionView(null);
     setWalking(false);
-    // Naming the organ out loud is the whole point for a child who cannot read
-    // the heading they just tapped.
-    if (kidsOn) speak(organById[id].name, speechLang);
-    else stopSpeaking();
   };
 
   // Warms the model in the HTTP cache while the pointer is still travelling,
@@ -945,8 +924,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               quizActive={quizActive}
               onQuizStart={() => { setQuizActive(true); setModal(null); setKnowledgeQuiz(false); setKidsQuiz(false); }}
               onQuizExit={() => setQuizActive(false)}
-              kids={kidsOn}
-              speechLang={speechLang}
               focusRef={focusRef}
             />
           )}
@@ -1018,8 +995,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
                   showParts={!!activeSystem.image || !!activeChart}
                   copy={{ ...kidsCopy.system }}
                   easy={mode === "easy"}
-                  speechLang={speechLang}
-                  revealExam={revealExam}
+                      revealExam={revealExam}
                   onStartQuiz={() => { setSystemQuiz("paper"); setSystemTab("quiz"); }}
                   tab={systemTab}
                   onBack={() => setSystemTab("basic")}
@@ -1072,11 +1048,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
             </span>
           </div>
           <p className="description" data-reveal>{organ.description}</p>
-          {kidsCopy && (
-            <button className="listen-button" type="button" data-reveal onClick={() => readAloud(organ)}>
-              <Volume2 size={19} /> {kidsCopy.listen}
-            </button>
-          )}
           {/* Turns the screen into something to do with their own body, which
               is how a child this age actually locates an organ. */}
           {kidsCopy && bodySense && (
@@ -1102,7 +1073,7 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           <div className="medical-note" data-reveal><Stethoscope size={16} /><p><b>{t.info.medical}</b>{organ.medical}</p></div>
           <div className="fun-note" data-reveal><Sparkles size={15} /><p><b>{t.info.didYouKnow}</b>{organ.funFact}</p></div>
           {kidsCopy && moreFacts.length > 0 && (
-            <MoreFacts key={organId} facts={moreFacts} copy={kidsCopy} speechLang={speechLang} />
+            <MoreFacts key={organId} facts={moreFacts} copy={kidsCopy} />
           )}
           {/* Long-form reading is for the grown-up view. In kids mode it is not
               hidden behind a control — it is simply not there. */}
@@ -1118,11 +1089,9 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               key={organId}
               pool={kidsPool}
             childName={childName}
-              speechLang={speechLang}
               copy={{
                 title: kidsCopy.kidsQuizTitle,
                 again: kidsCopy.kidsQuizAgain,
-                listen: kidsCopy.listen,
                 wrong: kidsCopy.kidsQuizWrong,
               }}
               onClose={() => setKidsQuiz(false)}
@@ -1135,7 +1104,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
               key={`${organId}-${stage}`}
               pool={knowledgePool}
               size={stage === "body" ? BODY_QUIZ_SIZE : KNOWLEDGE_QUIZ_SIZE}
-              speechLang={speechLang}
               // "본문에서 보기" now has to change face as well as open an
               // entry: the passage it names lives on a tab the reader is not
               // looking at. Both go together or the button appears to do
@@ -1150,12 +1118,11 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           )}
           </>
           {organ.stories && (
-            <Stories entries={organ.stories} speechLang={speechLang} easy={mode === "easy"} />
+            <Stories entries={organ.stories} easy={mode === "easy"} />
           )}
           {organ.deepDive && (
             <DeepDive
               entries={organ.deepDive}
-              speechLang={speechLang}
               easy={mode === "easy"}
               // Questions drawn from the long reads have no deep-dive entry to
               // open, and the quiz already hides the button for them.
@@ -1269,7 +1236,6 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
           organ={organ}
           t={t}
           kids={kidsOn}
-          speechLang={speechLang}
           microscope={microscope}
           onOpenPassage={() => {
             setModal(null);
@@ -1313,7 +1279,6 @@ function LearningModal({
   organ,
   t,
   kids,
-  speechLang,
   microscope,
   onOpenPassage,
   onClose,
@@ -1322,7 +1287,6 @@ function LearningModal({
   organ: Organ;
   t: UiDictionary;
   kids: boolean;
-  speechLang: string;
   /** The organ's microscope passage, where one has been written. */
   microscope: { title: string; body: string } | undefined;
   onOpenPassage: () => void;
@@ -1336,16 +1300,6 @@ function LearningModal({
     // grammatical for the plural organs too.
     : type === "system" ? format(t.modal.bodyTitle, vars)
     : format(t.modal.insideTitle, vars);
-
-  // Reads the panel out as it opens. Kids mode only ever opens a modal from a
-  // tap, so the browser's gesture requirement for speech is already satisfied.
-  useEffect(() => {
-    if (!kids) return;
-    const body = type === "system" ? format(t.modal.systemIntro, vars) : t.modal.lessonBody;
-    speak(`${title}. ${body}`, speechLang);
-    // Reading once per opening is the intent; `vars` is rebuilt every render.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kids, type, title, speechLang]);
 
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={onClose}>
