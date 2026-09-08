@@ -43,6 +43,14 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   min-height: 100vh;
   padding: 22px 24px 24px;
   overflow: hidden;
+  /* The narrow-screen search row, when it is open, in the heights below. Zero
+     here because the row does not exist on a wide screen; the width that shows
+     it is the width that sets it. Carried as a variable rather than as a
+     `.search-open .workspace` rule so the heights keep the specificity they
+     have — a two-class selector would outrank `.workspace-systems { height:
+     auto }` and pin the stacked systems layout, which is the trap the comment
+     above that rule was written for. */
+  --search-row: 0px;
 }
 
 /* A row, not a fixed set of slots. It was a five-column grid, which meant the
@@ -666,6 +674,11 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 /* Same top and bottom gap as an artwork card, so the footer buttons line up. */
 .learning-cards ul { list-style: none; padding: 0; margin: var(--card-gap-top) 0 var(--card-gap-bottom); flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 9px; font: 400 13px var(--font-serif), serif; }
 .learning-cards li:before { content: "♥"; color: #e9968b; margin-inline-end: 7px; }
+/* Not on the conditions. The same heart on all eight tells them apart from
+   nothing, and it is the mark the library uses for the organ you are on — two
+   meanings for one shape. A list of ways an organ fails is also the last place
+   for it. The urgent dot and the arrow, which do carry meaning, stay. */
+.condition-names li:before { content: none; }
 /* Sits directly under the header like every other card, rather than being
    pushed down by an auto top margin. */
 .system-visual { overflow: hidden; border-radius: 12px; }
@@ -738,7 +751,12 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   /* The labels stay now. They were dropped because the header had given up
      the search box and still could not fit them; the switch has its own row
      and 732px of middle column to sit in. */
-  .workspace { grid-template-columns: 250px minmax(500px,1fr) 300px; height: min(700px, calc(100vh - 157px)); }
+  /* 42px of input plus its 8px top margin. The row is a sibling above the
+     workspace, so it moves all three columns down by that much; without taking
+     it off the height too, the bottom of every column lands below the fold —
+     41px past it at 1200×820 — and the reading panel goes with them. */
+  .app-shell.search-open { --search-row: 50px; }
+  .workspace { grid-template-columns: 250px minmax(500px,1fr) 300px; height: min(700px, calc(100vh - 157px - var(--search-row))); }
   /* Same columns as the workspace, so the switch stays over the middle card. */
   .content-nav { grid-template-columns: 250px minmax(500px,1fr) 300px; gap: 18px; }
   .learning-cards { grid-template-columns: repeat(3, 1fr); --art-max: 300px; }
@@ -2436,7 +2454,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
    of top margin it was short of, and the drawing must not pay for it. All
    three columns are rows of the same grid, so growing this grows the three
    together and they stay level without anything else being touched. */
-.workspace-systems { height: min(1400px, calc(100vh - 161px)); }
+.workspace-systems { height: min(1400px, calc(100vh - 161px - var(--search-row))); }
 
 /* One card per column, the same card the other two use.
    The title bar has no box of its own, so the drawing and the note started

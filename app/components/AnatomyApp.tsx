@@ -540,8 +540,11 @@ export function AnatomyApp({ locale, dictionary }: { locale: LocaleConfig; dicti
     void fetch(asset(model), { priority: "low" } as RequestInit).catch(() => {});
   };
 
+  // `search-open` is what the narrow-screen heights subtract the unfolded
+  // search row by. The row itself only renders inside the same `kidsCopy`
+  // branch that renders the toggle, so the flag cannot outlive it.
   return (
-    <main className={`app-shell ${kidsOn ? "kids" : ""}`}>
+    <main className={`app-shell ${kidsOn ? "kids" : ""} ${mobileSearch ? "search-open" : ""}`}>
       <header className="topbar">
         <button className="brand" type="button" onClick={() => selectOrgan("heart")} aria-label={t.brand.home}>
           <strong>Anatomy Atelier<sup>✦</sup></strong>
