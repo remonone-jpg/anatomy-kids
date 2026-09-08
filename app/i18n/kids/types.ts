@@ -211,6 +211,37 @@ export type KidsUiCopy = {
     systemIntro: string;
     continueExploring: string;
   };
+  /** Only the three the clinical card shows. The other nine `cards` strings
+   *  name artwork panels a child reads the same way a grown-up does. */
+  cards: {
+    clinicalNotes: string;
+    commonConditions: string;
+    seeAll: string;
+  };
+  /**
+   * The headings on the conditions list and one condition's page. The writing
+   * under them already has its own easy version, field by field, in
+   * `conditions/ko.ts`; these are the labels around it.
+   *
+   * `seeDoctor` names the passage but does not rewrite it — that text tells
+   * someone when to call for help, and `seeDoctorEasy` is deliberately unwritten
+   * for the same reason. `noDetail` and `disclaimer` are not here either: one is
+   * a placeholder a reader rarely meets, the other is a legal sentence that says
+   * what it says.
+   */
+  conditions: {
+    listTitle: string;
+    back: string;
+    urgent: string;
+    what: string;
+    symptoms: string;
+    causes: string;
+    risk: string;
+    fixed: string;
+    modifiable: string;
+    seeDoctor: string;
+    note: string;
+  };
 };
 
 export type KidsCopy = {

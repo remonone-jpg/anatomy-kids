@@ -168,6 +168,24 @@ export const kids: KidsCopy = {
       systemIntro: "몸속에서 {organ}이 어디에 있는지 찾아보세요.",
       continueExploring: "계속 구경하기",
     },
+    cards: {
+      clinicalNotes: "몸이 아플 때",
+      commonConditions: "자주 생기는 일",
+      seeAll: "다 보기",
+    },
+    conditions: {
+      listTitle: "{organ}에 자주 생기는 일",
+      back: "뒤로",
+      urgent: "빨리 병원에",
+      what: "어떤 거예요?",
+      symptoms: "이런 게 나타나요",
+      causes: "왜 그럴까요?",
+      risk: "이럴 때 잘 생겨요",
+      fixed: "바꿀 수 없는 것",
+      modifiable: "줄일 수 있는 것",
+      seeDoctor: "이럴 땐 어른에게 말해요",
+      note: "알아두면 좋아요",
+    },
   },
   organs: {
     heart: {

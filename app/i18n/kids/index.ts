@@ -85,6 +85,11 @@ function mergeUi(base: UiDictionary, copy: KidsUiCopy): UiDictionary {
     },
     quiz: { ...base.quiz, ...copy.quiz },
     modal: { ...base.modal, ...copy.modal },
+    cards: { ...base.cards, ...copy.cards },
+    // `conditions` is the one optional block on the dictionary — a locale
+    // without the clinical writing has none, and inventing one here would put
+    // headings above text that is not there. Kept undefined in that case.
+    conditions: base.conditions && { ...base.conditions, ...copy.conditions },
   };
 }
 
